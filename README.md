@@ -5,7 +5,6 @@ A security research project investigating **indirect prompt injection attacks** 
 **Course:** CS 763 — Computer Security, Spring 2026, UW-Madison
 **Instructor:** Prof. Somesh Jha | **TA:** Saikumar Yadugiri
 **Team:** Muhammad Musa & Waleed Arshad
-**Advisor:** Prof. Karu Sankaralingam
 
 ---
 
@@ -109,7 +108,7 @@ User Query
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/<your-org>/CS763-indirect_prompt_injection.git
+   git clone https://github.com/waleed79/CS763-indirect_prompt_injection.git
    cd CS763-indirect_prompt_injection
    ```
 
