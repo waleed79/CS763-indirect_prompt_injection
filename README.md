@@ -2,7 +2,7 @@
 
 A security research project investigating **indirect prompt injection attacks** on Retrieval-Augmented Generation (RAG) systems. We build a custom RAG pipeline, demonstrate that corpus poisoning can hijack LLM outputs, and develop a defense mechanism to reduce attack success rate while maintaining retrieval utility.
 
-**Course:** CS 763 — Computer Security, Spring 2026, UW-Madison
+**Course:** CS 763 — Trustworthy AI, Spring 2026, UW-Madison
 **Instructor:** Prof. Somesh Jha | **TA:** Saikumar Yadugiri
 **Team:** Muhammad Musa & Waleed Arshad
 
