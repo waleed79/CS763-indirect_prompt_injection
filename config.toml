@@ -1,0 +1,25 @@
+# RAG Pipeline Configuration — Phase 2.1
+# All parameters used by the pipeline are centralized here for RAG-05 reproducibility.
+
+[pipeline]
+seed = 42
+top_k = 5
+corpus_size = 500
+
+[chunking]
+chunk_words = 200       # ~256 MiniLM wordpiece tokens (ratio ~1.3)
+overlap_words = 25      # ~32 tokens overlap
+
+[embedding]
+model = "sentence-transformers/all-MiniLM-L6-v2"
+
+[llm]
+model = "llama3.2:3b"
+ollama_host = "http://localhost:11434"
+
+[storage]
+chroma_path = ".chroma"
+collection = "nq_clean_v1"
+
+[logging]
+log_path = "logs/retrieval.jsonl"
