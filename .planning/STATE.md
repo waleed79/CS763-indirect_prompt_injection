@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01.1-02-PLAN.md — Phase 1 writeup complete (all 8 sections)
-last_updated: "2026-04-12T23:02:23.880Z"
-last_activity: 2026-04-12 -- Phase 02.1 execution started
+stopped_at: Completed 02.1-04-PLAN.md — RAG pipeline foundation complete; demo.ipynb created; awaiting human Ollama verification checkpoint
+last_updated: "2026-04-12T23:59:00.000Z"
+last_activity: 2026-04-12 -- Phase 02.1 all 4 plans executed
 progress:
   total_phases: 8
-  completed_phases: 1
-  total_plans: 6
-  completed_plans: 2
-  percent: 33
+  completed_phases: 2
+  total_plans: 10
+  completed_plans: 6
+  percent: 60
 ---
 
 # Project State
@@ -21,38 +21,42 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate a practical, end-to-end attack + defense pipeline for indirect prompt injection in RAG systems, with measurable attack success rates and defense effectiveness.
-**Current focus:** Phase 02.1 — rag-pipeline-foundation
+**Current focus:** Phase 02.2 — corpus poisoning attack (next phase)
 
 ## Current Position
 
-Phase: 02.1 (rag-pipeline-foundation) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 02.1
-Last activity: 2026-04-12 -- Phase 02.1 execution started
+Phase: 02.1 (rag-pipeline-foundation) — COMPLETE (pending human Ollama verification for demo.ipynb)
+Next phase: 02.2 — corpus poisoning attack
+Last activity: 2026-04-12 -- Phase 02.1 all 4 plans executed
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 0
+- Total plans completed: 6
 - Average duration: —
 - Total execution time: —
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| - | - | - | - |
+| Phase | Plans | Status |
+|-------|-------|--------|
+| 01.1 | 2 | Complete |
+| 02.1 | 4 | Complete (Ollama checkpoint pending) |
 
 **Recent Trend:**
 
-- Last 5 plans: —
-- Trend: —
+- Last 5 plans: 02.1-01, 02.1-02, 02.1-03, 02.1-04
+- Trend: On track
 
 *Updated after each plan completion*
 | Phase 01.1 P02 | 115 | 3 tasks | 1 files |
+| Phase 02.1 P01 | env + scaffolding | complete |
+| Phase 02.1 P02 | config + corpus | complete |
+| Phase 02.1 P03 | retriever + generator + logger + pipeline | complete |
+| Phase 02.1 P04 | demo.ipynb | complete (checkpoint pending) |
 
 ## Accumulated Context
 
@@ -74,12 +78,12 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 1 submission was due 2026-03-27 (4 days ago) — Phase 1.1 is overdue, start immediately
-- Phase 2 submission due 2026-04-12 — only 12 days away; pipeline + attacks + baseline ASR must be done
+- Phase 2 submission due 2026-04-12 (today) — pipeline is done; demo.ipynb needs Ollama verification
+- demo.ipynb checkpoint: run `pipeline.build()` + `pipeline.query()` with Ollama to confirm end-to-end works
 - Defense classifier training data source not yet determined (needed for Phase 3.1)
 
 ## Session Continuity
 
-Last session: 2026-04-01T00:48:44.923Z
-Stopped at: Completed 01.1-02-PLAN.md — Phase 1 writeup complete (all 8 sections)
+Last session: 2026-04-12T23:59:00.000Z
+Stopped at: Completed 02.1-04-PLAN.md — RAG pipeline foundation done; demo.ipynb needs human Ollama verification
 Resume file: None
