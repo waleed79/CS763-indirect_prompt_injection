@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02.1-04-PLAN.md — RAG pipeline foundation complete; demo.ipynb created; awaiting human Ollama verification checkpoint
-last_updated: "2026-04-12T23:59:00.000Z"
-last_activity: 2026-04-12 -- Phase 02.1 all 4 plans executed
+stopped_at: Phase 02.1 VERIFIED — demo.ipynb approved; ready for Phase 02.2 corpus poisoning
+last_updated: "2026-04-13T00:30:00.000Z"
+last_activity: 2026-04-13 -- Phase 02.1 fully verified and closed
 progress:
   total_phases: 8
   completed_phases: 2
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 
 ## Current Position
 
-Phase: 02.1 (rag-pipeline-foundation) — COMPLETE (pending human Ollama verification for demo.ipynb)
+Phase: 02.1 (rag-pipeline-foundation) — COMPLETE (verified)
 Next phase: 02.2 — corpus poisoning attack
-Last activity: 2026-04-12 -- Phase 02.1 all 4 plans executed
+Last activity: 2026-04-13 -- Phase 02.1 verified; demo.ipynb ran end-to-end with Ollama
 
 Progress: [██████░░░░] 60%
 
@@ -44,7 +44,7 @@ Progress: [██████░░░░] 60%
 | Phase | Plans | Status |
 |-------|-------|--------|
 | 01.1 | 2 | Complete |
-| 02.1 | 4 | Complete (Ollama checkpoint pending) |
+| 02.1 | 4 | Complete (verified) |
 
 **Recent Trend:**
 
@@ -78,9 +78,8 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 2 submission due 2026-04-12 (today) — pipeline is done; demo.ipynb needs Ollama verification
-- demo.ipynb checkpoint: run `pipeline.build()` + `pipeline.query()` with Ollama to confirm end-to-end works
 - Defense classifier training data source not yet determined (needed for Phase 3.1)
+- Phase 02.2 (corpus poisoning attack) not yet planned — next step
 
 ## Session Continuity
 
