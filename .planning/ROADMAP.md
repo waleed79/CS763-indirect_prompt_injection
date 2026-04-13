@@ -58,10 +58,10 @@ Plans:
   4. The setup is reproducible: pinned package versions, random seeds, and a config file produce identical retrieval results on rerun
 **Plans**: 4 plans
 Plans:
-- [ ] 02.1-01-PLAN.md — Conda env setup, requirements.txt, pytest scaffolding (7 test stubs)
-- [ ] 02.1-02-PLAN.md — Config system (config.toml + rag/config.py), corpus loader, word-budget chunker, data/nq_500.jsonl
-- [ ] 02.1-03-PLAN.md — Retriever (ChromaDB + SentenceTransformer), Generator (Ollama), Logger (JSONL), Pipeline orchestrator
-- [ ] 02.1-04-PLAN.md — Demo notebook (demo.ipynb) + full pipeline verification checkpoint
+- [x] 02.1-01-PLAN.md — Conda env setup, requirements.txt, pytest scaffolding (7 test stubs)
+- [x] 02.1-02-PLAN.md — Config system (config.toml + rag/config.py), corpus loader, word-budget chunker, data/nq_500.jsonl
+- [x] 02.1-03-PLAN.md — Retriever (ChromaDB + SentenceTransformer), Generator (Ollama), Logger (JSONL), Pipeline orchestrator
+- [x] 02.1-04-PLAN.md — Demo notebook (demo.ipynb) + full pipeline verification checkpoint
 
 ### Phase 2.2: Attack Module
 **Goal**: At least two tiers of corpus poisoning attacks are implemented, attack corpus generation is scripted, and baseline ASR on the undefended pipeline is measured

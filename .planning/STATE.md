@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 02.1 VERIFIED — demo.ipynb approved; ready for Phase 02.2 corpus poisoning
-last_updated: "2026-04-13T00:30:00.000Z"
-last_activity: 2026-04-13 -- Phase 02.1 fully verified and closed
+stopped_at: Completed 02.2-02-PLAN.md — attack evaluation done, baseline ASR recorded
+last_updated: "2026-04-13T01:07:08.497Z"
+last_activity: 2026-04-13 -- Phase 02.1 verified; demo.ipynb ran end-to-end with Ollama
 progress:
   total_phases: 8
   completed_phases: 2
-  total_plans: 10
-  completed_plans: 6
+  total_plans: 8
+  completed_plans: 7
   percent: 60
 ---
 
@@ -71,6 +71,7 @@ Recent decisions affecting current work:
 - [Phase 01.1]: Threat model uses structured bullet format (D-01): scenario intro + capabilities + goals + explicit cannot-control list — no mathematical formalism
 - [Phase 01.1]: Methodology preview uses high-level narrative with no library names (D-07): 'a BERT-based classifier', 'a vector store', 'a local language model'
 - [Phase 01.1]: ASR defined verbatim per D-08 in Section 7: 'Attack Success Rate (ASR): the fraction of test queries for which the attack successfully hijacks the LLM response'
+- [Phase 02.2]: dataclasses.replace used to override frozen Config collection field for poisoned pipeline — pattern established for all future collection overrides
 
 ### Pending Todos
 
@@ -83,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T23:59:00.000Z
-Stopped at: Completed 02.1-04-PLAN.md — RAG pipeline foundation done; demo.ipynb needs human Ollama verification
+Last session: 2026-04-13T01:07:04.677Z
+Stopped at: Completed 02.2-02-PLAN.md — attack evaluation done, baseline ASR recorded
 Resume file: None
