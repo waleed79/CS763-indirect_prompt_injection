@@ -1,0 +1,25 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Pytest cache
+.pytest_cache/
+
+# ChromaDB persisted data (large, local-only)
+chroma_db/
+
+# Retrieval logs (generated artifacts)
+logs/
+
+# HuggingFace model cache (downloaded by scripts)
+.cache/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Environment
+.env
+*.egg-info/
+dist/
+build/
