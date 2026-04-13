@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import os
 import random
-from typing import Any
+from typing import Any, Callable, Optional
 
 import numpy as np
 import torch
@@ -128,7 +128,7 @@ class RAGPipeline:
         # ── Logger ────────────────────────────────────────────────────────────
         self._logger = RetrievalLogger(path=self.cfg.log_path)
 
-    def query(self, question: str) -> dict[str, Any]:
+    def query(self, question: str, defense_fn: Optional[Callable[[list[dict]], list[dict]]] = None) -> dict[str, Any]:
         """Run a single question through the full RAG pipeline.
 
         Parameters
@@ -157,6 +157,13 @@ class RAGPipeline:
             for i, h in enumerate(hits)
         ]
 
+        if defense_fn is not None:
+            hit_dicts = defense_fn(hit_dicts)
+
+            # Reconstruct Hits for the generator based on filtered chunk_ids
+            filtered_chunk_ids = {h["chunk_id"] for h in hit_dicts}
+            hits = [h for h in hits if h.chunk_id in filtered_chunk_ids]
+
         self._logger.log(
             query=question,
             top_k=self.cfg.top_k,
@@ -167,3 +174,8 @@ class RAGPipeline:
         answer = self._generator.generate(question, hits)
 
         return {"question": question, "answer": answer, "hits": hit_dicts}
+
+    def close(self) -> None:
+        """Properly close components (e.g. log file handles)."""
+        if self._logger is not None:
+            self._logger.close()
