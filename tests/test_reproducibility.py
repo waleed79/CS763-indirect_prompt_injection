@@ -32,9 +32,9 @@ class TestConfigLoads:
         c = load_config("config.toml")
         assert c.top_k == 5
 
-    def test_config_corpus_size_is_500(self):
+    def test_config_corpus_size_is_1000(self):
         c = load_config("config.toml")
-        assert c.corpus_size == 500
+        assert c.corpus_size == 1000
 
     def test_config_chunk_words_is_200(self):
         c = load_config("config.toml")
@@ -50,11 +50,11 @@ class TestConfigLoads:
 
     def test_config_llm_model(self):
         c = load_config("config.toml")
-        assert c.llm_model == "llama3.2:3b"
+        assert c.llm_model == "mistral:7b"
 
     def test_config_collection(self):
         c = load_config("config.toml")
-        assert c.collection == "nq_clean_v1"
+        assert c.collection == "nq_clean_v2"
 
     def test_config_is_frozen(self):
         c = load_config("config.toml")
