@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
 status: Ready to execute
-stopped_at: "Completed 02.2-01-PLAN.md — MS-MARCO corpus, upgraded attacks, mistral:7b config"
-last_updated: "2026-04-15T16:50:43.117Z"
+stopped_at: Phase 02.3 context updated — 100-query expansion, ID bug fixes, multi-model eval
+last_updated: "2026-04-21T18:57:31.603Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 11
@@ -90,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-15T16:50:43.113Z
-Stopped at: Completed 02.2-01-PLAN.md — MS-MARCO corpus, upgraded attacks, mistral:7b config
-Resume file: None
+Last session: 2026-04-21T18:57:31.595Z
+Stopped at: Phase 02.3 context updated — 100-query expansion, ID bug fixes, multi-model eval
+Resume file: .planning/phases/02.3-evaluation-harness/02.3-CONTEXT.md
