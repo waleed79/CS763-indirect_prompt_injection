@@ -112,8 +112,11 @@ Plans:
   5. All 4 attack tiers (naive, context-blending, LLM-generated, cross-chunk) have comparable ASR measurements
   6. Cross-model baseline is established: all 4 tiers are run against both llama3.2:3b and mistral:7b, producing the first cross-model ASR comparison in the project — results table covers both models
   7. LLM-as-judge semantic ASR is piloted alongside substring matching on Tier 3 payloads — measures agreement rate between the two methods (EVAL-V2-02 bootstrap)
-**Plans**: TBD
-**UI hint**: no
+**Plans**: 3 plans
+Plans:
+- [ ] 02.4-01-PLAN.md — Wave 0 test stubs (test_corpus.py, test_pipeline.py, test_generator.py) + Tier 3 batch generation script + data/t3_payloads.jsonl
+- [ ] 02.4-02-PLAN.md — Extend generate_poisoned_corpus.py with Tier 4 static fragments + assemble data/corpus_poisoned.jsonl (all 4 tiers)
+- [ ] 02.4-03-PLAN.md — Extend run_eval.py (4-tier predicate fix + metrics) + create run_judge.py + build nq_poisoned_v4 + cross-model eval
 
 ### Phase 3.1: Multi-Signal Defense Fusion
 **Goal**: A 4-signal ensemble defense is trained and integrated into the RAG pipeline, combining BERT classifier, perplexity anomaly detection, imperative sentence ratio, and retrieval score fingerprinting via a learned meta-classifier — reducing ASR on Tiers 1-3 measurably
@@ -211,7 +214,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.1 RAG Pipeline Foundation | 4/4 | Complete | 2026-04-12 |
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
-| 2.4 Advanced Attack Tiers | 0/? | Not started | - |
+| 2.4 Advanced Attack Tiers | 0/3 | In progress | - |
 | 3.1 Multi-Signal Defense Fusion | 0/? | Not started | - |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
@@ -223,4 +226,5 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 *Restructured: 2026-04-13 — Direction A (arms race) added*
 *Audited: 2026-04-21 — Phase 2.2 marked complete; deferred items (ATK-01b, ATK-02, EVAL-V2-01) captured in Phase 3.3; cross-model baseline added to Phase 2.4; DEF-02 ablation added to Phase 3.1; ATK-09 and EVAL-05 (multi-seed) added to Phase 3.2; Phase 3.3 expanded from 3 to 6 criteria; PH3-05 made required in Phase 3.4; novelty positioning vs. PoisonedRAG/BadRAG/AttriBoT literature added throughout*
 *Phase 2.3 replanned: 2026-04-21 — full replan from scratch; plan list updated to reflect corpus expansion + harness fixes*
+*Phase 2.4 planned: 2026-04-22 — 3 plans in 2 waves; Tier 3 (kimi-k2.5:cloud) + Tier 4 (3-fragment fragmentation) + cross-model eval (llama + mistral) + EVAL-V2-02 judge pilot*
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
