@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Ready to execute
-stopped_at: Phase 02.3 context updated — 100-query expansion, ID bug fixes, multi-model eval
-last_updated: "2026-04-21T18:57:31.603Z"
-last_activity: 2026-04-15
+status: Phase 02.3 complete — ready for Phase 02.4
+stopped_at: Phase 02.3 execution complete — 4-model baselines, 100-query set, URL Tier-2, run_eval.py fixed
+last_updated: "2026-04-21T23:00:00.000Z"
+last_activity: 2026-04-21
 progress:
   total_phases: 11
-  completed_phases: 3
-  total_plans: 10
-  completed_plans: 8
-  percent: 60
+  completed_phases: 4
+  total_plans: 12
+  completed_plans: 10
+  percent: 72
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 02.2 — attack-module
+**Current focus:** Phase 02.4 — advanced attack tiers (Tier 3 LLM-generated + Tier 4 cross-chunk)
 
 ## Current Position
 
-Phase: 02.2 (attack-module) — EXECUTING
+Phase: 02.3 (evaluation-harness) — COMPLETE
 Plan: 2 of 2
-Next phase: 02.2 — corpus poisoning attack
-Last activity: 2026-04-15
+Next phase: 02.4 — advanced attack tiers
+Last activity: 2026-04-21
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 72%
 
 ## Performance Metrics
 
@@ -46,19 +46,13 @@ Progress: [██████░░░░] 60%
 |-------|-------|--------|
 | 01.1 | 2 | Complete |
 | 02.1 | 4 | Complete (verified) |
+| 02.2 | 2 | Complete |
+| 02.3 | 2 | Complete (verified 2026-04-21) |
 
 **Recent Trend:**
 
-- Last 5 plans: 02.1-01, 02.1-02, 02.1-03, 02.1-04
+- Last 5 plans: 02.2-01, 02.2-02, 02.3-01, 02.3-02
 - Trend: On track
-
-*Updated after each plan completion*
-| Phase 01.1 P02 | 115 | 3 tasks | 1 files |
-| Phase 02.1 P01 | env + scaffolding | complete |
-| Phase 02.1 P02 | config + corpus | complete |
-| Phase 02.1 P03 | retriever + generator + logger + pipeline | complete |
-| Phase 02.1 P04 | demo.ipynb | complete (checkpoint pending) |
-| Phase 02.2 P01 | 25 | 6 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -78,18 +72,23 @@ Recent decisions affecting current work:
 - [Phase 02.2]: 5 Tier-1 injection variants with distinct keywords (HACKED/COMPROMISED/INFILTRATED/SYSTEM_OVERRIDE/PAYLOAD_DELIVERED) enable per-style ASR measurement
 - [Phase 02.2]: mistral:7b chosen over llama3.2:3b as primary LLM target for stronger instruction-following and more meaningful ASR numbers
 - [Phase 02.2]: MS-MARCO v1.1 chosen over NQ-500 for 1000-passage corpus — web-search passages are more heterogeneous and realistic for RAG
+- [Phase 02.3]: Tier-2 EXFILTRATED token replaced with attacker.com URL payload — LLMs echo URLs reliably but not metadata tokens
+- [Phase 02.3]: paired_asr metrics computed over indices 0-49 only — isolates attack signal from clean-query false positive noise
+- [Phase 02.3]: Mistral:7b shows highest Tier-2 susceptibility (32% paired ASR) — stronger instruction-following makes it more likely to follow embedded [Note for AI:] directives
+- [Phase 02.3]: Cloud models (gpt-oss:20b/120b) resist Tier-1 naive injection (0% ASR) but succumb to Tier-2 URL smuggling — confirms scale doesn't defeat instruction smuggling
+- [Phase 02.3]: --model flag added to run_eval.py — enables multi-model eval without config.toml mutation
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
 - Defense classifier training data source not yet determined (needed for Phase 3.1)
-- Phase 02.2 (corpus poisoning attack) not yet planned — next step
+- Phase 02.4 (advanced attack tiers: Tier 3 LLM-generated + Tier 4 cross-chunk) not yet planned
 
 ## Session Continuity
 
-Last session: 2026-04-21T18:57:31.595Z
-Stopped at: Phase 02.3 context updated — 100-query expansion, ID bug fixes, multi-model eval
-Resume file: .planning/phases/02.3-evaluation-harness/02.3-CONTEXT.md
+Last session: 2026-04-21T23:00:00.000Z
+Stopped at: Phase 02.3 complete — 4-model baselines produced, all must-haves verified
+Resume file: .planning/phases/02.4-advanced-attack-tiers/ (needs planning)

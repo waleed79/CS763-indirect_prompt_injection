@@ -18,7 +18,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 1.2: Initial RAG Pipeline** - [optional] Basic RAG pipeline running as Phase 1 initial results
 - [ ] **Phase 2.1: RAG Pipeline Foundation** - Functional RAG pipeline with corpus, embedder, vector store, and LLM (needed for Apr 12 submission)
 - [ ] **Phase 2.2: Attack Module** - Corpus poisoning attacks at 2 sophistication tiers with baseline ASR measurement
-- [ ] **Phase 2.3: Evaluation Harness** - Automated ASR measurement infrastructure with retrieval rate decomposition
+- [x] **Phase 2.3: Evaluation Harness** - Automated ASR measurement infrastructure with retrieval rate decomposition (completed 2026-04-21)
 - [ ] **Phase 2.4: Advanced Attack Tiers** - LLM-generated payloads (Tier 3) and cross-chunk fragmentation attacks (Tier 4)
 - [ ] **Phase 3.1: Multi-Signal Defense Fusion** - 4-signal ensemble defense (BERT + perplexity + imperative ratio + retrieval fingerprint) with meta-classifier
 - [ ] **Phase 3.2: Adaptive Attacks & Causal Attribution** - Defense-aware attacks + leave-one-out causal influence analysis
@@ -78,9 +78,9 @@ Plans:
   3. At least two payload types are demonstrated: instruction override and one of misinformation injection or data exfiltration
   4. Poisoned corpus generation is scripted and reproducible — running the script produces a deterministic poisoned corpus
   5. Baseline ASR is recorded numerically for the undefended pipeline (this number motivates the defense)
-**Plans**: TBD
+**Plans**: 2 plans
 
-**Optional requirements in this phase:** ATK-01b (3-tier taxonomy), ATK-02 (poisoning ratio sweep 0.1%-10%)
+**Deferred to Phase 3.3:** ATK-01b (obfuscated/encoding tier), ATK-02 (poisoning ratio sweep), EVAL-V2-02 (LLM-as-judge ASR)
 
 ### Phase 2.3: Evaluation Harness
 **Goal**: Automated experiment infrastructure measures ASR with retrieval rate decomposition, so defense development in Phase 3 has immediate quantitative feedback
@@ -89,12 +89,19 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Running the evaluation harness on a (corpus, attack, query set) triple produces a structured results file with ASR, retrieval rate, and conditional ASR
   2. The harness can run the same experiment with/without a defense active, producing comparable paired results
-**Plans**: TBD
+  3. Tier-2 ASR is non-zero (payload fixed from 0% baseline in Phase 2.2)
+**Plans**: 2 plans
+Plans:
+- [x] 02.3-01-PLAN.md — Expand test_queries.json to 100 entries (50 paired/50 clean), fix generate_poisoned_corpus.py for 50 topics + URL-based Tier-2, regenerate corpus_poisoned.jsonl
+- [x] 02.3-02-PLAN.md — Fix run_eval.py bugs (passage IDs, collection default, paired field, paired_asr aggregates, --model/--delay flags), run canonical undefended evals for 4 models: llama3.2:3b, mistral:7b, gpt-oss:20b-cloud, gpt-oss:120b-cloud
 
-**Optional requirements in this phase:** EVAL-01 retrieval rate breakdown (flagged as optional in requirements)
+**Optional:** EVAL-01 retrieval rate breakdown (conditional ASR per tier)
 
 ### Phase 2.4: Advanced Attack Tiers
 **Goal**: Two novel attack tiers are implemented — LLM-generated payloads (Tier 3) and cross-chunk fragmentation (Tier 4) — with ASR measured on the undefended pipeline
+
+**Attacker LLM for Tier 3 payload generation:** `kimi-k2.5:cloud` (Moonshot AI, 256K context window, free via Ollama cloud account). The large context window allows reading relevant corpus passages before crafting targeted payloads — enabling semantically coherent injection that evades simpler defenses. Run via `ollama run kimi-k2.5:cloud` (requires `ollama login`; no code changes beyond passing the model name).
+
 **Depends on**: Phase 2.3
 **Requirements**: ATK-06, ATK-07
 **Success Criteria** (what must be TRUE):
@@ -103,60 +110,69 @@ Plans:
   3. Co-retrieval rate is measured (probability that all fragments land in the same top-k retrieval) and reported
   4. Reassembly ASR is measured (conditional on co-retrieval, does the LLM follow the fragmented instruction?)
   5. All 4 attack tiers (naive, context-blending, LLM-generated, cross-chunk) have comparable ASR measurements
+  6. Cross-model baseline is established: all 4 tiers are run against both llama3.2:3b and mistral:7b, producing the first cross-model ASR comparison in the project — results table covers both models
+  7. LLM-as-judge semantic ASR is piloted alongside substring matching on Tier 3 payloads — measures agreement rate between the two methods (EVAL-V2-02 bootstrap)
 **Plans**: TBD
 **UI hint**: no
 
 ### Phase 3.1: Multi-Signal Defense Fusion
 **Goal**: A 4-signal ensemble defense is trained and integrated into the RAG pipeline, combining BERT classifier, perplexity anomaly detection, imperative sentence ratio, and retrieval score fingerprinting via a learned meta-classifier — reducing ASR on Tiers 1-3 measurably
 **Depends on**: Phase 2.4
-**Requirements**: DEF-01, DEF-03, DEF-04
+**Requirements**: DEF-01, DEF-02, DEF-03, DEF-04
 **Success Criteria** (what must be TRUE):
   1. Each of the 4 individual signals produces a numeric score per retrieved chunk (independently testable)
   2. The meta-classifier (logistic regression or gradient boosting) combines the 4 signals into a single injection probability per chunk
   3. The fused defense is wired into the pipeline between retrieval and generation via the existing `defense_fn` hook
-  4. Individual signal ASR reduction is measured (BERT alone, perplexity alone, etc.) showing each is insufficient against all tiers
+  4. Individual signal ASR reduction is measured (BERT alone, perplexity alone, etc.) showing each is insufficient against all tiers — per-signal ablation table included
   5. The fused defense achieves lower ASR than any individual signal on at least 2 attack tiers
   6. False positive rate on clean queries is measured (defense should not filter legitimate chunks excessively)
+  7. DEF-02 prompt-engineering baseline (system-prompt instruction-data separation) is implemented and measured as an ablation comparison — establishes that rule-based instruction separation alone is insufficient, motivating the statistical multi-signal approach
 **Plans**: TBD
 **UI hint**: no
 
 ### Phase 3.2: Adaptive Attacks & Causal Attribution
-**Goal**: The multi-signal defense is stress-tested with adaptive attacks (ATK-08), and causal influence attribution is implemented to detect cross-chunk fragmentation attacks that evade per-chunk defenses
+**Goal**: The multi-signal defense is stress-tested with adaptive attacks (ATK-08, ATK-09), and causal influence attribution is implemented to detect cross-chunk fragmentation attacks that evade per-chunk defenses
 **Depends on**: Phase 3.1
-**Requirements**: ATK-08, DEF-05
+**Requirements**: ATK-08, ATK-09, DEF-05, EVAL-05
 **Success Criteria** (what must be TRUE):
-  1. At least 2 adaptive attack strategies are tested against the fused defense (e.g., natural-language-only payloads that maintain low perplexity, payloads that avoid imperative mood)
-  2. Adaptive attack ASR is measured and compared against non-adaptive tiers — demonstrating the arms race
-  3. Leave-one-out causal influence is computed for a subset of queries (generate answer with/without each chunk, measure output divergence)
-  4. The influence/relevance ratio anomaly metric is shown to distinguish injected chunks from clean chunks (ROC curve or precision-recall on labeled data)
-  5. Causal attribution is evaluated specifically on cross-chunk fragmentation attacks (Tier 4) where per-chunk defenses fail
+  1. At least 2 adaptive attack strategies are tested against the fused defense (natural-language-only payloads with low perplexity, payloads that avoid imperative mood)
+  2. ATK-09 (non-imperative declarative-only adaptive attack) is explicitly tested — targets the imperative-ratio signal specifically; its ASR demonstrates that single-signal gaps remain exploitable
+  3. Adaptive attack ASR is measured and compared against non-adaptive tiers — demonstrating the arms race escalation narrative
+  4. Leave-one-out causal influence is computed for a subset of queries (generate answer with/without each chunk, measure output divergence)
+  5. The influence/relevance ratio anomaly metric distinguishes injected chunks from clean chunks (ROC curve or precision-recall on labeled data)
+  6. Causal attribution is evaluated specifically on cross-chunk fragmentation attacks (Tier 4) where per-chunk defenses fail
+  7. Results are aggregated over 3 random seeds (EVAL-05) — mean ± std dev reported for key ASR metrics across the arms race table
 **Plans**: TBD
 **UI hint**: no
 
 ### Phase 3.3: Quick Evaluation Additions
-**Goal**: Three low-effort evaluations strengthen the generalizability and presentation impact of the project
+**Goal**: Six targeted evaluations — capturing all items deferred from earlier phases — that collectively strengthen generalizability, reproduce key literature comparisons, and add novel dimensions not found in existing RAG attack papers
 **Depends on**: Phase 2.3 (can run in parallel with Phase 3.1/3.2)
-**Requirements**: EVAL-06, EVAL-07, EVAL-08
+**Requirements**: EVAL-06, EVAL-07, EVAL-08, ATK-01b, ATK-02, EVAL-V2-01, EVAL-V2-02
 **Success Criteria** (what must be TRUE):
-  1. Retriever transferability: poisoned corpus ASR is measured with at least 3 embedding models (all-MiniLM-L6-v2, BAAI/bge-small-en-v1.5, all-mpnet-base-v2) and transfer rates reported
-  2. Human stealthiness: at least 3 evaluators classify a blind mix of clean and poisoned passages; human detection accuracy is compared against the automated defense
-  3. XSS/SSRF taxonomy: a formal mapping table exists connecting IPI attack classes to web security vulnerability classes (stored XSS ↔ corpus poisoning, reflected XSS ↔ query-time injection, CSP ↔ context sanitization, etc.)
+  1. Retriever transferability (EVAL-06): poisoned corpus ASR is measured with at least 3 embedding models — `nomic-embed-text` (primary, MTEB 62.4, 8192-token context), `mxbai-embed-large` (MTEB 64.7, strong BEIR performer), and `all-MiniLM-L6-v2` (legacy baseline, MTEB 56.3, preserved from Phase 2.1 for direct comparison) — novel finding as embedding-specific transfer for poisoning is not in published literature
+  2. Human stealthiness (EVAL-07): at least 3 evaluators classify a blind mix of clean and poisoned passages; human detection accuracy compared against automated defense
+  3. XSS/SSRF taxonomy (EVAL-08): formal mapping table connecting IPI attack classes to web security vulnerability classes with specific examples per mapping (stored XSS ↔ corpus poisoning, SSRF ↔ tool-call injection, CSP ↔ context sanitization)
+  4. Poisoning ratio sweep (ATK-02, deferred from Phase 2.2): ASR measured at 5 poisoning ratios (0.5%, 1%, 2%, 5%, 10% of corpus size) — produces the ASR-vs-poisoning-ratio curve needed for the final results section
+  5. Obfuscated encoding tier (ATK-01b, deferred from Phase 2.2): one additional attack variant using encoding obfuscation (Base64-encoded payload, Unicode homoglyphs, or whitespace-padded tokens) measured against the undefended pipeline to complete the 3-tier taxonomy
+  6. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all 4 tiers × 3 defense levels) is run against both llama3.2:3b and mistral:7b — demonstrates attack generalizability across LLM architectures and is a differentiating result vs. single-model RAG attack papers
 **Plans**: TBD
 **UI hint**: no
 
 ### Phase 3.4: Full Evaluation and Final Report
 **Goal**: The complete arms race experiment matrix is run, results are analyzed honestly (including limitations and fundamental limits), and the Phase 3 Google Doc submission is written
 **Depends on**: Phase 3.1, Phase 3.2, Phase 3.3
-**Requirements**: EVAL-02, EVAL-03, EVAL-04, EVAL-05, PH3-01, PH3-02, PH3-03, PH3-04, PH3-05
+**Requirements**: EVAL-02, EVAL-03, EVAL-04, PH3-01, PH3-02, PH3-03, PH3-04, PH3-05
 **Success Criteria** (what must be TRUE):
-  1. Results tables show ASR for all 4 attack tiers × 3 defense levels (no defense, individual signals, fused defense, causal attribution)
-  2. At least one figure shows the escalation narrative (attack tier vs. defense generation effectiveness)
+  1. Results tables show ASR for all 4 attack tiers × 3 defense levels (no defense, individual signals, fused defense, causal attribution) across 4 LLM columns: llama3.2:3b, mistral:7b, gpt-oss:20b-cloud, gpt-oss:120b-cloud — with per-variant Tier-1 breakdown included. The llama3.2:3b Tier-1/2 undefended row is seeded from `logs/attack_baseline.json` (Phase 2.2, 10-query frozen reference) alongside the Phase 2.3 100-query canonical runs.
+  2. At least one figure shows the escalation narrative (attack tier vs. defense generation effectiveness across the arms race)
   3. Adaptive attack results demonstrate the arms race dynamic (defense works → attacker adapts → need better defense)
-  4. A limitations section honestly names at least 2 things that did not work as expected, plus discusses fundamental limits of per-chunk defenses
-  5. The Phase 3 document is submitted to the course Google Doc by Apr 30
+  4. A limitations section honestly names at least 2 things that did not work as expected, plus discusses fundamental limits of per-chunk defenses vs. cross-chunk-aware approaches
+  5. Comparison to PoisonedRAG/BadRAG (PH3-05) is included — methodology differences are described and expected ASR differences discussed; this positions the contribution relative to the 2024-2025 literature (required, not optional)
+  6. The Phase 3 document is submitted to the course Google Doc by Apr 30
 **Plans**: TBD
 
-**Optional requirements in this phase:** EVAL-02 (utility metrics), EVAL-03 (ASR-utility curve), EVAL-04 (held-out attack evaluation), EVAL-05 (multi-seed aggregation), PH3-04 (failure case analysis), PH3-05 (comparison to related work)
+**Optional:** EVAL-02 (utility metrics), EVAL-03 (ASR-utility curve), EVAL-04 (held-out attack evaluation), PH3-04 (failure case analysis)
 
 ### Phase 4: Final Presentation
 **Goal**: A 10-12 minute presentation is ready that communicates the problem, approach, results, and conclusions clearly to fellow CS 763 students
@@ -193,8 +209,8 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 1.1 Phase 1 Submission Writeup | 2/2 | Complete | 2026-04-01 |
 | 1.2 Initial RAG Pipeline [optional] | — | Skipped | — |
 | 2.1 RAG Pipeline Foundation | 4/4 | Complete | 2026-04-12 |
-| 2.2 Attack Module | 1/2 | In progress | - |
-| 2.3 Evaluation Harness | 0/2 | Planned | - |
+| 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
+| 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 0/? | Not started | - |
 | 3.1 Multi-Signal Defense Fusion | 0/? | Not started | - |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
@@ -204,5 +220,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 
 ---
 *Roadmap created: 2026-03-31*
-*Restructured: 2026-04-13 — Direction A (arms race) added with advanced attack tiers, multi-signal defense fusion, causal attribution, and quick evaluation additions*
+*Restructured: 2026-04-13 — Direction A (arms race) added*
+*Audited: 2026-04-21 — Phase 2.2 marked complete; deferred items (ATK-01b, ATK-02, EVAL-V2-01) captured in Phase 3.3; cross-model baseline added to Phase 2.4; DEF-02 ablation added to Phase 3.1; ATK-09 and EVAL-05 (multi-seed) added to Phase 3.2; Phase 3.3 expanded from 3 to 6 criteria; PH3-05 made required in Phase 3.4; novelty positioning vs. PoisonedRAG/BadRAG/AttriBoT literature added throughout*
+*Phase 2.3 replanned: 2026-04-21 — full replan from scratch; plan list updated to reflect corpus expansion + harness fixes*
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
