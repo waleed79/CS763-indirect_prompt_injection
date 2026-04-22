@@ -518,7 +518,14 @@ def build_poisoned_passages() -> list[Passage]:
     poisoned: list[Passage] = []
 
     # Filter to only attack-paired queries (paired=True); clean queries get no poisoned doc
-    attack_queries = [e for e in TEST_QUERIES if e.get("paired", True)]
+    attack_queries = [e for e in TEST_QUERIES if e.get("paired", False)]
+
+    assert len(TIER1_OPENERS) >= len(attack_queries), (
+        f"Not enough TIER1_OPENERS ({len(TIER1_OPENERS)}) for {len(attack_queries)} attack queries"
+    )
+    assert len(TIER2_PARAGRAPHS) >= len(attack_queries), (
+        f"Not enough TIER2_PARAGRAPHS ({len(TIER2_PARAGRAPHS)}) for {len(attack_queries)} attack queries"
+    )
 
     for i, entry in enumerate(attack_queries):
         # Tier-1: rotate through 5 injection variants

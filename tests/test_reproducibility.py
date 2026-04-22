@@ -46,7 +46,7 @@ class TestConfigLoads:
 
     def test_config_embed_model(self):
         c = load_config("config.toml")
-        assert c.embed_model == "sentence-transformers/all-MiniLM-L6-v2"
+        assert c.embed_model == "nomic-ai/nomic-embed-text-v1.5"
 
     def test_config_llm_model(self):
         c = load_config("config.toml")
