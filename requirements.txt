@@ -15,6 +15,7 @@ colorama==0.4.6
 datasets==4.8.4
 dill==0.4.1
 durationpy==0.10
+einops>=0.8.0
 filelock==3.25.2
 flatbuffers==25.12.19
 frozenlist==1.8.0

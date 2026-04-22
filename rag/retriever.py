@@ -60,11 +60,13 @@ class Retriever:
         self.chroma_path = chroma_path
         self.top_k = top_k
 
-        self.encoder = SentenceTransformer(model_name)
+        # trust_remote_code=True is required for models with custom pooling code
+        # (e.g. nomic-ai/nomic-embed-text-v1.5). Harmlessly ignored for other models.
+        self.encoder = SentenceTransformer(model_name, trust_remote_code=True)
         self._client = chromadb.PersistentClient(path=chroma_path)
         self._collection = self._client.get_or_create_collection(
             name=collection_name,
-            # CRITICAL: ChromaDB defaults to L2; cosine is correct for MiniLM
+            # CRITICAL: ChromaDB defaults to L2; cosine is correct for sentence-transformers models
             configuration={"hnsw": {"space": "cosine"}},
             metadata={"description": "NQ 500 passages, 200-word chunks"},
         )
