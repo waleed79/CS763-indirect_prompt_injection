@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 02.4 in progress — plan 1 of 3 complete
-stopped_at: Phase 02.4 Plan 01 complete — Wave 0 stubs + Tier 3 payload generation done
-last_updated: "2026-04-23T17:28:00.000Z"
+status: Phase 02.4 in progress — plan 2 of 3 complete
+stopped_at: Phase 02.4 Plan 02 complete — Tier 4 templates + 4-tier corpus assembly done
+last_updated: "2026-04-23T17:38:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 12
-  completed_plans: 11
-  percent: 75
+  completed_plans: 12
+  percent: 80
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 02.4 (advanced-attack-tiers) — IN PROGRESS
-Plan: 1 of 3 COMPLETE (Plan 02 next)
+Plan: 2 of 3 COMPLETE (Plan 03 next)
 Last activity: 2026-04-23
 
 Progress: [████████░░] 75%
@@ -77,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 02.3]: --model flag added to run_eval.py — enables multi-model eval without config.toml mutation
 - [Phase 02.4-01]: gpt-oss:20b-cloud substituted for kimi-k2.5:cloud (Rule 3 deviation) — kimi requires paid subscription (403); research objective identical; --model flag preserves forward compatibility
 - [Phase 02.4-01]: Wave 0 stubs reference downstream module imports to enforce interface contract — TestTierDetectionPredicate imports TIER3/4_ID_START from run_eval.py; TestJudgeOutputParsing imports parse_judge_output from run_judge.py
+- [Phase 02.4-02]: Tier 4 Fragment C uses declarative editorial-note style (not imperative) — defeats per-chunk injection detectors by construction; no imperative verb in any single fragment
+- [Phase 02.4-02]: TIER4_SETS targets shakespeare_hamlet/einstein_relativity/vaccines_immunity (attack-paired indices 0, 1, 9) — highest-traffic paired queries for maximum co-retrieval signal
+- [Phase 02.4-02]: load_tier3_from_jsonl() filters to IDs 20100-20149 after loading to guard against stale/wrong-range entries in the JSONL
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-23T17:28:00.000Z
-Stopped at: Phase 02.4 Plan 01 complete — Wave 0 stubs + data/t3_payloads.jsonl (50 passages) produced
-Resume file: .planning/phases/02.4-advanced-attack-tiers/02.4-02-PLAN.md
+Last session: 2026-04-23T17:38:00.000Z
+Stopped at: Phase 02.4 Plan 02 complete — Tier 4 templates + 4-tier corpus_poisoned.jsonl (1159 passages) assembled
+Resume file: .planning/phases/02.4-advanced-attack-tiers/02.4-03-PLAN.md
