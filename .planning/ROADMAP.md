@@ -132,7 +132,7 @@ Plans:
   7. DEF-02 prompt-engineering baseline (system-prompt instruction-data separation) is implemented and measured as an ablation comparison — establishes that rule-based instruction separation alone is insufficient, motivating the statistical multi-signal approach
 **Plans**: 6 plans
 Plans:
-- [ ] 03.1-01-PLAN.md — Wave 0: test stubs (tests/test_defense.py, TestGenerateSystemPrompt), models/ dir, DistilBERT pre-flight
+- [x] 03.1-01-PLAN.md — Wave 0: test stubs (tests/test_defense.py, TestGenerateSystemPrompt), models/ dir, DistilBERT pre-flight (completed 2026-04-23)
 - [ ] 03.1-02-PLAN.md — rag/defense.py: FusedDefense + SingleSignalDefense + all 4 signal extractors
 - [ ] 03.1-03-PLAN.md — DEF-02: DEF_02_SYSTEM_PROMPT in generator.py + system_prompt kwarg threading through pipeline.query()
 - [ ] 03.1-04-PLAN.md — scripts/train_defense.py: offline BERT fine-tune + LR meta-classifier + Signal 4 calibration; run training
@@ -230,7 +230,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
-| 3.1 Multi-Signal Defense Fusion | 0/6 | In progress | - |
+| 3.1 Multi-Signal Defense Fusion | 1/6 | In progress | 2026-04-23 |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |

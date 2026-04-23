@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 02.4 complete — all 3 plans done
-stopped_at: Phase 02.4 Plan 03 complete — cross-model eval + LLM-as-judge pilot done
-last_updated: "2026-04-23T18:35:00.000Z"
+status: Phase 03.1 in progress — Plan 01 complete
+stopped_at: Phase 03.1 Plan 01 complete — Wave 0 pre-flight (test stubs + DistilBERT download)
+last_updated: "2026-04-23T18:47:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 12
-  completed_plans: 13
-  percent: 87
+  completed_plans: 14
+  percent: 89
 ---
 
 # Project State
@@ -24,8 +24,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 
 ## Current Position
 
-Phase: 02.4 (advanced-attack-tiers) — COMPLETE
-Plan: 3 of 3 COMPLETE
+Phase: 03.1 (multi-signal-defense-fusion) — IN PROGRESS
+Plan: 1 of 6 COMPLETE
 Last activity: 2026-04-23
 
 Progress: [█████████░] 87%
@@ -47,6 +47,7 @@ Progress: [█████████░] 87%
 | 02.2 | 2 | Complete |
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
+| 03.1 | 1/6 | In progress (Plan 01 complete 2026-04-23) |
 
 **Recent Trend:**
 
@@ -84,6 +85,8 @@ Recent decisions affecting current work:
 - [Phase 02.4-03]: LLM-as-judge agreement_rate=1.0 (79/79) — substring-based ASR detection validated as accurate proxy for semantic compliance
 - [Phase 02.4-03]: Tier 4 ASR=0% both models — co-retrieval of all 3 fragments not achieved in top-k=3; co-retrieval rate only 9%; expected empirical finding per RESEARCH.md Pitfall 3
 - [Phase 02.4-03]: mistral:7b shows 7% Tier 3 ASR (12% paired) vs 0% llama3.2:3b — stronger instruction-following increases susceptibility to LLM-generated semantic injections
+- [Phase 03.1-01]: Module-level try/except ImportError for rag.defense import in test stubs — collection exits 0 before defense module exists; all 9 dependent tests skip, TestDef02Prompt fails red
+- [Phase 03.1-01]: DistilBERT download via external script (scripts/_download_distilbert.py) — Windows conda 23.7.4 does not support multiline strings in -c arguments; external script is equivalent and reusable
 
 ### Pending Todos
 
@@ -96,6 +99,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-23T18:35:00.000Z
-Stopped at: Phase 02.4 Plan 03 complete — cross-model eval (llama + mistral) + LLM-as-judge pilot (agreement_rate=1.0) done
-Resume file: None (Phase 02.4 complete — advance to Phase 03.1)
+Last session: 2026-04-23T18:47:00.000Z
+Stopped at: Phase 03.1 Plan 01 complete — Wave 0 pre-flight: 10 test stubs, DistilBERT cached, models/ directory initialized
+Resume file: None (continue with Phase 03.1 Plan 02 — rag/defense.py implementation)
