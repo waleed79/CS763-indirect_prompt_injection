@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 02.4 — advanced attack tiers (Tier 3 LLM-generated + Tier 4 cross-chunk)
+**Current focus:** Phase 03.1 — multi-signal defense fusion (next phase)
 
 ## Current Position
 

@@ -19,7 +19,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 2.1: RAG Pipeline Foundation** - Functional RAG pipeline with corpus, embedder, vector store, and LLM (needed for Apr 12 submission)
 - [ ] **Phase 2.2: Attack Module** - Corpus poisoning attacks at 2 sophistication tiers with baseline ASR measurement
 - [x] **Phase 2.3: Evaluation Harness** - Automated ASR measurement infrastructure with retrieval rate decomposition (completed 2026-04-21)
-- [ ] **Phase 2.4: Advanced Attack Tiers** - LLM-generated payloads (Tier 3) and cross-chunk fragmentation attacks (Tier 4)
+- [x] **Phase 2.4: Advanced Attack Tiers** - LLM-generated payloads (Tier 3) and cross-chunk fragmentation attacks (Tier 4) (completed 2026-04-23)
 - [ ] **Phase 3.1: Multi-Signal Defense Fusion** - 4-signal ensemble defense (BERT + perplexity + imperative ratio + retrieval fingerprint) with meta-classifier
 - [ ] **Phase 3.2: Adaptive Attacks & Causal Attribution** - Defense-aware attacks + leave-one-out causal influence analysis
 - [ ] **Phase 3.3: Quick Evaluation Additions** - Retriever transferability, human stealthiness evaluation, XSS/SSRF taxonomy mapping
@@ -115,8 +115,8 @@ Plans:
 **Plans**: 3 plans
 Plans:
 - [x] 02.4-01-PLAN.md — Wave 0 test stubs (test_corpus.py, test_pipeline.py, test_generator.py) + Tier 3 batch generation script + data/t3_payloads.jsonl (completed 2026-04-23)
-- [ ] 02.4-02-PLAN.md — Extend generate_poisoned_corpus.py with Tier 4 static fragments + assemble data/corpus_poisoned.jsonl (all 4 tiers)
-- [ ] 02.4-03-PLAN.md — Extend run_eval.py (4-tier predicate fix + metrics) + create run_judge.py + build nq_poisoned_v4 + cross-model eval
+- [x] 02.4-02-PLAN.md — Extend generate_poisoned_corpus.py with Tier 4 static fragments + assemble data/corpus_poisoned.jsonl (all 4 tiers) (completed 2026-04-23)
+- [x] 02.4-03-PLAN.md — Extend run_eval.py (4-tier predicate fix + metrics) + create run_judge.py + build nq_poisoned_v4 + cross-model eval (completed 2026-04-23)
 
 ### Phase 3.1: Multi-Signal Defense Fusion
 **Goal**: A 4-signal ensemble defense is trained and integrated into the RAG pipeline, combining BERT classifier, perplexity anomaly detection, imperative sentence ratio, and retrieval score fingerprinting via a learned meta-classifier — reducing ASR on Tiers 1-3 measurably
@@ -214,7 +214,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.1 RAG Pipeline Foundation | 4/4 | Complete | 2026-04-12 |
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
-| 2.4 Advanced Attack Tiers | 0/3 | In progress | - |
+| 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
 | 3.1 Multi-Signal Defense Fusion | 0/? | Not started | - |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
