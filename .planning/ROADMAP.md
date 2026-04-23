@@ -114,7 +114,7 @@ Plans:
   7. LLM-as-judge semantic ASR is piloted alongside substring matching on Tier 3 payloads — measures agreement rate between the two methods (EVAL-V2-02 bootstrap)
 **Plans**: 3 plans
 Plans:
-- [ ] 02.4-01-PLAN.md — Wave 0 test stubs (test_corpus.py, test_pipeline.py, test_generator.py) + Tier 3 batch generation script + data/t3_payloads.jsonl
+- [x] 02.4-01-PLAN.md — Wave 0 test stubs (test_corpus.py, test_pipeline.py, test_generator.py) + Tier 3 batch generation script + data/t3_payloads.jsonl (completed 2026-04-23)
 - [ ] 02.4-02-PLAN.md — Extend generate_poisoned_corpus.py with Tier 4 static fragments + assemble data/corpus_poisoned.jsonl (all 4 tiers)
 - [ ] 02.4-03-PLAN.md — Extend run_eval.py (4-tier predicate fix + metrics) + create run_judge.py + build nq_poisoned_v4 + cross-model eval
 
