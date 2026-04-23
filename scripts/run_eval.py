@@ -277,7 +277,7 @@ def main() -> None:
 
     # ── Write results ─────────────────────────────────────────────────────────
     Path(args.output).parent.mkdir(exist_ok=True)
-    with open(args.output, "w") as f:
+    with open(args.output, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2)
 
     # ── Print summary ─────────────────────────────────────────────────────────
