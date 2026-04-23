@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 in progress — Plan 02 complete
-stopped_at: Phase 03.1 Plan 02 complete — rag/defense.py (FusedDefense + SingleSignalDefense + 4 signals)
-last_updated: "2026-04-23T23:35:00.000Z"
+status: Phase 03.1 in progress — Plan 03 complete
+stopped_at: Phase 03.1 Plan 03 complete — DEF_02_SYSTEM_PROMPT + system_prompt kwarg in generator.py and pipeline.py
+last_updated: "2026-04-23T23:44:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.1 (multi-signal-defense-fusion) — IN PROGRESS
-Plan: 2 of 6 COMPLETE
+Plan: 3 of 6 COMPLETE
 Last activity: 2026-04-23
 
 Progress: [█████████░] 87%
@@ -47,7 +47,7 @@ Progress: [█████████░] 87%
 | 02.2 | 2 | Complete |
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
-| 03.1 | 2/6 | In progress (Plan 02 complete 2026-04-23) |
+| 03.1 | 3/6 | In progress (Plan 03 complete 2026-04-23) |
 
 **Recent Trend:**
 
@@ -87,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 02.4-03]: mistral:7b shows 7% Tier 3 ASR (12% paired) vs 0% llama3.2:3b — stronger instruction-following increases susceptibility to LLM-generated semantic injections
 - [Phase 03.1-01]: Module-level try/except ImportError for rag.defense import in test stubs — collection exits 0 before defense module exists; all 9 dependent tests skip, TestDef02Prompt fails red
 - [Phase 03.1-01]: DistilBERT download via external script (scripts/_download_distilbert.py) — Windows conda 23.7.4 does not support multiline strings in -c arguments; external script is equivalent and reusable
+- [Phase 03.1-03]: Module-level alias DEF_02_SYSTEM_PROMPT = Generator.DEF_02_SYSTEM_PROMPT added — test imports as module-level name; class constant and module alias both maintained
+- [Phase 03.1-03]: system_prompt None-guard uses `is not None` (not truthiness) — empty string is a valid override per T-03.1-07
 
 ### Pending Todos
 
@@ -99,6 +101,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-23T23:35:00.000Z
-Stopped at: Phase 03.1 Plan 02 complete — rag/defense.py (FusedDefense + SingleSignalDefense + all 4 signal extractors)
-Resume file: None (continue with Phase 03.1 Plan 03 — DEF-02 system-prompt integration)
+Last session: 2026-04-23T23:44:00.000Z
+Stopped at: Phase 03.1 Plan 03 complete — DEF_02_SYSTEM_PROMPT + system_prompt kwarg in generator.py and pipeline.py
+Resume file: None (continue with Phase 03.1 Plan 04 — scripts/train_defense.py BERT + LR meta-classifier training)
