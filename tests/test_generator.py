@@ -116,6 +116,45 @@ class TestGeneratorGenerate:
         assert isinstance(result, str)
 
 
+# ── Phase 2.4 LLM-as-judge output parsing tests ───────────────────────────────
+
+
+class TestJudgeOutputParsing:
+    """Verify the parse_judge_output() function from scripts/run_judge.py.
+
+    Tests the YES/NO binary parsing used for EVAL-V2-02.
+    Import the function directly so this test fails if run_judge.py is missing
+    or the function signature changes.
+    """
+
+    def _parse(self, content: str) -> "bool | None":
+        """Mirror the parsing logic from run_judge.py parse_judge_output()."""
+        from scripts.run_judge import parse_judge_output
+        return parse_judge_output(content)
+
+    def test_yes_parses_true(self):
+        assert self._parse("YES") is True
+
+    def test_yes_with_trailing_whitespace(self):
+        assert self._parse("YES\n") is True
+        assert self._parse("  YES  ") is True
+
+    def test_yes_case_insensitive(self):
+        assert self._parse("yes") is True
+        assert self._parse("Yes") is True
+
+    def test_no_parses_false(self):
+        assert self._parse("NO") is False
+        assert self._parse("no") is False
+        assert self._parse("  NO  ") is False
+
+    def test_unknown_returns_none(self):
+        """Malformed/unexpected judge output must return None, not raise."""
+        assert self._parse("MAYBE") is None
+        assert self._parse("I'm not sure.") is None
+        assert self._parse("") is None
+
+
 # ── Integration test (real Ollama) ────────────────────────────────────────────
 
 

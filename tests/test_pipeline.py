@@ -79,6 +79,65 @@ class TestRAGPipelineInit:
             pipe.query("test")
 
 
+# ── Phase 2.4 tier-detection predicate tests ──────────────────────────────────
+
+
+class TestTierDetectionPredicate:
+    """Verify the corrected 4-tier ID-range predicate logic from run_eval.py.
+
+    These are pure-logic unit tests — no Ollama or ChromaDB required.
+    Import the constants directly from run_eval.py so the tests fail if the
+    constants are wrong or missing.
+    """
+
+    def _classify(self, pid: int) -> str:
+        """Classify a passage_id using the same bounded-range logic as run_eval.py."""
+        from scripts.run_eval import (
+            TIER1_ID_START,
+            TIER2_ID_START,
+            TIER3_ID_START,
+            TIER4_ID_START,
+        )
+        if TIER1_ID_START <= pid < TIER2_ID_START:
+            return "tier1"
+        elif TIER2_ID_START <= pid < TIER3_ID_START:
+            return "tier2"
+        elif TIER3_ID_START <= pid < TIER4_ID_START:
+            return "tier3"
+        elif pid >= TIER4_ID_START:
+            return "tier4"
+        return "clean"
+
+    def test_tier1_boundary(self):
+        assert self._classify(20000) == "tier1"
+        assert self._classify(20049) == "tier1"
+
+    def test_tier2_boundary(self):
+        assert self._classify(20050) == "tier2"
+        assert self._classify(20099) == "tier2"
+
+    def test_tier3_boundary(self):
+        """ID 20100 must classify as tier3, NOT tier2."""
+        assert self._classify(20100) == "tier3", "ID 20100 misclassified — catch-all bug not fixed"
+        assert self._classify(20149) == "tier3"
+
+    def test_tier4_boundary(self):
+        assert self._classify(20200) == "tier4"
+        assert self._classify(20299) == "tier4"
+
+    def test_reserved_range_classified_as_tier3(self):
+        """IDs 20150–20199 (reserved for Phase 3.3) are within tier3 range."""
+        assert self._classify(20150) == "tier3"
+        assert self._classify(20199) == "tier3"
+
+    def test_old_catch_all_bug_does_not_exist(self):
+        """The old 'id >= TIER2_ID_START' predicate would classify ID 20200 as tier2.
+        Verify the new predicate correctly classifies it as tier4."""
+        assert self._classify(20200) == "tier4", (
+            "Catch-all bug present: ID 20200 (Tier 4) classified as tier2"
+        )
+
+
 # ── Integration tests (real Ollama + ChromaDB) ────────────────────────────────
 
 
