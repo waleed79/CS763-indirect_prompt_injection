@@ -128,13 +128,22 @@ class RAGPipeline:
         # ── Logger ────────────────────────────────────────────────────────────
         self._logger = RetrievalLogger(path=self.cfg.log_path)
 
-    def query(self, question: str, defense_fn: Optional[Callable[[list[dict]], list[dict]]] = None) -> dict[str, Any]:
+    def query(self, question: str,
+              defense_fn: Optional[Callable[[list[dict]], list[dict]]] = None,
+              system_prompt: str | None = None) -> dict[str, Any]:
         """Run a single question through the full RAG pipeline.
 
         Parameters
         ----------
         question:
             Free-form question string.
+        defense_fn:
+            Optional callable that filters retrieved chunks before generation.
+            Takes ``list[dict]`` and returns ``list[dict]``.
+        system_prompt:
+            Optional system prompt override passed to the generator.
+            Use ``rag.generator.DEF_02_SYSTEM_PROMPT`` for DEF-02 ablation.
+            If None (default), the generator uses its built-in default prompt.
 
         Returns
         -------
@@ -171,7 +180,7 @@ class RAGPipeline:
             results=hit_dicts,
         )
 
-        answer = self._generator.generate(question, hits)
+        answer = self._generator.generate(question, hits, system_prompt=system_prompt)
 
         return {"question": question, "answer": answer, "hits": hit_dicts}
 
