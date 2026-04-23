@@ -155,6 +155,28 @@ class TestJudgeOutputParsing:
         assert self._parse("") is None
 
 
+# ── Phase 3.1: DEF-02 system_prompt tests (Wave 0 stubs) ─────────────────────
+
+
+class TestGenerateSystemPrompt:
+    """Phase 3.1: DEF-02 system_prompt parameter on generator.generate()."""
+
+    def test_def02_constant_exists_and_has_must_not(self):
+        """DEF_02_SYSTEM_PROMPT constant must exist in rag.generator and contain 'MUST NOT'."""
+        from rag.generator import DEF_02_SYSTEM_PROMPT
+        assert isinstance(DEF_02_SYSTEM_PROMPT, str)
+        assert "MUST NOT" in DEF_02_SYSTEM_PROMPT
+        assert len(DEF_02_SYSTEM_PROMPT) > 50
+
+    def test_generate_accepts_system_prompt_kwarg(self):
+        """generate() must accept system_prompt=... without raising TypeError."""
+        gen = Generator()
+        gen._client = _mock_client("answer text")
+        # Should not raise TypeError: generate() got unexpected keyword argument
+        result = gen.generate("q", [], system_prompt="Custom system prompt here.")
+        assert isinstance(result, str)
+
+
 # ── Integration test (real Ollama) ────────────────────────────────────────────
 
 
