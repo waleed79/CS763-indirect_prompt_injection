@@ -100,7 +100,7 @@ Plans:
 ### Phase 2.4: Advanced Attack Tiers
 **Goal**: Two novel attack tiers are implemented — LLM-generated payloads (Tier 3) and cross-chunk fragmentation (Tier 4) — with ASR measured on the undefended pipeline
 
-**Attacker LLM for Tier 3 payload generation:** `kimi-k2.5:cloud` (Moonshot AI, 256K context window, free via Ollama cloud account). The large context window allows reading relevant corpus passages before crafting targeted payloads — enabling semantically coherent injection that evades simpler defenses. Run via `ollama run kimi-k2.5:cloud` (requires `ollama login`; no code changes beyond passing the model name).
+**Attacker LLM for Tier 3 payload generation:** `gpt-oss:20b-cloud` (actual; Rule 3 deviation from original plan). Originally specified as `kimi-k2.5:cloud` (Moonshot AI, 256K context) but at execution time kimi-k2.5:cloud required a paid Ollama subscription the team does not have. Substituted with gpt-oss:20b-cloud — the research objective (generate semantically coherent factual prose with an embedded anchor token so the payload evades per-chunk injection detectors) is identical. Run via `ollama run gpt-oss:20b-cloud` (requires `ollama login`; no code changes beyond passing the model name). `--model` flag on `run_eval.py` preserves forward compatibility if kimi access becomes available.
 
 **Depends on**: Phase 2.3
 **Requirements**: ATK-06, ATK-07
@@ -130,7 +130,14 @@ Plans:
   5. The fused defense achieves lower ASR than any individual signal on at least 2 attack tiers
   6. False positive rate on clean queries is measured (defense should not filter legitimate chunks excessively)
   7. DEF-02 prompt-engineering baseline (system-prompt instruction-data separation) is implemented and measured as an ablation comparison — establishes that rule-based instruction separation alone is insufficient, motivating the statistical multi-signal approach
-**Plans**: TBD
+**Plans**: 6 plans
+Plans:
+- [ ] 03.1-01-PLAN.md — Wave 0: test stubs (tests/test_defense.py, TestGenerateSystemPrompt), models/ dir, DistilBERT pre-flight
+- [ ] 03.1-02-PLAN.md — rag/defense.py: FusedDefense + SingleSignalDefense + all 4 signal extractors
+- [ ] 03.1-03-PLAN.md — DEF-02: DEF_02_SYSTEM_PROMPT in generator.py + system_prompt kwarg threading through pipeline.query()
+- [ ] 03.1-04-PLAN.md — scripts/train_defense.py: offline BERT fine-tune + LR meta-classifier + Signal 4 calibration; run training
+- [ ] 03.1-05-PLAN.md — scripts/run_eval.py: extend --defense to 7 modes, add FPR tracking, system_prompt threading
+- [ ] 03.1-06-PLAN.md — Run ablation evaluations (7 modes x llama + 2 x mistral); assemble ablation_table.json; human checkpoint
 **UI hint**: no
 
 ### Phase 3.2: Adaptive Attacks & Causal Attribution
@@ -152,13 +159,21 @@ Plans:
 **Goal**: Six targeted evaluations — capturing all items deferred from earlier phases — that collectively strengthen generalizability, reproduce key literature comparisons, and add novel dimensions not found in existing RAG attack papers
 **Depends on**: Phase 2.3 (can run in parallel with Phase 3.1/3.2)
 **Requirements**: EVAL-06, EVAL-07, EVAL-08, ATK-01b, ATK-02, EVAL-V2-01, EVAL-V2-02
+
+**Extended model targets (added 2026-04-23):** During Phase 2.4 execution we discovered two additional cloud models available in the project's Ollama installation: `gemma4:31b-cloud` (Google, 32.7B dense, 262K context) and `minimax-m2.5:cloud` (MoE 230B/10B active, 204K context). Both were absent from the original model matrix because the plan was written before their availability was confirmed. They are added to Phase 3.3 (not earlier phases) because:
+- The Phase 2.4 two-model cross-model eval (llama + mistral) is already a complete, committed result; retrofitting it would break reproducibility of Phase 2.4 verification artifacts.
+- Phase 3.3 is the natural "extended evaluation" slot, explicitly scoped for additions that strengthen generalizability.
+- **Gemma4 rationale** (primary addition): fills the Google RLHF lineage gap — current matrix covers Meta (llama3.2), Mistral, and OpenAI (gpt-oss) lineages; gemma4 is architecturally distinct enough that divergent ASR is expected and publishable. Its 262K context window also stress-tests Tier 4 fragment co-retrieval under longer contexts. Public Gemma-family jailbreak reports suggest non-zero attack surface, unlike cloud OpenAI models that floor Tier 1 to 0%.
+- **Minimax rationale** (stretch target): reported 100% jailbreak resistance makes it a "hard target" — either our Tier 4 fragmentation attack breaks it (strong paper claim) or it doesn't (informative negative result showing architecture matters). Added as lower-priority stretch; dropped if time is tight.
+
 **Success Criteria** (what must be TRUE):
   1. Retriever transferability (EVAL-06): poisoned corpus ASR is measured with at least 3 embedding models — `nomic-embed-text` (primary, MTEB 62.4, 8192-token context), `mxbai-embed-large` (MTEB 64.7, strong BEIR performer), and `all-MiniLM-L6-v2` (legacy baseline, MTEB 56.3, preserved from Phase 2.1 for direct comparison) — novel finding as embedding-specific transfer for poisoning is not in published literature
   2. Human stealthiness (EVAL-07): at least 3 evaluators classify a blind mix of clean and poisoned passages; human detection accuracy compared against automated defense
   3. XSS/SSRF taxonomy (EVAL-08): formal mapping table connecting IPI attack classes to web security vulnerability classes with specific examples per mapping (stored XSS ↔ corpus poisoning, SSRF ↔ tool-call injection, CSP ↔ context sanitization)
   4. Poisoning ratio sweep (ATK-02, deferred from Phase 2.2): ASR measured at 5 poisoning ratios (0.5%, 1%, 2%, 5%, 10% of corpus size) — produces the ASR-vs-poisoning-ratio curve needed for the final results section
   5. Obfuscated encoding tier (ATK-01b, deferred from Phase 2.2): one additional attack variant using encoding obfuscation (Base64-encoded payload, Unicode homoglyphs, or whitespace-padded tokens) measured against the undefended pipeline to complete the 3-tier taxonomy
-  6. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all 4 tiers × 3 defense levels) is run against both llama3.2:3b and mistral:7b — demonstrates attack generalizability across LLM architectures and is a differentiating result vs. single-model RAG attack papers
+  6. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all 4 tiers × 3 defense levels) is run against llama3.2:3b and mistral:7b, and additionally against `gemma4:31b-cloud` (Google lineage; added 2026-04-23, see rationale above) — demonstrates attack generalizability across LLM architectures and lineages; this is a differentiating result vs. single-model RAG attack papers
+  7. **[Stretch]** Hard-target test: run all 4 attack tiers against `minimax-m2.5:cloud` and report ASR — either a breakthrough result (Tier 4 penetrates a reportedly jailbreak-resistant model) or a documented negative finding; drop if time does not permit
 **Plans**: TBD
 **UI hint**: no
 
@@ -215,7 +230,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
-| 3.1 Multi-Signal Defense Fusion | 0/? | Not started | - |
+| 3.1 Multi-Signal Defense Fusion | 0/6 | In progress | - |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
@@ -226,5 +241,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 *Restructured: 2026-04-13 — Direction A (arms race) added*
 *Audited: 2026-04-21 — Phase 2.2 marked complete; deferred items (ATK-01b, ATK-02, EVAL-V2-01) captured in Phase 3.3; cross-model baseline added to Phase 2.4; DEF-02 ablation added to Phase 3.1; ATK-09 and EVAL-05 (multi-seed) added to Phase 3.2; Phase 3.3 expanded from 3 to 6 criteria; PH3-05 made required in Phase 3.4; novelty positioning vs. PoisonedRAG/BadRAG/AttriBoT literature added throughout*
 *Phase 2.3 replanned: 2026-04-21 — full replan from scratch; plan list updated to reflect corpus expansion + harness fixes*
-*Phase 2.4 planned: 2026-04-22 — 3 plans in 2 waves; Tier 3 (kimi-k2.5:cloud) + Tier 4 (3-fragment fragmentation) + cross-model eval (llama + mistral) + EVAL-V2-02 judge pilot*
+*Phase 2.4 planned: 2026-04-22 — 3 plans in 2 waves; Tier 3 (kimi-k2.5:cloud originally specified) + Tier 4 (3-fragment fragmentation) + cross-model eval (llama + mistral) + EVAL-V2-02 judge pilot*
+*Phase 2.4 executed: 2026-04-23 — Rule 3 deviation: Tier 3 attacker LLM substituted kimi-k2.5:cloud → gpt-oss:20b-cloud (kimi requires paid Ollama subscription; research objective preserved). All 3 plans complete, 7/7 must-haves verified.*
+*Phase 3.3 updated: 2026-04-23 — added gemma4:31b-cloud as required attack target (Google lineage gap, divergent ASR expected) and minimax-m2.5:cloud as stretch target (hardened model, informative regardless of outcome); both discovered available during Phase 2.4 execution; added late to preserve Phase 2.4 result integrity and because Phase 3.3 is the correct "generalizability" slot*
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
