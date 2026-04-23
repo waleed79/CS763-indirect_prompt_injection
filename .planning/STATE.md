@@ -92,7 +92,7 @@ None.
 ### Blockers/Concerns
 
 - Defense classifier training data source not yet determined (needed for Phase 3.1)
-- kimi-k2.5:cloud requires paid Ollama subscription (403); Tier 3 payloads generated with gpt-oss:20b-cloud instead
+- kimi-k2.5:cloud is available in `ollama list` but queries require a paid Ollama subscription the team does not have (403 at request time); Phase 02.4 Tier 3 payloads were generated with gpt-oss:20b-cloud instead — research objective preserved, forward compatibility kept via `--model` flag
 
 ## Session Continuity
 
