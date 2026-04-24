@@ -223,7 +223,7 @@ def train_bert(train_examples: list, val_examples: list) -> None:
         save_strategy="epoch",
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",
-        no_cuda=True,
+        use_cpu=True,
         report_to="none",
         seed=42,
         logging_steps=20,
@@ -374,9 +374,10 @@ def calibrate_signal4() -> dict:
         queries = json.load(open(QUERIES_PATH, encoding="utf-8"))
         # Canary queries: indices 50-99 (paired=False)
         canary_queries = [
-            q["question"] for i, q in enumerate(queries)
+            q.get("query") or q.get("question", "") for i, q in enumerate(queries)
             if i >= 50 and q.get("paired") is False
         ]
+        canary_queries = [q for q in canary_queries if q]  # remove empty strings
         print(f"  Canary queries: {len(canary_queries)}")
 
         cfg = load_config()
