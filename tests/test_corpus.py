@@ -162,3 +162,112 @@ class TestPoisonedCorpusTier4:
             assert "t4.evilcorp.io" in p.text, (
                 f"Anchor 't4.evilcorp.io' absent in Fragment C passage_id={p.passage_id}: {p.text[:120]!r}"
             )
+
+
+# ── Phase 3.2 adaptive attack corpus validation ───────────────────────────────
+
+import importlib.util as _importlib_util
+import sys as _sys
+from pathlib import Path as _Path
+
+_SCRIPTS_DIR = _Path(__file__).parent.parent / "scripts"
+
+try:
+    _spec = _importlib_util.spec_from_file_location(
+        "generate_poisoned_corpus",
+        _SCRIPTS_DIR / "generate_poisoned_corpus.py",
+    )
+    _gpc = _importlib_util.module_from_spec(_spec)
+    _spec.loader.exec_module(_gpc)
+    ADAPTIVE_ID_START = _gpc.ADAPTIVE_ID_START
+    NOVEL_ANCHOR_TOKENS = _gpc.NOVEL_ANCHOR_TOKENS
+    build_adaptive_passages = _gpc.build_adaptive_passages
+    _adaptive_available = True
+except (AttributeError, FileNotFoundError, Exception):
+    _adaptive_available = False
+
+
+class TestAdaptiveCorpus:
+    """Phase 3.2 ATK-08/09 adaptive payload corpus validation.
+
+    All tests skip until plan 03.2-02 adds ADAPTIVE_ID_START, NOVEL_ANCHOR_TOKENS,
+    and build_adaptive_passages() to generate_poisoned_corpus.py.
+    """
+
+    def test_adaptive_id_range(self):
+        """All adaptive passages must have passage_id in [ADAPTIVE_ID_START, ADAPTIVE_ID_START+99].
+
+        Ensures ATK-08/09 entries occupy the reserved 20500–20599 block and do not
+        collide with earlier tiers (T1: 20000–20049, T2: 20050–20099, T3: 20100–20199,
+        T4: 20200–20299, T1b: 20150–20199, ATK-01b: 20150–20199, gap: 20300–20499).
+        """
+        if not _adaptive_available:
+            pytest.skip("generate_poisoned_corpus missing adaptive symbols — Wave 1 not yet implemented")
+        passages = build_adaptive_passages()
+        assert len(passages) >= 10, (
+            f"Expected at least 10 adaptive passages (5 novel anchors × 2 variants + declarative), "
+            f"found {len(passages)}"
+        )
+        for p in passages:
+            assert p.passage_id >= ADAPTIVE_ID_START, (
+                f"Passage {p.passage_id} below ADAPTIVE_ID_START={ADAPTIVE_ID_START}"
+            )
+            assert p.passage_id < ADAPTIVE_ID_START + 100, (
+                f"Passage {p.passage_id} above reserved block end {ADAPTIVE_ID_START + 99}"
+            )
+
+    def test_atk08_no_trained_anchors(self):
+        """ATK-08 novel anchor tokens must not overlap the 5 trained Tier-1 tokens.
+
+        Rationale: if novel tokens appear in training data the BERT classifier has
+        already memorized them; using them produces no adaptive evasion signal.
+        Each novel token must also appear in at least one adaptive passage.
+        """
+        if not _adaptive_available:
+            pytest.skip("generate_poisoned_corpus missing adaptive symbols — Wave 1 not yet implemented")
+        assert len(NOVEL_ANCHOR_TOKENS) >= 3, (
+            f"Expected at least 3 novel anchor tokens, found {len(NOVEL_ANCHOR_TOKENS)}"
+        )
+        # TIER1_KEYWORDS is importable because generate_poisoned_corpus was loaded above
+        tier1_keywords = _gpc.TIER1_KEYWORDS
+        for token in NOVEL_ANCHOR_TOKENS:
+            assert token not in tier1_keywords, (
+                f"Novel anchor token '{token}' is in TIER1_KEYWORDS — not novel"
+            )
+        passages = build_adaptive_passages()
+        for token in NOVEL_ANCHOR_TOKENS:
+            found = any(token in p.text for p in passages)
+            assert found, (
+                f"Novel anchor token '{token}' does not appear in any adaptive passage"
+            )
+
+    def test_atk09_no_imperative_verbs(self):
+        """ATK-09 declarative passages must contain zero imperative verbs.
+
+        ATK-09 tests single-chunk imperative-ratio bypass: passages carry an existing
+        Tier-1 anchor token but are written in fully declarative style with no
+        imperative verbs — bypassing the IMPERATIVE_VERBS heuristic signal.
+
+        The ATK-09 entries are declarative passages that still contain one of the
+        TIER1_KEYWORDS but do NOT contain any NOVEL_ANCHOR_TOKEN (those are ATK-08).
+        """
+        if not _adaptive_available:
+            pytest.skip("generate_poisoned_corpus missing adaptive symbols — Wave 1 not yet implemented")
+        from rag.defense import IMPERATIVE_VERBS
+        tier1_keywords = _gpc.TIER1_KEYWORDS
+        passages = build_adaptive_passages()
+        # ATK-09 entries: contain a Tier-1 keyword but no novel anchor token
+        atk09_entries = [
+            p for p in passages
+            if any(kw in p.text for kw in tier1_keywords)
+            and not any(token in p.text for token in NOVEL_ANCHOR_TOKENS)
+        ]
+        assert len(atk09_entries) > 0, (
+            "No ATK-09 declarative entries found — build_adaptive_passages() must return "
+            "at least one passage that has a Tier-1 keyword but no novel anchor token"
+        )
+        for p in atk09_entries:
+            assert not bool(IMPERATIVE_VERBS.search(p.text)), (
+                f"ATK-09 passage {p.passage_id} contains imperative verb(s) — "
+                f"must be fully declarative: {p.text[:120]!r}"
+            )
