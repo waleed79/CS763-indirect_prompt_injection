@@ -569,15 +569,17 @@ def main():
 
     # ── [4/4b] Train LR meta-classifier ──────────────────────────────────────
     print("\n[4/4b] Training LR meta-classifier...")
-    # Recompute retrieval_z with real baseline for training examples
-    # Update X_train and X_val feature column 3 (retrieval_z) with real baseline
+    # Recompute retrieval_z column with real baseline and per-example scores.
+    # Positives (label==1) have retrieval_score=0.9; negatives have 0.7.
+    # Overwriting column 3 with a single constant (as before) gives zero variance
+    # and makes Signal 4 useless during LR fitting (CR-02 fix).
     mu = signal4_baseline["mu"]
     std = max(signal4_baseline["std"], 1e-9)
-    # Retrieval scores for train/val are uniformly set to 0.7 (default)
-    # so retrieval_z = (0.7 - mu) / std -- apply uniform correction
-    default_retrieval_z = (0.7 - mu) / std
-    X_train[:, 3] = default_retrieval_z
-    X_val[:, 3] = default_retrieval_z
+    train_val_scores = [0.9 if label == 1 else 0.7 for _, label in train_examples + val_examples]
+    for i, rs in enumerate(train_val_scores):
+        X_trainval[i, 3] = (rs - mu) / std
+    X_train = X_trainval[:n_train]
+    X_val   = X_trainval[n_train:]
 
     lr, scaler, best_thresh = train_lr_meta_classifier(X_train, y_train, X_val, y_val)
 
