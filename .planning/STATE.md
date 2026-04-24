@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 in progress — Plan 03 complete
-stopped_at: Phase 03.1 Plan 03 complete — DEF_02_SYSTEM_PROMPT + system_prompt kwarg in generator.py and pipeline.py
-last_updated: "2026-04-23T23:44:00.000Z"
+status: Phase 03.1 in progress — Plan 04 complete
+stopped_at: Phase 03.1 Plan 04 complete — scripts/train_defense.py + 3 model artifacts + 10/10 defense tests green
+last_updated: "2026-04-24T00:12:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.1 (multi-signal-defense-fusion) — IN PROGRESS
-Plan: 3 of 6 COMPLETE
-Last activity: 2026-04-23
+Plan: 4 of 6 COMPLETE
+Last activity: 2026-04-24
 
 Progress: [█████████░] 87%
 
@@ -47,7 +47,7 @@ Progress: [█████████░] 87%
 | 02.2 | 2 | Complete |
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
-| 03.1 | 3/6 | In progress (Plan 03 complete 2026-04-23) |
+| 03.1 | 4/6 | In progress (Plan 04 complete 2026-04-24) |
 
 **Recent Trend:**
 
@@ -89,6 +89,10 @@ Recent decisions affecting current work:
 - [Phase 03.1-01]: DistilBERT download via external script (scripts/_download_distilbert.py) — Windows conda 23.7.4 does not support multiline strings in -c arguments; external script is equivalent and reusable
 - [Phase 03.1-03]: Module-level alias DEF_02_SYSTEM_PROMPT = Generator.DEF_02_SYSTEM_PROMPT added — test imports as module-level name; class constant and module alias both maintained
 - [Phase 03.1-03]: system_prompt None-guard uses `is not None` (not truthiness) — empty string is a valid override per T-03.1-07
+- [Phase 03.1-04]: accelerate>=1.1.0 installed (not in original env) — required by transformers 5.5.3 HF Trainer; Rule 3 auto-fix
+- [Phase 03.1-04]: Signal 4 baseline calibrated with real pipeline queries: mu=0.5891, std=0.0514 from 147 clean passage scores on nq_poisoned_v4
+- [Phase 03.1-04]: LR coef[3] (retrieval_z) = 0.0 expected — all training examples use uniform synthetic retrieval score; real variance present at eval time
+- [Phase 03.1-04]: Wave 0 pytest.skip() stubs removed from test_defense.py — all 10 tests now active and passing with trained models
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-23T23:44:00.000Z
-Stopped at: Phase 03.1 Plan 03 complete — DEF_02_SYSTEM_PROMPT + system_prompt kwarg in generator.py and pipeline.py
-Resume file: None (continue with Phase 03.1 Plan 04 — scripts/train_defense.py BERT + LR meta-classifier training)
+Last session: 2026-04-24T00:12:00.000Z
+Stopped at: Phase 03.1 Plan 04 complete — scripts/train_defense.py + 3 model artifacts + 10/10 defense tests green
+Resume file: None (continue with Phase 03.1 Plan 05 — run_eval.py --defense extension + FPR tracking)
