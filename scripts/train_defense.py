@@ -81,8 +81,15 @@ class WeightedTrainer(Trainer):
 
 # ── Step 1: Load training data ────────────────────────────────────────────────
 
-def load_training_data():
+def load_training_data(seed: int = 42):
     """Read corpus_poisoned.jsonl and split into train/val/test sets.
+
+    Parameters
+    ----------
+    seed:
+        Random seed for the clean-negative shuffle so splits are reproducible
+        even when called in isolation (e.g. notebooks, tests). Aligned with
+        Phase 3.2 EVAL-05 multi-seed aggregation (--seed flag, WR-04 fix).
 
     Returns
     -------
@@ -128,7 +135,10 @@ def load_training_data():
     )
 
     # Sample 300 clean negatives for training pool; hold out 150 for test
-    random.shuffle(all_clean)
+    # Use a local RNG seeded with `seed` so the split is reproducible even
+    # when load_training_data() is called in isolation (WR-04 fix).
+    rng = random.Random(seed)
+    rng.shuffle(all_clean)
     train_clean_pool = all_clean[:300]
     test_clean = all_clean[300:450]  # 150 test negatives
 
