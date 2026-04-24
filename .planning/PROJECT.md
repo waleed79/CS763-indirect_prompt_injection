@@ -109,12 +109,18 @@ This document evolves at phase transitions and milestone boundaries.
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
-## Current Status (2026-04-23)
+## Current Status (2026-04-24)
 
-- **Phase 3.1**: 6/7 plans complete. Plans 01–06 shipped the fused defense + 7-mode ablation table. Plan 07 (wrap-up: tuned threshold, retrieval_rate column, DEF-02 priming analysis) is pending.
-- **Next parallel work**: Phase 3.2 (adaptive attacks + causal attribution, now prioritizing novel-anchor-token attack) and Phase 3.3 (retriever transfer, XSS/SSRF taxonomy, poisoning ratio sweep, obfuscated tier, cross-model matrix with gemma4) can run concurrently once 3.1 closes.
-- **Phase 3.4 writeup**: Skeleton can start in parallel with 3.2/3.3 — roughly 60% of tables and limitations content is already populated by 3.1 results.
-- **Deadline**: Phase 3 Google Doc due 2026-04-30 (7 calendar days remaining).
+- **Phase 3.1**: ✅ COMPLETE — verified 2026-04-24, 12/12 must-haves passed, 115 tests green. Fused defense achieves 0% ASR across all 4 tiers. Ablation table complete with retrieval_rate column. DEF-02 priming classified. Code review open: CR-01 (run_eval.py KeyError on missing passage_id metadata) and CR-02 (Signal 4 constant overwrite in LR training — fused classifier is effectively 3-signal). Run `/gsd-code-review-fix 3.1` before Phase 3.4 analysis.
+- **Next**: Phase 3.2 (adaptive attacks + causal attribution — novel-anchor-token attack primary) and Phase 3.3 (retriever transfer, XSS/SSRF taxonomy, gemma4) can now proceed.
+- **Phase 3.4 writeup**: ~60% of tables and limitations content already populated by Phase 3.1 results. Skeleton can start in parallel.
+- **Deadline**: Phase 3 Google Doc due 2026-04-30 (6 calendar days remaining).
+
+### Validated Requirements (Phase 3.1)
+- ✅ Defense mechanism implemented: 4-signal FusedDefense (BERT + perplexity + imperative ratio + retrieval z-score) with LR meta-classifier
+- ✅ ASR reduction demonstrated: fused achieves 0% ASR on T1/T2/T3/T4 (vs 2–88% no-defense baseline)
+- ✅ Utility cost quantified: FPR=76%, retrieval_rate drops 88%→50% (fixed) / 34% (tuned threshold=0.10)
+- ✅ Cross-model generalizability: mistral:7b fused drops T2 28%→0%, T3 12%→0%
 
 ---
-*Last updated: 2026-04-23 after Phase 3.1 plans 01–06 ablation and post-checkpoint scope review*
+*Last updated: 2026-04-24 — Phase 3.1 verified complete*
