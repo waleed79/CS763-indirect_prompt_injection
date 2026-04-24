@@ -71,7 +71,8 @@ if lr_json.exists() and "fused_tuned_threshold" in table:
         table["fused_tuned_threshold"]["threshold_used"] = tuned_thresh
         print(f"  Annotated fused_tuned_threshold with threshold_used={tuned_thresh:.2f}")
 
-json.dump(table, open(OUTPUT, "w"), indent=2)
+with open(OUTPUT, "w") as f:
+    json.dump(table, f, indent=2)
 print(f"\nAblation table written to {OUTPUT}")
 print(f"Rows ({len(table)}): {list(table.keys())}")
 
