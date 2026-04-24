@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 in progress — Plan 04 complete
-stopped_at: Phase 03.1 Plan 04 complete — scripts/train_defense.py + 3 model artifacts + 10/10 defense tests green
-last_updated: "2026-04-24T00:12:00.000Z"
+status: Phase 03.1 in progress — Plan 05 complete
+stopped_at: Phase 03.1 Plan 05 complete — run_eval.py extended with 7-mode --defense, FPR tracking, system_prompt threading
+last_updated: "2026-04-23T00:30:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.1 (multi-signal-defense-fusion) — IN PROGRESS
-Plan: 4 of 6 COMPLETE
-Last activity: 2026-04-24
+Plan: 5 of 6 COMPLETE
+Last activity: 2026-04-23
 
 Progress: [█████████░] 87%
 
@@ -47,7 +47,7 @@ Progress: [█████████░] 87%
 | 02.2 | 2 | Complete |
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
-| 03.1 | 4/6 | In progress (Plan 04 complete 2026-04-24) |
+| 03.1 | 5/6 | In progress (Plan 05 complete 2026-04-23) |
 
 **Recent Trend:**
 
@@ -93,6 +93,10 @@ Recent decisions affecting current work:
 - [Phase 03.1-04]: Signal 4 baseline calibrated with real pipeline queries: mu=0.5891, std=0.0514 from 147 clean passage scores on nq_poisoned_v4
 - [Phase 03.1-04]: LR coef[3] (retrieval_z) = 0.0 expected — all training examples use uniform synthetic retrieval score; real variance present at eval time
 - [Phase 03.1-04]: Wave 0 pytest.skip() stubs removed from test_defense.py — all 10 tests now active and passing with trained models
+- [Phase 03.1-05]: DEFENSE_CHOICES constant at module level (not inline in argparse) — single source of truth; importable by test code
+- [Phase 03.1-05]: chunks_removed uses eval_cfg.top_k (from config) not hardcoded — mitigates T-03.1-12 threat
+- [Phase 03.1-05]: defense_active bool replaced by defense_mode string — mode name directly usable in ablation table assembly
+- [Phase 03.1-05]: FPR computed over unpaired_results only (paired=False) — measures false positives on clean queries, not attack queries
 
 ### Pending Todos
 
@@ -105,6 +109,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24T00:12:00.000Z
-Stopped at: Phase 03.1 Plan 04 complete — scripts/train_defense.py + 3 model artifacts + 10/10 defense tests green
-Resume file: None (continue with Phase 03.1 Plan 05 — run_eval.py --defense extension + FPR tracking)
+Last session: 2026-04-23T00:30:00.000Z
+Stopped at: Phase 03.1 Plan 05 complete — run_eval.py 7-mode --defense + FPR tracking + system_prompt threading
+Resume file: None (continue with Phase 03.1 Plan 06 — ablation evaluation runs)
