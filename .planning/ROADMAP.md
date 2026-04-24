@@ -130,7 +130,7 @@ Plans:
   5. The fused defense achieves lower ASR than any individual signal on at least 2 attack tiers
   6. False positive rate on clean queries is measured (defense should not filter legitimate chunks excessively)
   7. DEF-02 prompt-engineering baseline (system-prompt instruction-data separation) is implemented and measured as an ablation comparison — establishes that rule-based instruction separation alone is insufficient, motivating the statistical multi-signal approach
-**Plans**: 6 plans
+**Plans**: 7 plans
 Plans:
 - [x] 03.1-01-PLAN.md — Wave 0: test stubs (tests/test_defense.py, TestGenerateSystemPrompt), models/ dir, DistilBERT pre-flight (completed 2026-04-23)
 - [x] 03.1-02-PLAN.md — rag/defense.py: FusedDefense + SingleSignalDefense + all 4 signal extractors (completed 2026-04-23)
@@ -138,15 +138,19 @@ Plans:
 - [x] 03.1-04-PLAN.md — scripts/train_defense.py: offline BERT fine-tune + LR meta-classifier + Signal 4 calibration; run training (completed 2026-04-24)
 - [x] 03.1-05-PLAN.md — scripts/run_eval.py: extend --defense to 7 modes, add FPR tracking, system_prompt threading (completed 2026-04-23)
 - [x] 03.1-06-PLAN.md — Run ablation evaluations (7 modes x llama + 2 x mistral); assemble ablation_table.json; human checkpoint (completed 2026-04-23)
+- [ ] 03.1-07-PLAN.md — Wrap-up: run fused with tuned threshold, add retrieval_rate column to ablation_table, investigate DEF-02 counter-productive finding (priming vs. substring leak)
 **UI hint**: no
 
 ### Phase 3.2: Adaptive Attacks & Causal Attribution
 **Goal**: The multi-signal defense is stress-tested with adaptive attacks (ATK-08, ATK-09), and causal influence attribution is implemented to detect cross-chunk fragmentation attacks that evade per-chunk defenses
+
+**Priority reordering (decided 2026-04-23):** The Phase 3.1 ablation revealed BERT classifier scored suspiciously perfect (100% detection across all tiers), strongly suggesting memorization of the 5 anchor tokens (HACKED, COMPROMISED, INFILTRATED, SYSTEM_OVERRIDE, PAYLOAD_DELIVERED). The primary adaptive attack is therefore the **novel-anchor-token attack** (use synonym payloads the BERT classifier was never trained on, e.g., "BREACHED", "PWNED") to break BERT's detection floor. The imperative-free declarative attack is secondary but retained for defense-in-depth validation of the imperative-ratio signal.
+
 **Depends on**: Phase 3.1
 **Requirements**: ATK-08, ATK-09, DEF-05, EVAL-05
 **Success Criteria** (what must be TRUE):
-  1. At least 2 adaptive attack strategies are tested against the fused defense (natural-language-only payloads with low perplexity, payloads that avoid imperative mood)
-  2. ATK-09 (non-imperative declarative-only adaptive attack) is explicitly tested — targets the imperative-ratio signal specifically; its ASR demonstrates that single-signal gaps remain exploitable
+  1. **[Primary]** Novel-anchor-token adaptive attack (ATK-08 variant): payloads substitute the 5 trained anchor tokens with untrained synonyms (e.g., BREACHED, PWNED, OVERRIDDEN) to break the BERT classifier's suspiciously-perfect 100% detection floor observed in Phase 3.1; ASR measured against fused defense demonstrates the BERT signal's generalization gap
+  2. **[Secondary]** ATK-09 (non-imperative declarative-only adaptive attack) is explicitly tested — targets the imperative-ratio signal specifically; its ASR demonstrates that single-signal gaps remain exploitable
   3. Adaptive attack ASR is measured and compared against non-adaptive tiers — demonstrating the arms race escalation narrative
   4. Leave-one-out causal influence is computed for a subset of queries (generate answer with/without each chunk, measure output divergence)
   5. The influence/relevance ratio anomaly metric distinguishes injected chunks from clean chunks (ROC curve or precision-recall on labeled data)
@@ -166,14 +170,23 @@ Plans:
 - **Gemma4 rationale** (primary addition): fills the Google RLHF lineage gap — current matrix covers Meta (llama3.2), Mistral, and OpenAI (gpt-oss) lineages; gemma4 is architecturally distinct enough that divergent ASR is expected and publishable. Its 262K context window also stress-tests Tier 4 fragment co-retrieval under longer contexts. Public Gemma-family jailbreak reports suggest non-zero attack surface, unlike cloud OpenAI models that floor Tier 1 to 0%.
 - **Minimax rationale** (stretch target): reported 100% jailbreak resistance makes it a "hard target" — either our Tier 4 fragmentation attack breaks it (strong paper claim) or it doesn't (informative negative result showing architecture matters). Added as lower-priority stretch; dropped if time is tight.
 
+**Scope decisions (2026-04-23):**
+- **EVAL-07 (human stealthiness study) removed**: 6-day timeline to Apr 30 deadline cannot accommodate IRB-style recruitment of 3 evaluators + blind classification + analysis. The automated defense's FPR (76% fused) already signals stealthiness from the detector side; human study becomes Future Work in Phase 3.4.
+- **Minimax hard-target test (SC-7) demoted to Future Work**: removed from required criteria; parked as a "Future Work" footnote in the Phase 3.4 writeup. Rationale: gemma4 already fills the architectural-divergence slot, and a single minimax run is worth less than tightening the core arms race story.
+- **Gemma4 kept as required** (not demoted to optional): the Google-lineage gap is load-bearing for the generalizability claim and cloud runs are cheap.
+- **Remaining scope unchanged**: EVAL-06 retriever transfer, EVAL-08 XSS/SSRF taxonomy, ATK-02 poisoning ratio sweep, ATK-01b obfuscated tier, EVAL-V2-01 cross-model matrix all retained.
+
 **Success Criteria** (what must be TRUE):
   1. Retriever transferability (EVAL-06): poisoned corpus ASR is measured with at least 3 embedding models — `nomic-embed-text` (primary, MTEB 62.4, 8192-token context), `mxbai-embed-large` (MTEB 64.7, strong BEIR performer), and `all-MiniLM-L6-v2` (legacy baseline, MTEB 56.3, preserved from Phase 2.1 for direct comparison) — novel finding as embedding-specific transfer for poisoning is not in published literature
-  2. Human stealthiness (EVAL-07): at least 3 evaluators classify a blind mix of clean and poisoned passages; human detection accuracy compared against automated defense
-  3. XSS/SSRF taxonomy (EVAL-08): formal mapping table connecting IPI attack classes to web security vulnerability classes with specific examples per mapping (stored XSS ↔ corpus poisoning, SSRF ↔ tool-call injection, CSP ↔ context sanitization)
-  4. Poisoning ratio sweep (ATK-02, deferred from Phase 2.2): ASR measured at 5 poisoning ratios (0.5%, 1%, 2%, 5%, 10% of corpus size) — produces the ASR-vs-poisoning-ratio curve needed for the final results section
-  5. Obfuscated encoding tier (ATK-01b, deferred from Phase 2.2): one additional attack variant using encoding obfuscation (Base64-encoded payload, Unicode homoglyphs, or whitespace-padded tokens) measured against the undefended pipeline to complete the 3-tier taxonomy
-  6. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all 4 tiers × 3 defense levels) is run against llama3.2:3b and mistral:7b, and additionally against `gemma4:31b-cloud` (Google lineage; added 2026-04-23, see rationale above) — demonstrates attack generalizability across LLM architectures and lineages; this is a differentiating result vs. single-model RAG attack papers
-  7. **[Stretch]** Hard-target test: run all 4 attack tiers against `minimax-m2.5:cloud` and report ASR — either a breakthrough result (Tier 4 penetrates a reportedly jailbreak-resistant model) or a documented negative finding; drop if time does not permit
+  2. XSS/SSRF taxonomy (EVAL-08): formal mapping table connecting IPI attack classes to web security vulnerability classes with specific examples per mapping (stored XSS ↔ corpus poisoning, SSRF ↔ tool-call injection, CSP ↔ context sanitization)
+  3. Poisoning ratio sweep (ATK-02, deferred from Phase 2.2): ASR measured at 5 poisoning ratios (0.5%, 1%, 2%, 5%, 10% of corpus size) — produces the ASR-vs-poisoning-ratio curve needed for the final results section
+  4. Obfuscated encoding tier (ATK-01b, deferred from Phase 2.2): one additional attack variant using encoding obfuscation (Base64-encoded payload, Unicode homoglyphs, or whitespace-padded tokens) measured against the undefended pipeline to complete the 3-tier taxonomy
+  5. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all 4 tiers × 3 defense levels) is run against llama3.2:3b and mistral:7b, and additionally against `gemma4:31b-cloud` (Google lineage; added 2026-04-23, see rationale above) — demonstrates attack generalizability across LLM architectures and lineages; this is a differentiating result vs. single-model RAG attack papers
+
+**Future Work (Phase 3.4 limitations footnote — not required to pass):**
+- Human stealthiness study (EVAL-07): 3-evaluator blind classification task, deferred due to 6-day timeline
+- Hard-target test against `minimax-m2.5:cloud`: all 4 tiers; informative regardless of outcome (breakthrough or documented resistance)
+
 **Plans**: TBD
 **UI hint**: no
 
@@ -185,12 +198,15 @@ Plans:
   1. Results tables show ASR for all 4 attack tiers × 3 defense levels (no defense, individual signals, fused defense, causal attribution) across 4 LLM columns: llama3.2:3b, mistral:7b, gpt-oss:20b-cloud, gpt-oss:120b-cloud — with per-variant Tier-1 breakdown included. The llama3.2:3b Tier-1/2 undefended row is seeded from `logs/attack_baseline.json` (Phase 2.2, 10-query frozen reference) alongside the Phase 2.3 100-query canonical runs.
   2. At least one figure shows the escalation narrative (attack tier vs. defense generation effectiveness across the arms race)
   3. Adaptive attack results demonstrate the arms race dynamic (defense works → attacker adapts → need better defense)
-  4. A limitations section honestly names at least 2 things that did not work as expected, plus discusses fundamental limits of per-chunk defenses vs. cross-chunk-aware approaches
-  5. Comparison to PoisonedRAG/BadRAG (PH3-05) is included — methodology differences are described and expected ASR differences discussed; this positions the contribution relative to the 2024-2025 literature (required, not optional)
-  6. The Phase 3 document is submitted to the course Google Doc by Apr 30
+  4. **Utility-Security Tradeoff subsection**: includes an ASR-vs-retrieval-rate figure and a per-mode FPR table drawn from `logs/ablation_table.json` (retrieval_rate column + fpr column). Explicitly shows the fused defense's 88% → 50% poisoned retrieval drop and its 76% clean-query FPR cost. This makes the utility price of the defense visible and honest rather than hiding behind ASR-only numbers.
+  5. A limitations section honestly names at least 3 findings: (a) the **T3/T4 baseline puzzle** (paired ASR for Tier 3 and Tier 4 was 0% on llama3.2:3b undefended — defense cannot "reduce" what was never hitting; the result is methodologically correct but requires explanation rather than being framed as a defense win); (b) the **DEF-02 counter-productive finding** (system-prompt hardening *increased* paired ASR on llama3.2:3b from 2% → 8% on T1 and 12% → 38% on T2 — classified as priming/substring-leak/behavior-change per `logs/def02_priming_analysis.md`); (c) fundamental limits of per-chunk defenses vs. cross-chunk-aware approaches
+  6. Comparison to PoisonedRAG/BadRAG (PH3-05) is included — methodology differences are described and expected ASR differences discussed; this positions the contribution relative to the 2024-2025 literature (required, not optional)
+  7. The Phase 3 document is submitted to the course Google Doc by Apr 30
 **Plans**: TBD
 
 **Optional:** EVAL-02 (utility metrics), EVAL-03 (ASR-utility curve), EVAL-04 (held-out attack evaluation), PH3-04 (failure case analysis)
+
+**Future Work section** (from Phase 3.3 descope): EVAL-07 human stealthiness study, minimax-m2.5:cloud hard-target test
 
 ### Phase 4: Final Presentation
 **Goal**: A 10-12 minute presentation is ready that communicates the problem, approach, results, and conclusions clearly to fellow CS 763 students
@@ -230,7 +246,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
-| 3.1 Multi-Signal Defense Fusion | 6/6 | In progress (plan 07 wrap-up pending) | 2026-04-23 |
+| 3.1 Multi-Signal Defense Fusion | 6/7 | In progress (plan 07 wrap-up) | — |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
@@ -244,4 +260,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 *Phase 2.4 planned: 2026-04-22 — 3 plans in 2 waves; Tier 3 (kimi-k2.5:cloud originally specified) + Tier 4 (3-fragment fragmentation) + cross-model eval (llama + mistral) + EVAL-V2-02 judge pilot*
 *Phase 2.4 executed: 2026-04-23 — Rule 3 deviation: Tier 3 attacker LLM substituted kimi-k2.5:cloud → gpt-oss:20b-cloud (kimi requires paid Ollama subscription; research objective preserved). All 3 plans complete, 7/7 must-haves verified.*
 *Phase 3.3 updated: 2026-04-23 — added gemma4:31b-cloud as required attack target (Google lineage gap, divergent ASR expected) and minimax-m2.5:cloud as stretch target (hardened model, informative regardless of outcome); both discovered available during Phase 2.4 execution; added late to preserve Phase 2.4 result integrity and because Phase 3.3 is the correct "generalizability" slot*
+*Phase 3.1 post-mortem (2026-04-23): plan 03.1-06 ablation revealed 3 gaps requiring a plan 03.1-07 wrap-up: (1) fused_tuned_threshold row was a placeholder, (2) ablation table missing retrieval_rate column (the 88%→50% drop is the utility story for Phase 3.4), (3) DEF-02 increased paired ASR on llama3.2:3b (2%→8% T1, 12%→38% T2) — classified as priming vs. substring-leak vs. behavior-change. BERT classifier scored 100% detection across all tiers → strong anchor-token-memorization signal, which reshapes Phase 3.2 adaptive-attack priority (novel-anchor-token attack now primary).*
+*Phase 3.3 descoped (2026-04-23): EVAL-07 (human stealthiness) removed due to 6-day timeline, moved to Future Work. Minimax hard-target (SC-7) demoted from required to Future Work footnote. Gemma4 remains required. Remaining 5 criteria unchanged.*
+*Phase 3.4 amended (2026-04-23): added SC-4 utility-security tradeoff subsection requirement (ASR vs retrieval_rate figure + FPR table); expanded SC-5 limitations to require explicit coverage of T3/T4 zero-baseline puzzle and DEF-02 counter-productive finding; added Future Work section for descoped EVAL-07 and minimax test.*
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
