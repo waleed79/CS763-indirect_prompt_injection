@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 in progress — Plan 06 complete (plan 07 wrap-up pending)
-stopped_at: Phase 03.1 Plan 06 complete — 7-mode defense ablation evaluated; ablation_table.json assembled; SC-5 PASS; DEF-02 counter-productive finding deferred to plan 07
-last_updated: "2026-04-23T12:00:00.000Z"
+status: Phase 03.1 complete — all 7 plans done; ablation table finalized; DEF-02 priming investigation complete
+stopped_at: Phase 03.1 Plan 07 complete — fused tuned threshold run, retrieval_rate column added, DEF-02 priming classified
+last_updated: "2026-04-24T04:30:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
@@ -24,9 +24,9 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 
 ## Current Position
 
-Phase: 03.1 (multi-signal-defense-fusion) — IN PROGRESS
-Plan: 6 of 6 COMPLETE (plan 07 wrap-up added — phase stays in-progress)
-Last activity: 2026-04-23
+Phase: 03.1 (multi-signal-defense-fusion) — COMPLETE
+Plan: 7 of 7 COMPLETE
+Last activity: 2026-04-24
 
 Progress: [█████████░] 87%
 
@@ -102,6 +102,9 @@ Recent decisions affecting current work:
 - [Phase 03.1-06]: D-08 confirmed — perplexity_only T3 ASR = 0% = no_defense T3 baseline; perplexity signal adds zero T3 protection, motivating fusion
 - [Phase 03.1-06]: Cross-model transfer confirmed — mistral fused drops T2 28%→0% and T3 12%→0%; fused defense generalizes across LLM architectures
 - [Phase 03.1-06]: FPR cost = 76% for fused defense — high utility cost documented for Phase 3.4 analysis; threshold tuning targeted in plan 03.1-07
+- [Phase 03.1-07]: Tuned threshold=0.10 reduces retrieval_rate 50%->34% at same FPR=76% and 0% ASR — threshold tightens filtering at retrieval time without changing end-to-end security
+- [Phase 03.1-07]: DEF-02 counter-productive effect classified as priming on llama3.2:3b — system prompt warning primes model to identify/surface injected instructions; substring leak ruled out (no anchor tokens in prompt); behavior change ruled out (shorter answers)
+- [Phase 03.1-07]: Phase 3.4 practitioners warning established — naive prompt-only defenses counterproductive on small models; retrieval-side filtering is the correct intervention
 
 ### Pending Todos
 
@@ -114,6 +117,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-23T12:00:00.000Z
-Stopped at: Phase 03.1 Plan 06 complete — 7-mode defense ablation evaluated; ablation_table.json assembled; SC-5 PASS; DEF-02 counter-productive finding deferred to plan 03.1-07
-Resume file: None (continue with Phase 03.1 Plan 07 — DEF-02 investigation, tuned-threshold re-run, retrieval_rate column)
+Last session: 2026-04-24T04:30:00.000Z
+Stopped at: Phase 03.1 Plan 07 complete — fused tuned threshold run (T1/T2/T3/T4=0%, FPR=76%, retrieval_rate=34%); retrieval_rate column added to ablation table; DEF-02 priming mechanism classified with evidence
+Resume file: None (Phase 03.1 complete; proceed to Phase 03.2 adaptive attacks)

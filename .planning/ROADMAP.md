@@ -138,7 +138,7 @@ Plans:
 - [x] 03.1-04-PLAN.md — scripts/train_defense.py: offline BERT fine-tune + LR meta-classifier + Signal 4 calibration; run training (completed 2026-04-24)
 - [x] 03.1-05-PLAN.md — scripts/run_eval.py: extend --defense to 7 modes, add FPR tracking, system_prompt threading (completed 2026-04-23)
 - [x] 03.1-06-PLAN.md — Run ablation evaluations (7 modes x llama + 2 x mistral); assemble ablation_table.json; human checkpoint (completed 2026-04-23)
-- [ ] 03.1-07-PLAN.md — Wrap-up: run fused with tuned threshold, add retrieval_rate column to ablation_table, investigate DEF-02 counter-productive finding (priming vs. substring leak)
+- [x] 03.1-07-PLAN.md — Wrap-up: run fused with tuned threshold, add retrieval_rate column to ablation_table, investigate DEF-02 counter-productive finding (priming vs. substring leak) (completed 2026-04-24)
 **UI hint**: no
 
 ### Phase 3.2: Adaptive Attacks & Causal Attribution
