@@ -11,13 +11,14 @@ OUTPUT = LOGDIR / "ablation_table.json"
 
 # Map: ablation row name -> log file for llama
 LLAMA_FILES = {
-    "no_defense":      "defense_off_llama.json",
-    "def02":           "defense_def02_llama.json",
-    "bert_only":       "defense_bert_llama.json",
-    "perplexity_only": "defense_perplexity_llama.json",
-    "imperative_only": "defense_imperative_llama.json",
-    "fingerprint_only":"defense_fingerprint_llama.json",
-    "fused_fixed_0.5": "defense_fused_llama.json",
+    "no_defense":           "defense_off_llama.json",
+    "def02":                "defense_def02_llama.json",
+    "bert_only":            "defense_bert_llama.json",
+    "perplexity_only":      "defense_perplexity_llama.json",
+    "imperative_only":      "defense_imperative_llama.json",
+    "fingerprint_only":     "defense_fingerprint_llama.json",
+    "fused_fixed_0.5":      "defense_fused_llama.json",
+    "fused_tuned_threshold": "defense_fused_tuned_llama.json",
 }
 
 MISTRAL_FILES = {
@@ -37,6 +38,7 @@ def extract_row(log_path: Path) -> dict:
         "asr_t3": agg.get("paired_asr_tier3", agg.get("asr_tier3", 0.0)),
         "asr_t4": agg.get("paired_asr_tier4", agg.get("asr_tier4", 0.0)),
         "fpr":    agg.get("fpr", 0.0),
+        "retrieval_rate": agg.get("retrieval_rate", 0.0),
         "n_queries": data.get("n_queries", 0),
         "chunks_removed_total": agg.get("chunks_removed_total", 0),
     }
@@ -60,18 +62,14 @@ for name, fname in MISTRAL_FILES.items():
     else:
         print(f"WARNING: missing {fpath}")
 
-# Check for tuned threshold in LR model
+# Annotate fused_tuned_threshold row with the actual threshold value used
 lr_json = Path("models/lr_meta_classifier.json")
-if lr_json.exists():
+if lr_json.exists() and "fused_tuned_threshold" in table:
     lr_data = json.loads(lr_json.read_text())
     tuned_thresh = lr_data.get("tuned_threshold", None)
-    if tuned_thresh is not None and "fused_fixed_0.5" in table:
-        table["fused_tuned_threshold"] = {
-            **table.get("fused_fixed_0.5", {}),
-            "note": f"threshold={tuned_thresh:.2f} — re-run with FusedDefense(threshold={tuned_thresh:.2f}) for accurate numbers",
-            "defense_mode": "fused_tuned",
-        }
-        print(f"  Added fused_tuned_threshold row (threshold={tuned_thresh:.2f})")
+    if tuned_thresh is not None:
+        table["fused_tuned_threshold"]["threshold_used"] = tuned_thresh
+        print(f"  Annotated fused_tuned_threshold with threshold_used={tuned_thresh:.2f}")
 
 json.dump(table, open(OUTPUT, "w"), indent=2)
 print(f"\nAblation table written to {OUTPUT}")
@@ -79,17 +77,18 @@ print(f"Rows ({len(table)}): {list(table.keys())}")
 
 # Print summary table
 print()
-print(f"{'Mode':<24} {'Model':<14} {'T1 ASR':>8} {'T2 ASR':>8} {'T3 ASR':>8} {'T4 ASR':>8} {'FPR':>8}")
-print("-" * 80)
+print(f"{'Mode':<26} {'Model':<14} {'T1 ASR':>8} {'T2 ASR':>8} {'T3 ASR':>8} {'T4 ASR':>8} {'FPR':>8} {'Ret.Rate':>10}")
+print("-" * 96)
 for name, row in table.items():
     if "note" not in row:
         print(
-            f"{name:<24} {row.get('model','?'):<14} "
+            f"{name:<26} {row.get('model','?'):<14} "
             f"{row.get('asr_t1',0)*100:>7.1f}% "
             f"{row.get('asr_t2',0)*100:>7.1f}% "
             f"{row.get('asr_t3',0)*100:>7.1f}% "
             f"{row.get('asr_t4',0)*100:>7.1f}% "
-            f"{row.get('fpr',0)*100:>7.1f}%"
+            f"{row.get('fpr',0)*100:>7.1f}% "
+            f"{row.get('retrieval_rate',0)*100:>9.1f}%"
         )
 
 # Part C: Verify key research finding (SC-5)
