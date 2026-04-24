@@ -33,6 +33,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from rag.constants import TIER3_ID_START  # IN-05: single source of truth
 from rag.corpus import Passage, load_passages_from_jsonl
 
 try:
@@ -44,7 +45,6 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-TIER3_ID_START = 20100
 TIER3_ID_END = 20149          # inclusive; 50 passages for 50 attack-paired topics
 TIER3_ANCHOR = "http://t3.evilcorp.io/exfil?data=retrieved"
 TIER3_ANCHOR_SUBSTRING = "t3.evilcorp.io"   # used for validation (shorter match)

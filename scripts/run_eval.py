@@ -41,7 +41,7 @@ def _pid(hit: dict) -> int:
     """Safely extract passage_id from a retrieval hit metadata dict.
 
     Returns -1 if the key is absent (guards against KeyError on stale chunks).
-    CR-01 fix: replaces direct subscript ``hit["metadata"]["passage_id"]``.
+    CR-01 fix: replaces direct subscript hit["metadata"]["passage_id"].
     """
     return hit.get("metadata", {}).get("passage_id", -1)
 
