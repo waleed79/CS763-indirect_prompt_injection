@@ -192,7 +192,14 @@ Plans:
 - Human stealthiness study (EVAL-07): 3-evaluator blind classification task, deferred due to 6-day timeline
 - Hard-target test against `minimax-m2.5:cloud`: all 4 tiers; informative regardless of outcome (breakthrough or documented resistance)
 
-**Plans**: TBD
+**Plans**: 7 plans
+- [ ] 03.3-01-PLAN.md — Wave 0 test stubs for all Phase 3.3 deliverables (ATK-01b, ATK-02, EVAL-06, EVAL-V2-01, EVAL-V2-02)
+- [ ] 03.3-02-PLAN.md — ATK-01b Tier 1b Unicode homoglyph attack (TIER1B_ID_START=20150, HOMOGLYPH_HACKED)
+- [ ] 03.3-03-PLAN.md — ATK-02 poisoning ratio sweep (0.5%-10%) Tier 1 corpora
+- [ ] 03.3-04-PLAN.md — EVAL-06 retriever transferability (nomic, mxbai, MiniLM) with task-prefix support
+- [ ] 03.3-05-PLAN.md — EVAL-V2-02 LLM-as-judge extension to 5 tiers (TIER_CONFIG + --tier flag)
+- [ ] 03.3-06-PLAN.md — EVAL-08 XSS/SSRF taxonomy mapping table (docs/xss_ssrf_taxonomy.md)
+- [ ] 03.3-07-PLAN.md — EVAL-V2-01 cross-model full matrix driver (3 LLMs × 3 defenses × 5 tiers; Wave 2, depends on Plans 01/02/04 and Phase 3.2)
 **UI hint**: no
 
 ### Phase 3.4: Full Evaluation and Final Report
@@ -253,7 +260,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
 | 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/4 | Planned 2026-04-24 | - |
-| 3.3 Quick Evaluation Additions | 0/? | Not started | - |
+| 3.3 Quick Evaluation Additions | 0/7 | Planned 2026-04-24 | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
 | 4 Final Presentation | 0/? | Not started | - |
 
@@ -270,3 +277,5 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 *Phase 3.4 amended (2026-04-23): added SC-4 utility-security tradeoff subsection requirement (ASR vs retrieval_rate figure + FPR table); expanded SC-5 limitations to require explicit coverage of T3/T4 zero-baseline puzzle and DEF-02 counter-productive finding; added Future Work section for descoped EVAL-07 and minimax test.*
 *Phase 3.2 planned: 2026-04-24 — 4 plans in 4 sequential waves; ATK-08/09 adaptive payloads (novel anchor tokens + declarative rewrites), nq_poisoned_v5 collection, DEF-05 LOO causal attribution (run_loo.py), EVAL-05 3-seed aggregation, FPR threshold sweep D-17; all requirements ATK-08/ATK-09/DEF-05/EVAL-05 covered.*
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
+
+*Phase 3.3 planned: 2026-04-24 — 7 plans in 2 waves; Wave 1 (6 parallel plans) covers Wave 0 test stubs + ATK-01b + ATK-02 + EVAL-06 + EVAL-V2-02 + EVAL-08; Wave 2 (1 plan) covers EVAL-V2-01 cross-model matrix and depends on Phase 3.2 causal artifacts with DEF-02 fallback per CONTEXT D-12.*
