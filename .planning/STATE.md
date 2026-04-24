@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 verified complete — 7/7 plans done, 12/12 must-haves passed; advancing to Phase 03.2
-stopped_at: Phase 03.1 verified 2026-04-24 — all must-haves passed; DEF-02 priming classified; ablation table complete with retrieval_rate; code review issued 2 criticals (CR-01 run_eval.py KeyError, CR-02 Signal 4 LR training bug)
-last_updated: "2026-04-24T00:00:00.000Z"
+status: Phase 03.2 in progress — plan 01/3 complete (Wave 0 test stubs)
+stopped_at: Phase 03.2 Plan 01 complete — Wave 0 stubs (TestAdaptiveCorpus skip, TestLooExcludeFn skip, TestLooJudge green, TestSeedVariance green); full suite 121 passed 5 skipped
+last_updated: "2026-04-24T18:01:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 12
-  completed_plans: 21
-  percent: 91
+  completed_plans: 22
+  percent: 92
 ---
 
 # Project State
@@ -24,11 +24,11 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 
 ## Current Position
 
-Phase: 03.1 (multi-signal-defense-fusion) — COMPLETE
-Plan: 7 of 7 COMPLETE
+Phase: 03.2 (adaptive-attacks-causal-attribution) — IN PROGRESS
+Plan: 1 of 3 COMPLETE
 Last activity: 2026-04-24
 
-Progress: [█████████░] 87%
+Progress: [█████████░] 92%
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Progress: [█████████░] 87%
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
+| 03.2 | 1/3 | In progress |
 
 **Recent Trend:**
 
@@ -105,6 +106,9 @@ Recent decisions affecting current work:
 - [Phase 03.1-07]: Tuned threshold=0.10 reduces retrieval_rate 50%->34% at same FPR=76% and 0% ASR — threshold tightens filtering at retrieval time without changing end-to-end security
 - [Phase 03.1-07]: DEF-02 counter-productive effect classified as priming on llama3.2:3b — system prompt warning primes model to identify/surface injected instructions; substring leak ruled out (no anchor tokens in prompt); behavior change ruled out (shorter answers)
 - [Phase 03.1-07]: Phase 3.4 practitioners warning established — naive prompt-only defenses counterproductive on small models; retrieval-side filtering is the correct intervention
+- [Phase 03.2-01]: importlib.spec_from_file_location used to load scripts/ modules in tests — avoids sys.path mutation; handles FileNotFoundError gracefully for wave 0 stubs
+- [Phase 03.2-01]: test_train_defense_has_no_seed_flag_yet uses regex add_argument.*--seed not bare string — '--seed' already appears in train_defense.py docstring on line 95
+- [Phase 03.2-01]: TestLooJudge kept green (not skip-guard) — parse_judge_output satisfies full contract including edge cases; immediately usable by plan 03.2-03 LOO script
 
 ### Pending Todos
 
@@ -117,6 +121,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24T04:30:00.000Z
-Stopped at: Phase 03.1 Plan 07 complete — fused tuned threshold run (T1/T2/T3/T4=0%, FPR=76%, retrieval_rate=34%); retrieval_rate column added to ablation table; DEF-02 priming mechanism classified with evidence
-Resume file: None (Phase 03.1 complete; proceed to Phase 03.2 adaptive attacks)
+Last session: 2026-04-24T18:01:00.000Z
+Stopped at: Phase 03.2 Plan 01 complete — Wave 0 stubs: TestAdaptiveCorpus (3 skip), TestLooExcludeFn (2 skip), TestLooJudge (4 pass), TestSeedVariance (2 pass); 121 passed, 5 skipped
+Resume file: None (proceed to Phase 03.2 Plan 02 — adaptive corpus generation and --seed flag)
