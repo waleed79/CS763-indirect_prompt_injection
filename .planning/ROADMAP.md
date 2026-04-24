@@ -159,7 +159,7 @@ Plans:
 **Plans**: 4 plans
 Plans:
 - [x] 03.2-01-PLAN.md — Wave 0 test stubs: TestAdaptiveCorpus (ATK-08/09 payload validation), TestLooExcludeFn (DEF-05 contract), TestSeedVariance (EVAL-05 --seed flag) (completed 2026-04-24)
-- [ ] 03.2-02-PLAN.md — ATK-08/09 corpus (nq_poisoned_v5 collection), run_eval.py adaptive tier support (ADAPTIVE_ID_START, ADAPTIVE_HIJACK_STRS), train_defense.py --seed/--lr-output flags + 3 EVAL-05 seed runs
+- [x] 03.2-02-PLAN.md — ATK-08/09 corpus (nq_poisoned_v5 collection), run_eval.py adaptive tier support (ADAPTIVE_ID_START, ADAPTIVE_HIJACK_STRS), train_defense.py --seed/--lr-output flags + 3 EVAL-05 seed runs (completed 2026-04-24)
 - [ ] 03.2-03-PLAN.md — scripts/run_loo.py (DEF-05: LOO causal attribution loop + judge calls + ROC AUC); run LOO for llama3.2:3b and mistral:7b
 - [ ] 03.2-04-PLAN.md — Adaptive attack evals (ATK-08/09 vs fused, threshold sweep D-17, EVAL-05 aggregation), assemble arms race summary table in ablation_table.json + human checkpoint
 **UI hint**: no
@@ -259,7 +259,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
 | 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
-| 3.2 Adaptive Attacks & Causal Attribution | 1/4 | In progress | - |
+| 3.2 Adaptive Attacks & Causal Attribution | 2/4 | In progress | - |
 | 3.3 Quick Evaluation Additions | 0/7 | Planned 2026-04-24 | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
 | 4 Final Presentation | 0/? | Not started | - |

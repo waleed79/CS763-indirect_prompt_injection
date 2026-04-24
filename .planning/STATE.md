@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.2 in progress — plan 01/3 complete (Wave 0 test stubs)
-stopped_at: Phase 03.2 Plan 01 complete — Wave 0 stubs (TestAdaptiveCorpus skip, TestLooExcludeFn skip, TestLooJudge green, TestSeedVariance green); full suite 121 passed 5 skipped
-last_updated: "2026-04-24T18:01:00.000Z"
+status: Phase 03.2 in progress — plan 02/4 complete (adaptive corpus + eval harness extension)
+stopped_at: Phase 03.2 Plan 02 complete — nq_poisoned_v5 built (1189 docs), 30 ATK-08/09 adaptive entries, run_eval.py adaptive tier support, train_defense.py --seed flag, 3 seed LR artifacts; TestAdaptiveCorpus 3/3 green, TestSeedVariance 2/2 green
+last_updated: "2026-04-24T19:11:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 6
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.2 (adaptive-attacks-causal-attribution) — IN PROGRESS
-Plan: 1 of 3 COMPLETE
+Plan: 2 of 4 COMPLETE
 Last activity: 2026-04-24
 
 Progress: [█████████░] 92%
@@ -109,6 +109,10 @@ Recent decisions affecting current work:
 - [Phase 03.2-01]: importlib.spec_from_file_location used to load scripts/ modules in tests — avoids sys.path mutation; handles FileNotFoundError gracefully for wave 0 stubs
 - [Phase 03.2-01]: test_train_defense_has_no_seed_flag_yet uses regex add_argument.*--seed not bare string — '--seed' already appears in train_defense.py docstring on line 95
 - [Phase 03.2-01]: TestLooJudge kept green (not skip-guard) — parse_judge_output satisfies full contract including edge cases; immediately usable by plan 03.2-03 LOO script
+- [Phase 03.2-02]: Pre-filter TIER1_OPENERS to safe_openers pool (no IMPERATIVE_VERBS match) — several openers contain 'produce'/'override' which would false-positive on the ATK-08/09 assert; deterministic pool guards against future opener additions
+- [Phase 03.2-02]: ATK08_INDIRECT_TEMPLATE uses 'response' not 'answer'; ATK09_DECLARATIVE_TEMPLATE uses 'conclusion' not 'answer' — 'answer' is in IMPERATIVE_VERBS; Rule 1 fix applied at template definition time
+- [Phase 03.2-02]: ADAPTIVE_ID_START defined both in generate_poisoned_corpus.py (local constant for corpus build) and rag/constants.py (single-source-of-truth for evaluation); different modules, no shadow conflict
+- [Phase 03.2-02]: Stale test_train_defense_has_no_seed_flag_yet replaced with positive presence assertion test_seed_flag_exists_in_train_defense — inverts guard once flag is implemented per plan 03.2-01 instructions
 
 ### Pending Todos
 
@@ -121,6 +125,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24T18:01:00.000Z
-Stopped at: Phase 03.2 Plan 01 complete — Wave 0 stubs: TestAdaptiveCorpus (3 skip), TestLooExcludeFn (2 skip), TestLooJudge (4 pass), TestSeedVariance (2 pass); 121 passed, 5 skipped
-Resume file: None (proceed to Phase 03.2 Plan 02 — adaptive corpus generation and --seed flag)
+Last session: 2026-04-24T19:11:00.000Z
+Stopped at: Phase 03.2 Plan 02 complete — nq_poisoned_v5 (1189 docs), 30 ATK-08/09 adaptive entries, run_eval.py adaptive tier, train_defense.py --seed, 3 seed LR artifacts; TestAdaptiveCorpus 3/3 green, TestSeedVariance 2/2 green
+Resume file: None (proceed to Phase 03.2 Plan 03 — scripts/run_loo.py DEF-05 LOO causal attribution)
