@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 in progress — Plan 05 complete
-stopped_at: Phase 03.1 Plan 05 complete — run_eval.py extended with 7-mode --defense, FPR tracking, system_prompt threading
-last_updated: "2026-04-23T00:30:00.000Z"
+status: Phase 03.1 in progress — Plan 06 complete (plan 07 wrap-up pending)
+stopped_at: Phase 03.1 Plan 06 complete — 7-mode defense ablation evaluated; ablation_table.json assembled; SC-5 PASS; DEF-02 counter-productive finding deferred to plan 07
+last_updated: "2026-04-23T12:00:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.1 (multi-signal-defense-fusion) — IN PROGRESS
-Plan: 5 of 6 COMPLETE
+Plan: 6 of 6 COMPLETE (plan 07 wrap-up added — phase stays in-progress)
 Last activity: 2026-04-23
 
 Progress: [█████████░] 87%
@@ -97,6 +97,11 @@ Recent decisions affecting current work:
 - [Phase 03.1-05]: chunks_removed uses eval_cfg.top_k (from config) not hardcoded — mitigates T-03.1-12 threat
 - [Phase 03.1-05]: defense_active bool replaced by defense_mode string — mode name directly usable in ablation table assembly
 - [Phase 03.1-05]: FPR computed over unpaired_results only (paired=False) — measures false positives on clean queries, not attack queries
+- [Phase 03.1-06]: SC-5 PASS — fused_fixed_0.5 achieves 0% ASR on T1/T2/T3 for llama3.2:3b, ties or beats every individual signal on all tiers
+- [Phase 03.1-06]: DEF-02 counter-productive finding (honest) — system-prompt instruction-data separation increased T1 ASR 2%→8% and T2 ASR 12%→38%; investigation deferred to plan 03.1-07
+- [Phase 03.1-06]: D-08 confirmed — perplexity_only T3 ASR = 0% = no_defense T3 baseline; perplexity signal adds zero T3 protection, motivating fusion
+- [Phase 03.1-06]: Cross-model transfer confirmed — mistral fused drops T2 28%→0% and T3 12%→0%; fused defense generalizes across LLM architectures
+- [Phase 03.1-06]: FPR cost = 76% for fused defense — high utility cost documented for Phase 3.4 analysis; threshold tuning targeted in plan 03.1-07
 
 ### Pending Todos
 
@@ -109,6 +114,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-23T00:30:00.000Z
-Stopped at: Phase 03.1 Plan 05 complete — run_eval.py 7-mode --defense + FPR tracking + system_prompt threading
-Resume file: None (continue with Phase 03.1 Plan 06 — ablation evaluation runs)
+Last session: 2026-04-23T12:00:00.000Z
+Stopped at: Phase 03.1 Plan 06 complete — 7-mode defense ablation evaluated; ablation_table.json assembled; SC-5 PASS; DEF-02 counter-productive finding deferred to plan 03.1-07
+Resume file: None (continue with Phase 03.1 Plan 07 — DEF-02 investigation, tuned-threshold re-run, retrieval_rate column)

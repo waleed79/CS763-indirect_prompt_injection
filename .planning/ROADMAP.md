@@ -137,7 +137,7 @@ Plans:
 - [x] 03.1-03-PLAN.md — DEF-02: DEF_02_SYSTEM_PROMPT in generator.py + system_prompt kwarg threading through pipeline.query() (completed 2026-04-23)
 - [x] 03.1-04-PLAN.md — scripts/train_defense.py: offline BERT fine-tune + LR meta-classifier + Signal 4 calibration; run training (completed 2026-04-24)
 - [x] 03.1-05-PLAN.md — scripts/run_eval.py: extend --defense to 7 modes, add FPR tracking, system_prompt threading (completed 2026-04-23)
-- [ ] 03.1-06-PLAN.md — Run ablation evaluations (7 modes x llama + 2 x mistral); assemble ablation_table.json; human checkpoint
+- [x] 03.1-06-PLAN.md — Run ablation evaluations (7 modes x llama + 2 x mistral); assemble ablation_table.json; human checkpoint (completed 2026-04-23)
 **UI hint**: no
 
 ### Phase 3.2: Adaptive Attacks & Causal Attribution
@@ -230,7 +230,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
-| 3.1 Multi-Signal Defense Fusion | 5/6 | In progress | 2026-04-23 |
+| 3.1 Multi-Signal Defense Fusion | 6/6 | In progress (plan 07 wrap-up pending) | 2026-04-23 |
 | 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
