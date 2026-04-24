@@ -368,7 +368,8 @@ def calibrate_signal4() -> dict:
         from rag.config import load_config
         from rag.pipeline import RAGPipeline
 
-        queries = json.load(open(QUERIES_PATH, encoding="utf-8"))
+        with open(QUERIES_PATH, encoding="utf-8") as f:
+            queries = json.load(f)
         # Canary queries: indices 50-99 (paired=False)
         canary_queries = [
             q.get("query") or q.get("question", "") for i, q in enumerate(queries)
