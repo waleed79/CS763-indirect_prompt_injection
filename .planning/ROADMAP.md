@@ -156,7 +156,12 @@ Plans:
   5. The influence/relevance ratio anomaly metric distinguishes injected chunks from clean chunks (ROC curve or precision-recall on labeled data)
   6. Causal attribution is evaluated specifically on cross-chunk fragmentation attacks (Tier 4) where per-chunk defenses fail
   7. Results are aggregated over 3 random seeds (EVAL-05) — mean ± std dev reported for key ASR metrics across the arms race table
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 03.2-01-PLAN.md — Wave 0 test stubs: TestAdaptiveCorpus (ATK-08/09 payload validation), TestLooExcludeFn (DEF-05 contract), TestSeedVariance (EVAL-05 --seed flag)
+- [ ] 03.2-02-PLAN.md — ATK-08/09 corpus (nq_poisoned_v5 collection), run_eval.py adaptive tier support (ADAPTIVE_ID_START, ADAPTIVE_HIJACK_STRS), train_defense.py --seed/--lr-output flags + 3 EVAL-05 seed runs
+- [ ] 03.2-03-PLAN.md — scripts/run_loo.py (DEF-05: LOO causal attribution loop + judge calls + ROC AUC); run LOO for llama3.2:3b and mistral:7b
+- [ ] 03.2-04-PLAN.md — Adaptive attack evals (ATK-08/09 vs fused, threshold sweep D-17, EVAL-05 aggregation), assemble arms race summary table in ablation_table.json + human checkpoint
 **UI hint**: no
 
 ### Phase 3.3: Quick Evaluation Additions
@@ -246,8 +251,8 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.2 Attack Module | 2/2 | Complete | 2026-04-15 |
 | 2.3 Evaluation Harness | 2/2 | Complete | 2026-04-21 |
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
-| 3.1 Multi-Signal Defense Fusion | 6/7 | In progress (plan 07 wrap-up) | — |
-| 3.2 Adaptive Attacks & Causal Attribution | 0/? | Not started | - |
+| 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
+| 3.2 Adaptive Attacks & Causal Attribution | 0/4 | Planned 2026-04-24 | - |
 | 3.3 Quick Evaluation Additions | 0/? | Not started | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
 | 4 Final Presentation | 0/? | Not started | - |
@@ -263,4 +268,5 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 *Phase 3.1 post-mortem (2026-04-23): plan 03.1-06 ablation revealed 3 gaps requiring a plan 03.1-07 wrap-up: (1) fused_tuned_threshold row was a placeholder, (2) ablation table missing retrieval_rate column (the 88%→50% drop is the utility story for Phase 3.4), (3) DEF-02 increased paired ASR on llama3.2:3b (2%→8% T1, 12%→38% T2) — classified as priming vs. substring-leak vs. behavior-change. BERT classifier scored 100% detection across all tiers → strong anchor-token-memorization signal, which reshapes Phase 3.2 adaptive-attack priority (novel-anchor-token attack now primary).*
 *Phase 3.3 descoped (2026-04-23): EVAL-07 (human stealthiness) removed due to 6-day timeline, moved to Future Work. Minimax hard-target (SC-7) demoted from required to Future Work footnote. Gemma4 remains required. Remaining 5 criteria unchanged.*
 *Phase 3.4 amended (2026-04-23): added SC-4 utility-security tradeoff subsection requirement (ASR vs retrieval_rate figure + FPR table); expanded SC-5 limitations to require explicit coverage of T3/T4 zero-baseline puzzle and DEF-02 counter-productive finding; added Future Work section for descoped EVAL-07 and minimax test.*
+*Phase 3.2 planned: 2026-04-24 — 4 plans in 4 sequential waves; ATK-08/09 adaptive payloads (novel anchor tokens + declarative rewrites), nq_poisoned_v5 collection, DEF-05 LOO causal attribution (run_loo.py), EVAL-05 3-seed aggregation, FPR threshold sweep D-17; all requirements ATK-08/ATK-09/DEF-05/EVAL-05 covered.*
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
