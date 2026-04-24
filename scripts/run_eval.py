@@ -24,14 +24,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from rag.config import load_config
+from rag.constants import TIER1_ID_START, TIER2_ID_START, TIER3_ID_START, TIER4_ID_START  # IN-05
 from rag.pipeline import RAGPipeline, set_global_seed
-
-# Poisoned passage_id ranges
-# Plan 02.3-01 expanded Tier-1 to 20000-20049 and Tier-2 to 20050-20099.
-TIER1_ID_START = 20000
-TIER2_ID_START = 20050
-TIER3_ID_START = 20100   # Phase 2.4: LLM-generated payloads (gpt-oss:20b-cloud)
-TIER4_ID_START = 20200   # Phase 2.4: Cross-chunk fragmentation (3 fragments/set)
 
 # Phase 3.1: defense ablation modes
 DEFENSE_CHOICES = ["off", "def02", "bert", "perplexity", "imperative", "fingerprint", "fused"]

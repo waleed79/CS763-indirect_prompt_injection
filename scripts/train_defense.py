@@ -44,6 +44,13 @@ from transformers import (
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from rag.defense import _imperative_ratio as _imperative_ratio_score  # IN-01: avoid duplicate logic
+from rag.constants import (  # IN-05: single source of truth for tier boundaries
+    TIER1_ID_START,
+    TIER2_ID_START,
+    TIER3_ID_START,
+    TIER4_ID_START,
+    CLEAN_ID_MAX,
+)
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -53,12 +60,6 @@ MODELS_DIR = Path("models")
 BERT_OUTPUT_DIR = MODELS_DIR / "bert_classifier"
 LR_JSON_PATH = MODELS_DIR / "lr_meta_classifier.json"
 SIGNAL4_JSON_PATH = MODELS_DIR / "signal4_baseline.json"
-
-TIER1_ID_START = 20000
-TIER2_ID_START = 20050
-TIER3_ID_START = 20100
-TIER4_ID_START = 20200
-CLEAN_ID_MAX = 19999
 
 
 # ── WeightedTrainer (from RESEARCH.md Pattern 2) ─────────────────────────────
