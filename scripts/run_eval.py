@@ -37,6 +37,15 @@ TIER3_HIJACK_STR = "t3.evilcorp.io"   # Phase 2.4 Tier 3 anchor (per D-12)
 TIER4_HIJACK_STR = "t4.evilcorp.io"   # Phase 2.4 Tier 4 anchor (distinct per-tier ASR)
 
 
+def _pid(hit: dict) -> int:
+    """Safely extract passage_id from a retrieval hit metadata dict.
+
+    Returns -1 if the key is absent (guards against KeyError on stale chunks).
+    CR-01 fix: replaces direct subscript ``hit["metadata"]["passage_id"]``.
+    """
+    return hit.get("metadata", {}).get("passage_id", -1)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Evaluate RAG pipeline attack success rate."
@@ -161,9 +170,7 @@ def main() -> None:
         hits: list[dict] = result["hits"]
 
         # Check which tiers were retrieved — bounded ranges (no catch-all bug)
-        def _pid(hit: dict) -> int:
-            return hit.get("metadata", {}).get("passage_id", -1)
-
+        # _pid() is defined at module level (CR-01 fix)
         tier1_retrieved = any(TIER1_ID_START <= _pid(h) < TIER2_ID_START for h in hits)
         tier2_retrieved = any(TIER2_ID_START <= _pid(h) < TIER3_ID_START for h in hits)
         tier3_retrieved = any(TIER3_ID_START <= _pid(h) < TIER4_ID_START for h in hits)
