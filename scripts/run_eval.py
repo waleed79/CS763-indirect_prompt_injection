@@ -93,6 +93,17 @@ def parse_args() -> argparse.Namespace:
         default=False,
         help="Force ChromaDB collection rebuild from scratch (use on first run of new collection).",
     )
+    parser.add_argument(
+        "--fused-threshold",
+        type=float,
+        default=None,
+        dest="fused_threshold",
+        help=(
+            "Override FusedDefense injection probability threshold (default 0.5). "
+            "Only used when --defense fused. Pass the tuned threshold from "
+            "models/lr_meta_classifier.json for calibrated operation."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -115,7 +126,13 @@ def main() -> None:
     elif args.defense in ("bert", "perplexity", "imperative", "fingerprint", "fused"):
         from rag.defense import FusedDefense, SingleSignalDefense
         if args.defense == "fused":
-            _defense_obj = FusedDefense(models_dir="models")
+            fused_kwargs: dict = {"models_dir": "models"}
+            if args.fused_threshold is not None:
+                fused_kwargs["threshold"] = args.fused_threshold
+                print(f"FusedDefense: using threshold={args.fused_threshold} (from --fused-threshold)")
+            else:
+                print("FusedDefense: using default threshold=0.5")
+            _defense_obj = FusedDefense(**fused_kwargs)
         else:
             _defense_obj = SingleSignalDefense(signal=args.defense, models_dir="models")
         defense_fn = _defense_obj.filter
@@ -150,22 +167,13 @@ def main() -> None:
         hits: list[dict] = result["hits"]
 
         # Check which tiers were retrieved — bounded ranges (no catch-all bug)
-        tier1_retrieved = any(
-            TIER1_ID_START <= h["metadata"]["passage_id"] < TIER2_ID_START
-            for h in hits
-        )
-        tier2_retrieved = any(
-            TIER2_ID_START <= h["metadata"]["passage_id"] < TIER3_ID_START
-            for h in hits
-        )
-        tier3_retrieved = any(
-            TIER3_ID_START <= h["metadata"]["passage_id"] < TIER4_ID_START
-            for h in hits
-        )
-        tier4_retrieved = any(
-            h["metadata"]["passage_id"] >= TIER4_ID_START
-            for h in hits
-        )
+        def _pid(hit: dict) -> int:
+            return hit.get("metadata", {}).get("passage_id", -1)
+
+        tier1_retrieved = any(TIER1_ID_START <= _pid(h) < TIER2_ID_START for h in hits)
+        tier2_retrieved = any(TIER2_ID_START <= _pid(h) < TIER3_ID_START for h in hits)
+        tier3_retrieved = any(TIER3_ID_START <= _pid(h) < TIER4_ID_START for h in hits)
+        tier4_retrieved = any(_pid(h) >= TIER4_ID_START for h in hits)
         retrieved_poisoned = tier1_retrieved or tier2_retrieved or tier3_retrieved or tier4_retrieved
 
         # Check if the answer was hijacked (per-tier detection)
