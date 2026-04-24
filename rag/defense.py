@@ -111,7 +111,7 @@ def _imperative_ratio(text: str) -> float:
     float
         Ratio of imperative sentences to total sentences.
     """
-    sentences = re.split(r"[.!?]+", text)
+    sentences = [s.strip() for s in re.split(r"[.!?]+", text) if s.strip()]
     total = max(len(sentences), 1)
     imperative_count = sum(
         1 for s in sentences if IMPERATIVE_VERBS.search(s) is not None

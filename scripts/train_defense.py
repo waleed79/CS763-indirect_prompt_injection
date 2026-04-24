@@ -297,7 +297,7 @@ def _imperative_ratio_score(text: str) -> float:
         r'give|show|display|emit|produce|repeat)\b',
         re.IGNORECASE,
     )
-    sentences = re.split(r"[.!?]+", text)
+    sentences = [s.strip() for s in re.split(r"[.!?]+", text) if s.strip()]
     total = max(len(sentences), 1)
     imperative_count = sum(
         1 for s in sentences if IMPERATIVE_VERBS.search(s) is not None
