@@ -20,7 +20,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 2.2: Attack Module** - Corpus poisoning attacks at 2 sophistication tiers with baseline ASR measurement
 - [x] **Phase 2.3: Evaluation Harness** - Automated ASR measurement infrastructure with retrieval rate decomposition (completed 2026-04-21)
 - [x] **Phase 2.4: Advanced Attack Tiers** - LLM-generated payloads (Tier 3) and cross-chunk fragmentation attacks (Tier 4) (completed 2026-04-23)
-- [ ] **Phase 3.1: Multi-Signal Defense Fusion** - 4-signal ensemble defense (BERT + perplexity + imperative ratio + retrieval fingerprint) with meta-classifier
+- [x] **Phase 3.1: Multi-Signal Defense Fusion** - 4-signal ensemble defense (BERT + perplexity + imperative ratio + retrieval fingerprint) with meta-classifier (completed 2026-04-24)
 - [ ] **Phase 3.2: Adaptive Attacks & Causal Attribution** - Defense-aware attacks + leave-one-out causal influence analysis
 - [ ] **Phase 3.3: Quick Evaluation Additions** - Retriever transferability, human stealthiness evaluation, XSS/SSRF taxonomy mapping
 - [ ] **Phase 3.4: Full Evaluation and Final Report** - Complete experiment matrix, arms race analysis, limitations, and Phase 3 writeup (due Apr 30)

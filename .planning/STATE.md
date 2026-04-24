@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.1 complete — all 7 plans done; ablation table finalized; DEF-02 priming investigation complete
-stopped_at: Phase 03.1 Plan 07 complete — fused tuned threshold run, retrieval_rate column added, DEF-02 priming classified
-last_updated: "2026-04-24T04:30:00.000Z"
+status: Phase 03.1 verified complete — 7/7 plans done, 12/12 must-haves passed; advancing to Phase 03.2
+stopped_at: Phase 03.1 verified 2026-04-24 — all must-haves passed; DEF-02 priming classified; ablation table complete with retrieval_rate; code review issued 2 criticals (CR-01 run_eval.py KeyError, CR-02 Signal 4 LR training bug)
+last_updated: "2026-04-24T00:00:00.000Z"
 progress:
   total_phases: 11
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 12
-  completed_plans: 14
-  percent: 89
+  completed_plans: 21
+  percent: 91
 ---
 
 # Project State
@@ -47,7 +47,7 @@ Progress: [█████████░] 87%
 | 02.2 | 2 | Complete |
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
-| 03.1 | 5/6 | In progress (Plan 05 complete 2026-04-23) |
+| 03.1 | 7/7 | Complete (verified 2026-04-24) |
 
 **Recent Trend:**
 
