@@ -284,7 +284,9 @@ def _perplexity_max_nll(text: str, gpt2_model, gpt2_tokenizer,
                 out = gpt2_model(chunk_tokens, labels=chunk_tokens)
                 nlls.append(out.loss.item())
         return max(nlls) if nlls else 0.0
-    except Exception:
+    except (RuntimeError, ValueError):
+        # Truncation/inference errors — treat as 0.0 (DoS mitigation T-03.1-04)
+        # Let MemoryError and SystemExit propagate
         return 0.0
 
 
