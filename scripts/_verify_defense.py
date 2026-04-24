@@ -1,5 +1,6 @@
 """Acceptance criteria verification for rag/defense.py (Plan 03.1-02)."""
 import sys
+from pathlib import Path
 
 from rag.defense import FusedDefense, SingleSignalDefense, IMPERATIVE_VERBS, _imperative_ratio, _load_lr_from_json
 
@@ -31,13 +32,18 @@ try:
 except FileNotFoundError:
     print("FusedDefense FileNotFoundError OK")
 
-# FusedDefense with existing models dir (no config.json) raises FileNotFoundError
-try:
-    FusedDefense(models_dir="models")
-    print("ERROR: should have raised FileNotFoundError (no trained model yet)")
-    sys.exit(1)
-except FileNotFoundError:
-    print("FusedDefense models/ FileNotFoundError OK")
+# FusedDefense with existing models dir raises FileNotFoundError only when
+# bert_classifier/config.json is absent (stale check: skip if models are trained).
+# IN-03 fix: gate on runtime state to avoid false failure after training.
+if not Path("models/bert_classifier/config.json").exists():
+    try:
+        FusedDefense(models_dir="models")
+        print("ERROR: should have raised FileNotFoundError (no trained model yet)")
+        sys.exit(1)
+    except FileNotFoundError:
+        print("FusedDefense models/ FileNotFoundError OK")
+else:
+    print("FusedDefense models/ check skipped (models already trained — FileNotFoundError not expected)")
 
 # SingleSignalDefense with 'imperative' requires no model files
 defense = SingleSignalDefense(signal="imperative")
