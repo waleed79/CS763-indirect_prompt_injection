@@ -182,11 +182,19 @@ def load_training_data(seed: int = 42):
 
 # ── Step 2: Train DistilBERT ──────────────────────────────────────────────────
 
-def train_bert(train_examples: list, val_examples: list) -> None:
+def train_bert(train_examples: list, val_examples: list,
+               output_dir: Path | None = None, seed: int = 42) -> None:
     """Fine-tune DistilBERT on train_examples, evaluate on val_examples.
 
-    Saves tokenizer and model to models/bert_classifier/.
+    Args:
+        output_dir: Directory to save the fine-tuned model and tokenizer.
+                    Defaults to BERT_OUTPUT_DIR if None.
+        seed: Random seed for TrainingArguments (EVAL-05 multi-seed support).
+
+    Saves tokenizer and model to output_dir (default: models/bert_classifier/).
     """
+    if output_dir is None:
+        output_dir = BERT_OUTPUT_DIR
     tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
     model = DistilBertForSequenceClassification.from_pretrained(
         "distilbert-base-uncased", num_labels=2
@@ -228,7 +236,7 @@ def train_bert(train_examples: list, val_examples: list) -> None:
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     training_args = TrainingArguments(
-        output_dir=str(BERT_OUTPUT_DIR),
+        output_dir=str(output_dir),
         num_train_epochs=3,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=32,
@@ -238,7 +246,7 @@ def train_bert(train_examples: list, val_examples: list) -> None:
         metric_for_best_model="eval_loss",
         use_cpu=True,
         report_to="none",
-        seed=42,
+        seed=seed,
         logging_steps=20,
     )
 
@@ -255,9 +263,9 @@ def train_bert(train_examples: list, val_examples: list) -> None:
     trainer.train()
 
     # Save model and tokenizer
-    trainer.save_model(str(BERT_OUTPUT_DIR))
-    tokenizer.save_pretrained(str(BERT_OUTPUT_DIR))
-    print(f"  BERT model saved to {BERT_OUTPUT_DIR}")
+    trainer.save_model(str(output_dir))
+    tokenizer.save_pretrained(str(output_dir))
+    print(f"  BERT model saved to {output_dir}")
 
     # Print final eval metrics
     metrics = trainer.evaluate()
@@ -449,6 +457,7 @@ def train_lr_meta_classifier(
     y_train: np.ndarray,
     X_val: np.ndarray,
     y_val: np.ndarray,
+    output_path: Path | None = None,
 ) -> tuple[LogisticRegression, StandardScaler, float]:
     """Fit StandardScaler + LogisticRegression on training features.
 
@@ -495,8 +504,9 @@ def train_lr_meta_classifier(
     print(f"  LR coef: {lr.coef_.tolist()}")
 
     # Save artifact
-    save_lr_to_json(lr, scaler, str(LR_JSON_PATH), best_thresh)
-    print(f"  LR meta-classifier saved to {LR_JSON_PATH}")
+    save_path = output_path if output_path is not None else LR_JSON_PATH
+    save_lr_to_json(lr, scaler, str(save_path), best_thresh)
+    print(f"  LR meta-classifier saved to {save_path}")
 
     return lr, scaler, best_thresh
 
@@ -504,12 +514,32 @@ def train_lr_meta_classifier(
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    random.seed(42)
-    np.random.seed(42)
+    import argparse
+    parser = argparse.ArgumentParser(description="Train Phase 3.1 defense models.")
+    parser.add_argument(
+        "--seed", type=int, default=42,
+        help="Random seed for negative example sampling (EVAL-05). Default: 42."
+    )
+    parser.add_argument(
+        "--lr-output", default="models/lr_meta_classifier.json",
+        help="Output path for LR meta-classifier JSON artifact."
+    )
+    parser.add_argument(
+        "--bert-output-dir", default="models/bert_classifier",
+        help="Output directory for fine-tuned BERT model."
+    )
+    args = parser.parse_args()
 
-    print("=== Phase 3.1 Defense Training ===")
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+
+    # Override module-level constants with CLI args for this run
+    lr_output_path = Path(args.lr_output)
+    bert_output_dir = Path(args.bert_output_dir)
+
+    print(f"=== Phase 3.1/3.2 Defense Training (seed={args.seed}) ===")
     MODELS_DIR.mkdir(exist_ok=True)
-    BERT_OUTPUT_DIR.mkdir(exist_ok=True)
+    bert_output_dir.mkdir(exist_ok=True)
 
     # ── [1/4] Load training data ──────────────────────────────────────────────
     print("\n[1/4] Loading training data...")
@@ -517,13 +547,13 @@ def main():
 
     # ── [2/4] Fine-tune DistilBERT (Signal 1) ────────────────────────────────
     print("\n[2/4] Fine-tuning DistilBERT (Signal 1)...")
-    train_bert(train_examples, val_examples)
+    train_bert(train_examples, val_examples, output_dir=bert_output_dir, seed=args.seed)
 
     # ── [3/4] Compute signal features for LR training ────────────────────────
     print("\n[3/4] Computing signal features for LR training...")
-    print("  Loading trained BERT from models/bert_classifier...")
-    bert_tokenizer = DistilBertTokenizerFast.from_pretrained(str(BERT_OUTPUT_DIR))
-    bert_model = DistilBertForSequenceClassification.from_pretrained(str(BERT_OUTPUT_DIR))
+    print(f"  Loading trained BERT from {bert_output_dir}...")
+    bert_tokenizer = DistilBertTokenizerFast.from_pretrained(str(bert_output_dir))
+    bert_model = DistilBertForSequenceClassification.from_pretrained(str(bert_output_dir))
     bert_model.eval()
 
     print("  Loading GPT-2 for perplexity signal...")
@@ -580,11 +610,13 @@ def main():
     X_train = X_trainval[:n_train]
     X_val   = X_trainval[n_train:]
 
-    lr, scaler, best_thresh = train_lr_meta_classifier(X_train, y_train, X_val, y_val)
+    lr, scaler, best_thresh = train_lr_meta_classifier(
+        X_train, y_train, X_val, y_val, output_path=lr_output_path
+    )
 
-    print("\n=== Training complete. Model artifacts in models/ ===")
-    print(f"  models/bert_classifier/      : DistilBERT fine-tuned (Signal 1)")
-    print(f"  models/lr_meta_classifier.json: LR coefs + scaler (4 features, threshold={best_thresh:.2f})")
+    print("\n=== Training complete. Model artifacts ===")
+    print(f"  {bert_output_dir}/ : DistilBERT fine-tuned (Signal 1)")
+    print(f"  {lr_output_path}   : LR coefs + scaler (4 features, threshold={best_thresh:.2f})")
     print(f"  models/signal4_baseline.json  : mu={signal4_baseline['mu']:.4f}, std={signal4_baseline['std']:.4f}")
 
 

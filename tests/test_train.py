@@ -1,24 +1,17 @@
 """Phase 3.2 EVAL-05 multi-seed aggregation tests.
 
 TestSeedVariance — confirms that different seeds produce different negative sample
-                   shuffling orders (stdlib proof-of-concept), and that train_defense.py
-                   does NOT yet have a --seed flag (guards against accidental pre-impl).
+                   shuffling orders (stdlib proof-of-concept).
 
-The test_seed_changes_shuffle_order test is green immediately — it validates Python
-stdlib random.seed() behavior, not train_defense.py internals.
-
-The test_train_defense_has_no_seed_flag_yet test goes RED once plan 03.2-02 adds the
---seed flag, correctly signalling the stub can be cleaned up.
+Plan 03.2-02 adds the --seed flag to train_defense.py; the stub guard test
+(test_train_defense_has_no_seed_flag_yet) was deleted once the flag was implemented.
 
 Run with:
     conda run -n rag-security python -m pytest tests/test_train.py -v
 """
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
-
-import pytest
 
 _SCRIPTS_DIR = Path(__file__).parent.parent / "scripts"
 _TRAIN_DEFENSE_PATH = _SCRIPTS_DIR / "train_defense.py"
@@ -37,10 +30,10 @@ class TestSeedVariance:
     def test_seed_changes_shuffle_order(self):
         """Different seeds must produce different list orderings.
 
-        Simulates what train_defense.py does after the --seed flag is added:
-        seed the RNG, then shuffle the negative sample pool. Seeds 1 and 2
-        must produce different orderings, confirming the --seed flag will
-        generate genuine variance in the trained meta-classifier.
+        Simulates what train_defense.py does: seed the RNG, then shuffle the
+        negative sample pool. Seeds 1 and 2 must produce different orderings,
+        confirming the --seed flag generates genuine variance in the trained
+        meta-classifier.
         """
         import random
 
@@ -59,19 +52,17 @@ class TestSeedVariance:
             "with Python's stdlib Mersenne Twister RNG"
         )
 
-    def test_train_defense_has_no_seed_flag_yet(self):
-        """Confirm --seed argparse flag is not yet in train_defense.py.
+    def test_seed_flag_exists_in_train_defense(self):
+        """Confirm --seed argparse flag is registered in train_defense.py (plan 03.2-02).
 
         Checks for 'add_argument.*--seed' pattern (the actual argparse registration)
         rather than the bare string '--seed', which may appear in docstrings/comments.
-
-        This test goes RED after plan 03.2-02 adds the argparse --seed argument,
-        correctly signalling that this stub guard test is stale and should be deleted.
+        This test replaced the stale stub that checked for the flag's absence.
         """
         import re
         src = _TRAIN_DEFENSE_PATH.read_text(encoding="utf-8")
         has_seed_arg = bool(re.search(r'add_argument\s*\([^)]*["\']--seed["\']', src))
-        assert not has_seed_arg, (
-            "add_argument('--seed', ...) already exists in train_defense.py — "
-            "this stub test is now stale. Delete it once plan 03.2-02 is complete."
+        assert has_seed_arg, (
+            "add_argument('--seed', ...) not found in train_defense.py — "
+            "plan 03.2-02 must add the --seed argparse flag."
         )
