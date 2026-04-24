@@ -511,4 +511,4 @@ class SingleSignalDefense:
             if self._threshold is not None
             else self._default_threshold
         )
-        return [c for c in chunks if self._score_single(c) <= effective_threshold]
+        return [c for c in chunks if self._score_single(c) < effective_threshold]
