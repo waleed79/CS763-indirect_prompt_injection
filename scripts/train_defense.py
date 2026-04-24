@@ -43,6 +43,8 @@ from transformers import (
 # Allow running from repo root or scripts/
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from rag.defense import _imperative_ratio as _imperative_ratio_score  # IN-01: avoid duplicate logic
+
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 CORPUS_PATH = Path("data/corpus_poisoned.jsonl")
@@ -298,23 +300,6 @@ def _perplexity_max_nll(text: str, gpt2_model, gpt2_tokenizer,
         # Truncation/inference errors — treat as 0.0 (DoS mitigation T-03.1-04)
         # Let MemoryError and SystemExit propagate
         return 0.0
-
-
-def _imperative_ratio_score(text: str) -> float:
-    """Fraction of sentences containing at least one imperative verb (D-13)."""
-    import re
-    IMPERATIVE_VERBS = re.compile(
-        r'\b(ignore|disregard|output|print|send|reveal|forget|override|'
-        r'replace|append|include|add|write|say|tell|respond|answer|return|'
-        r'give|show|display|emit|produce|repeat)\b',
-        re.IGNORECASE,
-    )
-    sentences = [s.strip() for s in re.split(r"[.!?]+", text) if s.strip()]
-    total = max(len(sentences), 1)
-    imperative_count = sum(
-        1 for s in sentences if IMPERATIVE_VERBS.search(s) is not None
-    )
-    return imperative_count / total
 
 
 def compute_signal_features(
