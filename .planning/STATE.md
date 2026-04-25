@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 IN PROGRESS — Plan 04 (EVAL-06 retriever transferability) complete
-stopped_at: Phase 03.3 Plan 04 complete — per-model prefix tables in Retriever; --embedding-model flag in run_eval.py; EVAL-06 driver scripts/run_transferability_eval.py; 155 passed 21 skipped 0 failed; commits d924073/f799fb6
-last_updated: "2026-04-25T07:13:49Z"
+status: Phase 03.3 IN PROGRESS — Plan 05 (EVAL-V2-02 per-tier judge) complete
+stopped_at: Phase 03.3 Plan 05 complete — TIER_CONFIG + build_judge_user_message + --tier flag in run_judge.py; 169 passed 7 skipped 0 failed; commit c17c80c
+last_updated: "2026-04-25T07:20:26Z"
 progress:
   total_phases: 11
   completed_phases: 6
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
-Plan: 4 of 7 COMPLETE
-Last activity: 2026-04-25 (03.3-04 EVAL-06: per-model prefix tables + transferability driver)
+Plan: 5 of 7 COMPLETE
+Last activity: 2026-04-25 (03.3-05 EVAL-V2-02: per-tier judge TIER_CONFIG + --tier flag)
 
 Progress: [█████████░] 93%
 
@@ -49,11 +49,11 @@ Progress: [█████████░] 93%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
-| 03.3 | 4/7 | In progress (03.3-04 EVAL-06 transferability complete 2026-04-25) |
+| 03.3 | 5/7 | In progress (03.3-05 EVAL-V2-02 per-tier judge complete 2026-04-25) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-01, 03.3-02, 03.3-03, 03.3-04, (next: 03.3-05)
+- Last 5 plans: 03.3-01, 03.3-02, 03.3-03, 03.3-04, 03.3-05
 - Trend: On track
 
 ## Accumulated Context
@@ -125,6 +125,8 @@ Recent decisions affecting current work:
 - [Phase 03.3-04]: Prefix application is encode-time only — index() encodes prefixed texts but stores documents=all_texts (un-prefixed) in ChromaDB; retrieve() encodes prefixed query but RetrievalResult.text is un-prefixed; prevents prefix leakage into LLM prompts
 - [Phase 03.3-04]: EVAL-06 driver uses option (A) — indexes each per-model collection in-process via Retriever.index(), then invokes run_eval.py via subprocess with --embedding-model to match eval model to indexed collection
 - [Phase 03.3-04]: subprocess.run(list_argv, check=True) with no shell=True — enforces T-3.3-01 threat mitigation in run_transferability_eval.py
+- [Phase 03.3-05]: TIER_CONFIG dict is single source of truth for per-tier anchor/retrieved_key/hijack_key — build_judge_user_message reads anchor from TIER_CONFIG[tier]["anchor"]; eliminates hardcoded JUDGE_USER_TEMPLATE and TIER3_ANCHOR_SUBSTRING
+- [Phase 03.3-05]: --tier default=tier3 preserves Phase 2.4 pilot CLI behavior; empty-tier guard generalized to n_tier==0 check avoiding ZeroDivisionError for any tier including tier4
 
 ### Pending Todos
 
@@ -136,6 +138,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-25T07:13:49Z
-Stopped at: Phase 03.3 Plan 04 complete — per-model prefix tables in rag/retriever.py; --embedding-model flag in scripts/run_eval.py; EVAL-06 driver scripts/run_transferability_eval.py (3 models, secure subprocess); 155 passed 21 skipped 0 failed; commits d924073/f799fb6
-Resume file: None (proceed to Phase 03.3 Plan 05 — next plan)
+Last session: 2026-04-25T07:20:26Z
+Stopped at: Phase 03.3 Plan 05 complete — TIER_CONFIG + build_judge_user_message + --tier flag in scripts/run_judge.py; 169 passed 7 skipped 0 failed; commit c17c80c
+Resume file: None (proceed to Phase 03.3 Plan 06 — next plan)

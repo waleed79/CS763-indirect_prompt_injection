@@ -197,7 +197,7 @@ Plans:
 - [x] 03.3-02-PLAN.md — ATK-01b Tier 1b Unicode homoglyph attack (TIER1B_ID_START=20150, HOMOGLYPH_HACKED, 50 passages IDs 20150-20199, run_eval tier1b metrics) (completed 2026-04-25)
 - [x] 03.3-03-PLAN.md — ATK-02 poisoning ratio sweep driver + 5 corpora (0.5%/1%/2%/5%/10%; Tier-1 pool cycling into ATK02_SWEEP_ID_START 21000-21049) (completed 2026-04-25)
 - [x] 03.3-04-PLAN.md — EVAL-06 retriever transferability (nomic, mxbai, MiniLM) with task-prefix support (completed 2026-04-25)
-- [ ] 03.3-05-PLAN.md — EVAL-V2-02 LLM-as-judge extension to 5 tiers (TIER_CONFIG + --tier flag)
+- [x] 03.3-05-PLAN.md — EVAL-V2-02 LLM-as-judge extension to 5 tiers (TIER_CONFIG + --tier flag) (completed 2026-04-25)
 - [ ] 03.3-06-PLAN.md — EVAL-08 XSS/SSRF taxonomy mapping table (docs/xss_ssrf_taxonomy.md)
 - [ ] 03.3-07-PLAN.md — EVAL-V2-01 cross-model full matrix driver (3 LLMs × 3 defenses × 5 tiers; Wave 2, depends on Plans 01/02/04 and Phase 3.2)
 **UI hint**: no
