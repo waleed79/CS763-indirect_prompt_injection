@@ -154,7 +154,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
 | EVAL-07 | Phase 3.3 | Pending |
 | EVAL-08 | Phase 3.3 | Pending |
 | EVAL-V2-01 | Phase 3.3 | Pending |
-| EVAL-V2-02 | Phase 2.4 (pilot) / Phase 3.4 (full) | Pending |
+| EVAL-V2-02 | Phase 3.3 Plan 05 | Complete |
 | EVAL-02 [optional] | Phase 3.4 | Pending |
 | EVAL-03 [optional] | Phase 3.4 | Pending |
 | EVAL-04 [optional] | Phase 3.4 | Pending |
