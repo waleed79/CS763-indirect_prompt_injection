@@ -23,6 +23,22 @@ from tqdm import tqdm
 
 from rag.corpus import Passage, chunk_text
 
+# ── Per-model prompt prefix tables (EVAL-06, Phase 3.3) ──────────────────────
+# Both nomic-embed-text-v1.5 and mxbai-embed-large-v1 REQUIRE task-specific prefixes
+# that sentence-transformers does NOT auto-apply. Verified against HF model cards
+# 2026-04-24. MiniLM requires no prefix (empty strings preserve legacy behavior).
+_DOCUMENT_PREFIXES: dict[str, str] = {
+    "nomic-ai/nomic-embed-text-v1.5": "search_document: ",
+    "mixedbread-ai/mxbai-embed-large-v1": "",
+    "sentence-transformers/all-MiniLM-L6-v2": "",
+}
+_QUERY_PREFIXES: dict[str, str] = {
+    "nomic-ai/nomic-embed-text-v1.5": "search_query: ",
+    "mixedbread-ai/mxbai-embed-large-v1":
+        "Represent this sentence for searching relevant passages: ",
+    "sentence-transformers/all-MiniLM-L6-v2": "",
+}
+
 
 class RetrievalResult(NamedTuple):
     """A single retrieved chunk with its cosine similarity score."""
@@ -70,6 +86,10 @@ class Retriever:
             configuration={"hnsw": {"space": "cosine"}},
             metadata={"description": "NQ 500 passages, 200-word chunks"},
         )
+
+        # Per-model prefix lookup (EVAL-06, Phase 3.3). Unknown models → empty prefixes.
+        self._doc_prefix = _DOCUMENT_PREFIXES.get(model_name, "")
+        self._query_prefix = _QUERY_PREFIXES.get(model_name, "")
 
     # ── Indexing ──────────────────────────────────────────────────────────────
 
@@ -129,9 +149,17 @@ class Retriever:
                 metadata={"description": "NQ 500 passages, 200-word chunks"},
             )
 
+        # EVAL-06: apply per-model document prefix for encoding ONLY.
+        # The ChromaDB documents field stores the ORIGINAL un-prefixed text so the
+        # prefix does not leak into LLM prompts via retrieved context.
+        encode_texts = (
+            [self._doc_prefix + t for t in all_texts]
+            if self._doc_prefix
+            else all_texts
+        )
         # Batch-encode with normalization
         embeddings: np.ndarray = self.encoder.encode(
-            all_texts,
+            encode_texts,
             batch_size=batch_size,
             normalize_embeddings=True,
             show_progress_bar=True,
@@ -171,8 +199,12 @@ class Retriever:
         ChromaDB returns *distances* in [0, 2] for cosine metric.
         We convert: similarity = 1 - distance (so 1.0 = identical).
         """
+        # EVAL-06: apply per-model query prefix at encode time ONLY.
+        prefixed_query = (
+            (self._query_prefix + query) if self._query_prefix else query
+        )
         q_emb: np.ndarray = self.encoder.encode(
-            [query],
+            [prefixed_query],
             normalize_embeddings=True,
             convert_to_numpy=True,
         )[0]
