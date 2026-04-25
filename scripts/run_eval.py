@@ -110,6 +110,15 @@ def parse_args() -> argparse.Namespace:
             "models/lr_meta_classifier.json for calibrated operation."
         ),
     )
+    parser.add_argument(
+        "--lr-path",
+        default=None,
+        dest="lr_path",
+        help=(
+            "Override LR meta-classifier JSON path for EVAL-05 seed variants. "
+            "Only used when --defense fused."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -138,6 +147,9 @@ def main() -> None:
                 print(f"FusedDefense: using threshold={args.fused_threshold} (from --fused-threshold)")
             else:
                 print("FusedDefense: using default threshold=0.5")
+            if args.lr_path is not None:
+                fused_kwargs["lr_path"] = args.lr_path
+                print(f"FusedDefense: using LR artifact {args.lr_path} (EVAL-05 seed variant)")
             _defense_obj = FusedDefense(**fused_kwargs)
         else:
             _defense_obj = SingleSignalDefense(signal=args.defense, models_dir="models")

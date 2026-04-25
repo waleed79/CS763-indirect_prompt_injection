@@ -200,9 +200,11 @@ class FusedDefense:
         If any required model artifact is missing in models_dir.
     """
 
-    def __init__(self, models_dir: str = "models", threshold: float = 0.5) -> None:
+    def __init__(self, models_dir: str = "models", threshold: float = 0.5,
+                 lr_path: str | None = None) -> None:
         self.threshold = threshold
         self._models_dir = Path(models_dir)
+        self._lr_path_override = lr_path
         self._load_bert()
         self._load_gpt2()
         self._load_lr()
@@ -239,7 +241,10 @@ class FusedDefense:
 
     def _load_lr(self) -> None:
         """Load LR meta-classifier and StandardScaler from JSON artifact."""
-        lr_path = str(self._models_dir / "lr_meta_classifier.json")
+        if self._lr_path_override is not None:
+            lr_path = self._lr_path_override
+        else:
+            lr_path = str(self._models_dir / "lr_meta_classifier.json")
         self._lr, self._scaler = _load_lr_from_json(lr_path)
 
     def _load_signal4_baseline(self) -> None:
