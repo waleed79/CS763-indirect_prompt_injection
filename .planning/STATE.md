@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 IN PROGRESS — Plan 02 (ATK-01b Tier 1b homoglyph attack) complete
-stopped_at: Phase 03.3 Plan 02 complete — TIER1B_ID_START=20150, HOMOGLYPH_HACKED (Cyrillic НАСКЕД), build_tier1b_passages (50 passages IDs 20150-20199), run_eval.py Tier 1b metrics + T3 upper bound fix; 141 passed 35 skipped 0 failed
-last_updated: "2026-04-25T06:56:21Z"
+status: Phase 03.3 IN PROGRESS — Plan 03 (ATK-02 poisoning ratio sweep) complete
+stopped_at: Phase 03.3 Plan 03 complete — ATK-02 ratio sweep driver + 5 corpora (0.5%/1%/2%/5%/10%); Tier-1 pool cycling into ATK02_SWEEP_ID_START (21000-21049); 147 passed 29 skipped 0 failed; commits 7d03788/2b316dd
+last_updated: "2026-04-25T07:05:00Z"
 progress:
   total_phases: 11
   completed_phases: 6
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.3 — quick evaluation additions (Plan 02 ATK-01b Tier 1b complete)
+**Current focus:** Phase 03.3 — quick evaluation additions (Plan 03 ATK-02 ratio sweep complete)
 
 ## Current Position
 
 Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
-Plan: 2 of 7 COMPLETE
-Last activity: 2026-04-25 (03.3-02 ATK-01b: Tier 1b homoglyph attack + corpus regeneration + run_eval metrics)
+Plan: 3 of 7 COMPLETE
+Last activity: 2026-04-25 (03.3-03 ATK-02: poisoning ratio sweep driver + 5 corpora)
 
 Progress: [█████████░] 93%
 
@@ -49,11 +49,11 @@ Progress: [█████████░] 93%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
-| 03.3 | 2/7 | In progress (03.3-02 ATK-01b Tier 1b complete 2026-04-25) |
+| 03.3 | 3/7 | In progress (03.3-03 ATK-02 ratio sweep complete 2026-04-25) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.2-02, 03.2-03, 03.2-04, 03.3-01, (next: 03.3-02)
+- Last 5 plans: 03.2-04, 03.3-01, 03.3-02, 03.3-03, (next: 03.3-04)
 - Trend: On track
 
 ## Accumulated Context
@@ -119,6 +119,9 @@ Recent decisions affecting current work:
 - [Phase 03.2-03]: parse_judge_output copied directly into run_loo.py (no cross-script imports) — avoids importlib issues in test stubs; identical 8-line implementation maintained in both run_judge.py and run_loo.py
 - [Phase 03.3-01]: test_eval_tier1b.py uses inspect.getsource(run_eval_mod) to enforce T3 upper bound uses TIER1B_ID_START not TIER4_ID_START — contract enforcement without importing internal functions
 - [Phase 03.3-01]: test_eval_v2_01_driver.py shell=True assertion is a hard assertion not a skip — enforces T-3.3-01 threat mitigation (command injection risk) at contract time before Wave 2 implementation
+- [Phase 03.3-03]: ATK02_SWEEP_ID_START (21000-21049) used for cycle-1 Tier-1 pool extension — NOT p.passage_id + 50 which collides with T2 range (20050-20099); threat T-3.3-03-03 mitigated
+- [Phase 03.3-03]: p._replace() used for NamedTuple field update — Passage is NamedTuple not dataclass; dataclasses.replace() raises TypeError; Rule 1 auto-fix at execution time
+- [Phase 03.3-03]: math.ceil(ratio * n_clean) with dynamic n_clean=len(clean) — PoisonedRAG adversary-favoring rounding; n_clean never hardcoded; 5/10/20/50/100 poisoned docs at 0.5%/1%/2%/5%/10%
 
 ### Pending Todos
 
@@ -130,6 +133,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-25T06:56:21Z
-Stopped at: Phase 03.3 Plan 02 complete — ATK-01b Tier 1b homoglyph attack: HOMOGLYPH_HACKED (Cyrillic НАСКЕД), 50 T1b passages (IDs 20150-20199), run_eval.py tier1b metrics + T3 upper bound fix; 141 passed 35 skipped; commits 8393d47/fe22288/ee1debb
-Resume file: None (proceed to Phase 03.3 Plan 03 — ATK-02 poisoning ratio sweep)
+Last session: 2026-04-25T07:05:00Z
+Stopped at: Phase 03.3 Plan 03 complete — ATK-02 ratio sweep driver (scripts/run_ratio_sweep.py) + 5 corpora (corpus_ratio_0005/0010/0020/0050/0100.jsonl); Tier-1 pool cycling into ATK02_SWEEP_ID_START band; 147 passed 29 skipped 0 failed; commits 7d03788/2b316dd
+Resume file: None (proceed to Phase 03.3 Plan 04 — next plan)

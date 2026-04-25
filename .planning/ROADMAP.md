@@ -195,7 +195,7 @@ Plans:
 **Plans**: 7 plans
 - [x] 03.3-01-PLAN.md — Wave 0 test stubs for all Phase 3.3 deliverables (ATK-01b, ATK-02, EVAL-06, EVAL-V2-01, EVAL-V2-02) (completed 2026-04-25)
 - [x] 03.3-02-PLAN.md — ATK-01b Tier 1b Unicode homoglyph attack (TIER1B_ID_START=20150, HOMOGLYPH_HACKED, 50 passages IDs 20150-20199, run_eval tier1b metrics) (completed 2026-04-25)
-- [ ] 03.3-03-PLAN.md — ATK-02 poisoning ratio sweep (0.5%-10%) Tier 1 corpora
+- [x] 03.3-03-PLAN.md — ATK-02 poisoning ratio sweep driver + 5 corpora (0.5%/1%/2%/5%/10%; Tier-1 pool cycling into ATK02_SWEEP_ID_START 21000-21049) (completed 2026-04-25)
 - [ ] 03.3-04-PLAN.md — EVAL-06 retriever transferability (nomic, mxbai, MiniLM) with task-prefix support
 - [ ] 03.3-05-PLAN.md — EVAL-V2-02 LLM-as-judge extension to 5 tiers (TIER_CONFIG + --tier flag)
 - [ ] 03.3-06-PLAN.md — EVAL-08 XSS/SSRF taxonomy mapping table (docs/xss_ssrf_taxonomy.md)
@@ -260,7 +260,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
 | 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
 | 3.2 Adaptive Attacks & Causal Attribution | 4/4 | Complete | 2026-04-24 |
-| 3.3 Quick Evaluation Additions | 2/7 | In progress 2026-04-25 | - |
+| 3.3 Quick Evaluation Additions | 3/7 | In progress 2026-04-25 | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
 | 4 Final Presentation | 0/? | Not started | - |
 
