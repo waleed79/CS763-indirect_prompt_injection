@@ -198,7 +198,7 @@ Plans:
 - [x] 03.3-03-PLAN.md — ATK-02 poisoning ratio sweep driver + 5 corpora (0.5%/1%/2%/5%/10%; Tier-1 pool cycling into ATK02_SWEEP_ID_START 21000-21049) (completed 2026-04-25)
 - [x] 03.3-04-PLAN.md — EVAL-06 retriever transferability (nomic, mxbai, MiniLM) with task-prefix support (completed 2026-04-25)
 - [x] 03.3-05-PLAN.md — EVAL-V2-02 LLM-as-judge extension to 5 tiers (TIER_CONFIG + --tier flag) (completed 2026-04-25)
-- [ ] 03.3-06-PLAN.md — EVAL-08 XSS/SSRF taxonomy mapping table (docs/xss_ssrf_taxonomy.md)
+- [x] 03.3-06-PLAN.md — EVAL-08 XSS/SSRF taxonomy mapping table (docs/xss_ssrf_taxonomy.md) (completed 2026-04-25)
 - [ ] 03.3-07-PLAN.md — EVAL-V2-01 cross-model full matrix driver (3 LLMs × 3 defenses × 5 tiers; Wave 2, depends on Plans 01/02/04 and Phase 3.2)
 **UI hint**: no
 
@@ -260,7 +260,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 2.4 Advanced Attack Tiers | 3/3 | Complete | 2026-04-23 |
 | 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
 | 3.2 Adaptive Attacks & Causal Attribution | 4/4 | Complete | 2026-04-24 |
-| 3.3 Quick Evaluation Additions | 3/7 | In progress 2026-04-25 | - |
+| 3.3 Quick Evaluation Additions | 6/7 | In progress 2026-04-25 | - |
 | 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
 | 4 Final Presentation | 0/? | Not started | - |
 

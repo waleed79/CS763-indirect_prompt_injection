@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 IN PROGRESS — Plan 05 (EVAL-V2-02 per-tier judge) complete
-stopped_at: Phase 03.3 Plan 05 complete — TIER_CONFIG + build_judge_user_message + --tier flag in run_judge.py; 169 passed 7 skipped 0 failed; commit c17c80c
-last_updated: "2026-04-25T07:20:26Z"
+status: Phase 03.3 IN PROGRESS — Plan 06 (EVAL-08 XSS/SSRF taxonomy) complete
+stopped_at: Phase 03.3 Plan 06 complete — docs/xss_ssrf_taxonomy.md with 3 required D-18 mapping rows (Stored XSS/SSRF/CSP); commit 185ba8e
+last_updated: "2026-04-25T07:26:52Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 12
-  completed_plans: 24
-  percent: 93
+  completed_plans: 25
+  percent: 95
 ---
 
 # Project State
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
-Plan: 5 of 7 COMPLETE
-Last activity: 2026-04-25 (03.3-05 EVAL-V2-02: per-tier judge TIER_CONFIG + --tier flag)
+Plan: 6 of 7 COMPLETE
+Last activity: 2026-04-25 (03.3-06 EVAL-08: XSS/SSRF taxonomy docs/xss_ssrf_taxonomy.md)
 
 Progress: [█████████░] 93%
 
@@ -49,11 +49,11 @@ Progress: [█████████░] 93%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
-| 03.3 | 5/7 | In progress (03.3-05 EVAL-V2-02 per-tier judge complete 2026-04-25) |
+| 03.3 | 6/7 | In progress (03.3-06 EVAL-08 XSS/SSRF taxonomy complete 2026-04-25) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-01, 03.3-02, 03.3-03, 03.3-04, 03.3-05
+- Last 5 plans: 03.3-02, 03.3-03, 03.3-04, 03.3-05, 03.3-06
 - Trend: On track
 
 ## Accumulated Context
@@ -138,6 +138,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-25T07:20:26Z
-Stopped at: Phase 03.3 Plan 05 complete — TIER_CONFIG + build_judge_user_message + --tier flag in scripts/run_judge.py; 169 passed 7 skipped 0 failed; commit c17c80c
-Resume file: None (proceed to Phase 03.3 Plan 06 — next plan)
+Last session: 2026-04-25T07:26:52Z
+Stopped at: Phase 03.3 Plan 06 complete — docs/xss_ssrf_taxonomy.md with 3 D-18 mapping rows (Stored XSS/SSRF/CSP ↔ IPI analogs); commit 185ba8e
+Resume file: None (proceed to Phase 03.3 Plan 07 — EVAL-V2-01 cross-model full matrix)

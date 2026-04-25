@@ -95,7 +95,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
 
 - [ ] **EVAL-06**: Retriever transferability — ASR across 3+ embedding models (`nomic-embed-text` primary MTEB 62.4, `mxbai-embed-large` MTEB 64.7, `all-MiniLM-L6-v2` legacy baseline MTEB 56.3) *(Phase 3.3 — novel: embedding-specific poison transfer not studied in published RAG security papers)*
 - [ ] **EVAL-07**: Human stealthiness evaluation — blind passage classification by 3+ humans vs. automated defense *(Phase 3.3)*
-- [ ] **EVAL-08**: XSS/SSRF taxonomy mapping — formal table connecting IPI attack classes to web security vulnerabilities with specific examples *(Phase 3.3)*
+- [x] **EVAL-08**: XSS/SSRF taxonomy mapping — formal table connecting IPI attack classes to web security vulnerabilities with specific examples *(Phase 3.3 — completed 2026-04-25, docs/xss_ssrf_taxonomy.md)*
 - [ ] **ATK-02**: Poisoning ratio sweep at 5 ratios (0.5%, 1%, 2%, 5%, 10%) *(Phase 3.3 — deferred from Phase 2.2)*
 - [ ] **ATK-01b**: Obfuscated/encoding attack tier (Base64, Unicode homoglyphs, or whitespace padding) *(Phase 3.3 — deferred from Phase 2.2)*
 - [ ] **EVAL-V2-01**: Cross-model full attack/defense matrix with llama3.2:3b and mistral:7b *(Phase 3.3 — upgraded from "extended" to required)*
@@ -152,7 +152,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
 | EVAL-05 | Phase 3.2 | Pending |
 | EVAL-06 | Phase 3.3 | Pending |
 | EVAL-07 | Phase 3.3 | Pending |
-| EVAL-08 | Phase 3.3 | Pending |
+| EVAL-08 | Phase 3.3 Plan 06 | Complete |
 | EVAL-V2-01 | Phase 3.3 | Pending |
 | EVAL-V2-02 | Phase 3.3 Plan 05 | Complete |
 | EVAL-02 [optional] | Phase 3.4 | Pending |
