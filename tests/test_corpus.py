@@ -120,14 +120,20 @@ class TestPoisonedCorpusTier3:
                 f"Anchor absent in passage_id={p.passage_id}: {p.text[:120]!r}"
             )
 
-    def test_tier3_ids_do_not_use_reserved_range(self):
-        """IDs 20150–20199 are reserved for Phase 3.3 Tier 1b — must be empty."""
+    def test_tier1b_ids_in_range(self):
+        """IDs 20150–20199 are Phase 3.3 Tier 1b (homoglyph ATK-01b) — must contain exactly 50 passages."""
         passages = load_passages_from_jsonl(CORPUS_POISONED_PATH)
-        reserved = [p for p in passages if 20150 <= p.passage_id <= 20199]
-        assert len(reserved) == 0, (
-            f"Found {len(reserved)} passages in reserved ID range 20150–20199: "
-            f"{[p.passage_id for p in reserved]}"
+        tier1b = [p for p in passages if 20150 <= p.passage_id <= 20199]
+        assert len(tier1b) == 50, (
+            f"Expected 50 Tier 1b passages in range 20150–20199, found {len(tier1b)}"
         )
+        for p in tier1b:
+            assert "T1B_BREACHED" in p.text, (
+                f"Tier 1b passage {p.passage_id} missing T1B_BREACHED output marker"
+            )
+            assert "HACKED" not in p.text, (
+                f"Tier 1b passage {p.passage_id} contains ASCII 'HACKED' — homoglyph substitution failed"
+            )
 
 
 @pytest.mark.skipif(not CORPUS_POISONED_PATH.exists(), reason="corpus_poisoned.jsonl not yet generated")
