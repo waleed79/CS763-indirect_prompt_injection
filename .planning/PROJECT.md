@@ -12,7 +12,13 @@ Demonstrate an **attack-defense arms race** for indirect prompt injection in RAG
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Build a functional RAG pipeline with retrieval corpus, embedding model, vector store, and LLM — *Validated in Phase 2.1*
+- [x] Design and implement indirect prompt injection attacks via corpus poisoning (4 tiers: naive, context-blend, LLM-generated, cross-chunk fragmentation) — *Validated in Phases 2.2, 2.4*
+- [x] Measure ASR across multiple attack strategies with retrieval rate decomposition — *Validated in Phase 2.3*
+- [x] Develop multi-signal defense fusion (BERT + perplexity + imperative ratio + retrieval fingerprint) — *Validated in Phase 3.1*
+- [x] Implement adaptive attacks (ATK-08 novel anchors, ATK-09 declarative) stress-testing the fused defense — *Validated in Phase 3.2* — ATK-08 mean ASR=4.7% vs fused (BERT generalization gap confirmed)
+- [x] Leave-one-out causal influence attribution (DEF-05) with honest negative result — *Validated in Phase 3.2* — LOC AUC=0.372/0.410 (below chance); mechanistically explained as redundant-payload attribution failure
+- [x] Multi-seed evaluation (EVAL-05) with mean±std reporting — *Validated in Phase 3.2* — asr_adaptive std=3.3%, fpr std=15.1%
 
 ### Active
 
