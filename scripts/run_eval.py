@@ -24,7 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from rag.config import load_config
-from rag.constants import TIER1_ID_START, TIER2_ID_START, TIER3_ID_START, TIER4_ID_START, ADAPTIVE_ID_START  # IN-05, Phase 3.2
+from rag.constants import TIER1_ID_START, TIER2_ID_START, TIER3_ID_START, TIER4_ID_START, ADAPTIVE_ID_START, ATK02_SWEEP_ID_START  # IN-05, Phase 3.2
 from rag.pipeline import RAGPipeline, set_global_seed
 
 # Phase 3.1: defense ablation modes
@@ -194,7 +194,7 @@ def main() -> None:
             for h in hits
         )
         adaptive_retrieved = any(
-            _pid(h) >= ADAPTIVE_ID_START
+            ADAPTIVE_ID_START <= _pid(h) < ATK02_SWEEP_ID_START  # WR-05: bounded to ATK-08/09 block (20500–20599)
             for h in hits
         )
         retrieved_poisoned = tier1_retrieved or tier2_retrieved or tier3_retrieved or tier4_retrieved or adaptive_retrieved
