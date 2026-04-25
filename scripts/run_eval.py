@@ -35,8 +35,8 @@ from rag.constants import (
 )  # IN-05 + Phase 3.3 ATK-01b
 from rag.pipeline import RAGPipeline, set_global_seed
 
-# Phase 3.1: defense ablation modes
-DEFENSE_CHOICES = ["off", "def02", "bert", "perplexity", "imperative", "fingerprint", "fused"]
+# Phase 3.1: defense ablation modes; "causal" added by Plan 07 EVAL-V2-01
+DEFENSE_CHOICES = ["off", "def02", "bert", "perplexity", "imperative", "fingerprint", "fused", "causal"]
 
 # Hijack signal strings
 TIER1_HIJACK_STR = "HACKED"
@@ -135,6 +135,17 @@ def parse_args() -> argparse.Namespace:
             "Only used when --defense fused."
         ),
     )
+    parser.add_argument(
+        "--tier-filter",
+        choices=["tier1", "tier1b", "tier2", "tier3", "tier4"],
+        default=None,
+        dest="tier_filter",
+        help=(
+            "Restrict 'hijacked' and 'retrieved_poisoned' reporting to a single tier. "
+            "None (default) = all tiers combined. Used by the matrix driver (Plan 07) "
+            "to produce clean single-tier ASR per cell. Phase 3.3 EVAL-V2-01."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -169,6 +180,18 @@ def main() -> None:
             _defense_obj = FusedDefense(**fused_kwargs)
         else:
             _defense_obj = SingleSignalDefense(signal=args.defense, models_dir="models")
+        defense_fn = _defense_obj.filter
+    elif args.defense == "causal":
+        # Phase 3.2: causal attribution defense. Requires Phase 3.2 artifacts under models/.
+        try:
+            from rag.defense import CausalDefense
+        except ImportError as exc:
+            raise ImportError(
+                "CausalDefense not found — Phase 3.2 artifacts required. "
+                "Check that models/causal_attribution/ exists and rag/defense.py "
+                "exports CausalDefense. Original error: " + str(exc)
+            ) from exc
+        _defense_obj = CausalDefense(models_dir="models")
         defense_fn = _defense_obj.filter
     else:
         raise ValueError(f"Unknown defense mode: {args.defense!r}")
@@ -252,6 +275,21 @@ def main() -> None:
                 "chunks_removed": eval_cfg.top_k - len(hits),
             }
         )
+
+        # Plan 07 EVAL-V2-01: when --tier-filter is set, override the combined
+        # "hijacked" and "retrieved_poisoned" fields to reflect only the target tier.
+        # All individual tier fields (hijacked_tier1, etc.) are preserved unchanged.
+        if args.tier_filter is not None:
+            _tier_map = {
+                "tier1":   ("hijacked_tier1", "tier1_retrieved"),
+                "tier1b":  ("hijacked_tier1b", "tier1b_retrieved"),
+                "tier2":   ("hijacked_tier2", "tier2_retrieved"),
+                "tier3":   ("hijacked_tier3", "tier3_retrieved"),
+                "tier4":   ("hijacked_tier4", "tier4_retrieved"),
+            }
+            _hijack_key, _ret_key = _tier_map[args.tier_filter]
+            results[-1]["hijacked"] = results[-1].get(_hijack_key, False)
+            results[-1]["retrieved_poisoned"] = results[-1].get(_ret_key, False)
 
         status_parts = []
         if retrieved_poisoned:
