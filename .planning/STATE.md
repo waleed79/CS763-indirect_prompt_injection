@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.2 in progress — plan 03/4 complete (LOO causal attribution)
-stopped_at: Phase 03.2 Plan 03 complete — scripts/run_loo.py (DEF-05) implemented; LOO run for llama3.2:3b (AUC=0.372) and mistral:7b (AUC=0.410); TestLooExcludeFn 2/2 green, TestLooJudge 4/4 green; honest negative result: clean chunks more attributable than injected ones
-last_updated: "2026-04-24T21:00:00.000Z"
+status: Phase 03.2 COMPLETE — all 4 plans done; ready for Phase 03.3 or 03.4
+stopped_at: Phase 03.2 Plan 04 complete — adaptive evals (ATK-08/09 vs fused, 3 seeds), threshold sweep (T=0.8 FPR=0% adaptive ASR=6%), LOO AUC=0.372/0.414 honest negative result; ablation_table.json has all Phase 3.2 keys; arms race narrative human-verified
+last_updated: "2026-04-24T22:00:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 6
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.2 — adaptive attacks + causal attribution (plan 03 of 4 complete)
+**Current focus:** Phase 03.3 — quick evaluation additions (Phase 03.2 complete)
 
 ## Current Position
 
-Phase: 03.2 (adaptive-attacks-causal-attribution) — IN PROGRESS
-Plan: 3 of 4 COMPLETE
-Last activity: 2026-04-24 (03.2-03 LOO causal attribution complete)
+Phase: 03.2 (adaptive-attacks-causal-attribution) — COMPLETE
+Plan: 4 of 4 COMPLETE
+Last activity: 2026-04-24 (03.2-04 adaptive evals + arms race table complete)
 
 Progress: [█████████░] 92%
 
@@ -48,11 +48,11 @@ Progress: [█████████░] 92%
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
-| 03.2 | 3/4 | In progress |
+| 03.2 | 4/4 | Complete (verified 2026-04-24) |
 
 **Recent Trend:**
 
-- Last 5 plans: 02.4-03, 03.1-06, 03.1-07, 03.2-02, 03.2-03
+- Last 5 plans: 03.1-07, 03.2-02, 03.2-03, 03.2-04, (next: 03.3-01)
 - Trend: On track
 
 ## Accumulated Context
@@ -127,6 +127,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24T21:00:00.000Z
-Stopped at: Phase 03.2 Plan 03 complete — scripts/run_loo.py LOO attribution (DEF-05); llama AUC=0.372, mistral AUC=0.410; 6/6 tests green; logs/loo_results_llama.json + logs/loo_results_mistral.json produced
-Resume file: None (proceed to Phase 03.2 Plan 04 — adaptive attack evals + arms race table)
+Last session: 2026-04-24T22:00:00.000Z
+Stopped at: Phase 03.2 Plan 04 complete — adaptive evals (ATK-08 mean ASR=4.7% vs fused, 3 seeds), threshold sweep (T=0.8 FPR=0%), LOO AUC=0.372/0.414 honest negative result; ablation_table.json complete with all Phase 3.2 keys; Phase 03.2 DONE
+Resume file: None (proceed to Phase 03.3 Plan 01 — Wave 0 test stubs)
