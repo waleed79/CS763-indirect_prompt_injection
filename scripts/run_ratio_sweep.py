@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import math
 import sys
-from dataclasses import replace as dc_replace
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -50,7 +49,7 @@ def _tier1_only(all_poisoned):
                 # ATK02_SWEEP_ID_START + offset keeps these above all existing tiers
                 offset = p.passage_id - 20000  # 0..49
                 new_id = ATK02_SWEEP_ID_START + offset  # 21000-21049
-            extended.append(dc_replace(p, passage_id=new_id))
+            extended.append(p._replace(passage_id=new_id))
     return extended
 
 
@@ -73,7 +72,9 @@ def main() -> None:
         subset = all_tier1[:n_poison]
         # Naming: int(0.005 * 1000) = 5 -> "0005"; int(0.10 * 1000) = 100 -> "0100"
         out_path = f"data/corpus_ratio_{int(ratio * 1000):04d}.jsonl"
-        n_written = persist_passages(clean + subset, out_path)
+        combined = clean + subset
+        persist_passages(combined, out_path)
+        n_written = len(combined)
         print(f"  {ratio*100:>5.1f}% -> {n_poison:>3d} poisoned docs -> {out_path} ({n_written} total lines)")
 
 
