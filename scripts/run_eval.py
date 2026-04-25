@@ -97,6 +97,13 @@ def parse_args() -> argparse.Namespace:
         help="Override the llm_model in config.toml (e.g. 'mistral:7b', 'gpt-oss:120b-cloud').",
     )
     parser.add_argument(
+        "--embedding-model",
+        type=str,
+        default=None,
+        help="Override embedding model (SentenceTransformer HF ID). Phase 3.3 EVAL-06. "
+             "Examples: 'nomic-ai/nomic-embed-text-v1.5', 'mixedbread-ai/mxbai-embed-large-v1'.",
+    )
+    parser.add_argument(
         "--delay",
         type=int,
         default=0,
@@ -172,6 +179,9 @@ def main() -> None:
     if args.model is not None:
         eval_cfg = dataclasses.replace(eval_cfg, llm_model=args.model)
         print(f"Overriding llm_model from CLI: {args.model}")
+    if args.embedding_model is not None:
+        eval_cfg = dataclasses.replace(eval_cfg, embed_model=args.embedding_model)
+        print(f"Overriding embed_model from CLI: {args.embedding_model}")
 
     set_global_seed(eval_cfg.seed)
 
