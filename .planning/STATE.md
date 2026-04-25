@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 IN PROGRESS — Plan 01 (Wave 0 test stubs) complete
-stopped_at: Phase 03.3 Plan 01 complete — 6 TDD stub files created (test_tier1b_generator, test_eval_tier1b, test_ratio_sweep, test_retriever_prefix, test_judge_per_tier, test_eval_v2_01_driver); 50 tests skip cleanly; 176 total tests collected without errors
-last_updated: "2026-04-25T06:41:32Z"
+status: Phase 03.3 IN PROGRESS — Plan 02 (ATK-01b Tier 1b homoglyph attack) complete
+stopped_at: Phase 03.3 Plan 02 complete — TIER1B_ID_START=20150, HOMOGLYPH_HACKED (Cyrillic НАСКЕД), build_tier1b_passages (50 passages IDs 20150-20199), run_eval.py Tier 1b metrics + T3 upper bound fix; 141 passed 35 skipped 0 failed
+last_updated: "2026-04-25T06:56:21Z"
 progress:
   total_phases: 11
   completed_phases: 6
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.3 — quick evaluation additions (Plan 01 Wave 0 stubs complete)
+**Current focus:** Phase 03.3 — quick evaluation additions (Plan 02 ATK-01b Tier 1b complete)
 
 ## Current Position
 
 Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
-Plan: 1 of 7 COMPLETE
-Last activity: 2026-04-25 (03.3-01 Wave 0 TDD stubs: 6 test files, 50 tests)
+Plan: 2 of 7 COMPLETE
+Last activity: 2026-04-25 (03.3-02 ATK-01b: Tier 1b homoglyph attack + corpus regeneration + run_eval metrics)
 
 Progress: [█████████░] 93%
 
@@ -49,7 +49,7 @@ Progress: [█████████░] 93%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
-| 03.3 | 1/7 | In progress (03.3-01 Wave 0 stubs complete 2026-04-25) |
+| 03.3 | 2/7 | In progress (03.3-02 ATK-01b Tier 1b complete 2026-04-25) |
 
 **Recent Trend:**
 
@@ -130,6 +130,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-25T06:41:32Z
-Stopped at: Phase 03.3 Plan 01 complete — 6 Wave 0 TDD stub files (50 tests, all skip cleanly); 176 total tests collected; commits fbc5ccc/b40a9ea/f95d57a
-Resume file: None (proceed to Phase 03.3 Plan 02 — ATK-01b Tier 1b Unicode homoglyph attack)
+Last session: 2026-04-25T06:56:21Z
+Stopped at: Phase 03.3 Plan 02 complete — ATK-01b Tier 1b homoglyph attack: HOMOGLYPH_HACKED (Cyrillic НАСКЕД), 50 T1b passages (IDs 20150-20199), run_eval.py tier1b metrics + T3 upper bound fix; 141 passed 35 skipped; commits 8393d47/fe22288/ee1debb
+Resume file: None (proceed to Phase 03.3 Plan 03 — ATK-02 poisoning ratio sweep)
