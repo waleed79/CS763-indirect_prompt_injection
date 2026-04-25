@@ -543,7 +543,7 @@ def main():
 
     # ── [1/4] Load training data ──────────────────────────────────────────────
     print("\n[1/4] Loading training data...")
-    train_examples, val_examples, test_examples = load_training_data()
+    train_examples, val_examples, test_examples = load_training_data(seed=args.seed)
 
     # ── [2/4] Fine-tune DistilBERT (Signal 1) ────────────────────────────────
     print("\n[2/4] Fine-tuning DistilBERT (Signal 1)...")
