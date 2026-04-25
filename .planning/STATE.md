@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.2 COMPLETE — all 4 plans done; ready for Phase 03.3 or 03.4
-stopped_at: Phase 03.2 Plan 04 complete — adaptive evals (ATK-08/09 vs fused, 3 seeds), threshold sweep (T=0.8 FPR=0% adaptive ASR=6%), LOO AUC=0.372/0.414 honest negative result; ablation_table.json has all Phase 3.2 keys; arms race narrative human-verified
-last_updated: "2026-04-24T22:00:00.000Z"
+status: Phase 03.3 IN PROGRESS — Plan 01 (Wave 0 test stubs) complete
+stopped_at: Phase 03.3 Plan 01 complete — 6 TDD stub files created (test_tier1b_generator, test_eval_tier1b, test_ratio_sweep, test_retriever_prefix, test_judge_per_tier, test_eval_v2_01_driver); 50 tests skip cleanly; 176 total tests collected without errors
+last_updated: "2026-04-25T06:41:32Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 12
-  completed_plans: 23
-  percent: 92
+  completed_plans: 24
+  percent: 93
 ---
 
 # Project State
@@ -20,21 +20,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.3 — quick evaluation additions (Phase 03.2 complete)
+**Current focus:** Phase 03.3 — quick evaluation additions (Plan 01 Wave 0 stubs complete)
 
 ## Current Position
 
-Phase: 03.2 (adaptive-attacks-causal-attribution) — COMPLETE
-Plan: 4 of 4 COMPLETE
-Last activity: 2026-04-24 (03.2-04 adaptive evals + arms race table complete)
+Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
+Plan: 1 of 7 COMPLETE
+Last activity: 2026-04-25 (03.3-01 Wave 0 TDD stubs: 6 test files, 50 tests)
 
-Progress: [█████████░] 92%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 23
+- Total plans completed: 24
 - Average duration: —
 - Total execution time: —
 
@@ -49,10 +49,11 @@ Progress: [█████████░] 92%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
+| 03.3 | 1/7 | In progress (03.3-01 Wave 0 stubs complete 2026-04-25) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.1-07, 03.2-02, 03.2-03, 03.2-04, (next: 03.3-01)
+- Last 5 plans: 03.2-02, 03.2-03, 03.2-04, 03.3-01, (next: 03.3-02)
 - Trend: On track
 
 ## Accumulated Context
@@ -116,6 +117,8 @@ Recent decisions affecting current work:
 - [Phase 03.2-03]: LOO ROC AUC below 0.5 for both models (llama: 0.372, mistral: 0.410) — honest negative result: clean chunks appear MORE attributable by LOO divergence because they contain unique factual content; injected chunks are redundant (same payload repeated), removing one does not restore clean model behavior
 - [Phase 03.2-03]: Only Tier 4 fragment A retrieved in top-3 (pids 20200/20203/20206); B/C never appear — co-retrieval rate insufficient for Tier 4 fragmentation attack, confirming Phase 02.4-03 finding; fragment A influence=1.0 when retrieved but retrieved only 3 times across 50 queries
 - [Phase 03.2-03]: parse_judge_output copied directly into run_loo.py (no cross-script imports) — avoids importlib issues in test stubs; identical 8-line implementation maintained in both run_judge.py and run_loo.py
+- [Phase 03.3-01]: test_eval_tier1b.py uses inspect.getsource(run_eval_mod) to enforce T3 upper bound uses TIER1B_ID_START not TIER4_ID_START — contract enforcement without importing internal functions
+- [Phase 03.3-01]: test_eval_v2_01_driver.py shell=True assertion is a hard assertion not a skip — enforces T-3.3-01 threat mitigation (command injection risk) at contract time before Wave 2 implementation
 
 ### Pending Todos
 
@@ -127,6 +130,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24T22:00:00.000Z
-Stopped at: Phase 03.2 Plan 04 complete — adaptive evals (ATK-08 mean ASR=4.7% vs fused, 3 seeds), threshold sweep (T=0.8 FPR=0%), LOO AUC=0.372/0.414 honest negative result; ablation_table.json complete with all Phase 3.2 keys; Phase 03.2 DONE
-Resume file: None (proceed to Phase 03.3 Plan 01 — Wave 0 test stubs)
+Last session: 2026-04-25T06:41:32Z
+Stopped at: Phase 03.3 Plan 01 complete — 6 Wave 0 TDD stub files (50 tests, all skip cleanly); 176 total tests collected; commits fbc5ccc/b40a9ea/f95d57a
+Resume file: None (proceed to Phase 03.3 Plan 02 — ATK-01b Tier 1b Unicode homoglyph attack)

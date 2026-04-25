@@ -193,7 +193,7 @@ Plans:
 - Hard-target test against `minimax-m2.5:cloud`: all 4 tiers; informative regardless of outcome (breakthrough or documented resistance)
 
 **Plans**: 7 plans
-- [ ] 03.3-01-PLAN.md — Wave 0 test stubs for all Phase 3.3 deliverables (ATK-01b, ATK-02, EVAL-06, EVAL-V2-01, EVAL-V2-02)
+- [x] 03.3-01-PLAN.md — Wave 0 test stubs for all Phase 3.3 deliverables (ATK-01b, ATK-02, EVAL-06, EVAL-V2-01, EVAL-V2-02) (completed 2026-04-25)
 - [ ] 03.3-02-PLAN.md — ATK-01b Tier 1b Unicode homoglyph attack (TIER1B_ID_START=20150, HOMOGLYPH_HACKED)
 - [ ] 03.3-03-PLAN.md — ATK-02 poisoning ratio sweep (0.5%-10%) Tier 1 corpora
 - [ ] 03.3-04-PLAN.md — EVAL-06 retriever transferability (nomic, mxbai, MiniLM) with task-prefix support
