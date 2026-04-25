@@ -23,6 +23,7 @@ NOTE: ATK02_SWEEP_ID_START (21000) is exclusively for isolated ratio-sweep corpu
 
 TIER1_ID_START = 20000
 TIER2_ID_START = 20050
+TIER2_ID_END = 20099     # inclusive upper bound for T2 positives (T1+T2 training block)
 TIER3_ID_START = 20100   # Phase 2.4: LLM-generated payloads
 TIER1B_ID_START = 20150  # Phase 3.3: ATK-01b Unicode homoglyph obfuscation
 TIER4_ID_START = 20200   # Phase 2.4: Cross-chunk fragmentation

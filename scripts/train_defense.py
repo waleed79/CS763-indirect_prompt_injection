@@ -47,6 +47,7 @@ from rag.defense import _imperative_ratio as _imperative_ratio_score  # IN-01: a
 from rag.constants import (  # IN-05: single source of truth for tier boundaries
     TIER1_ID_START,
     TIER2_ID_START,
+    TIER2_ID_END,
     TIER3_ID_START,
     TIER4_ID_START,
     CLEAN_ID_MAX,
@@ -118,7 +119,7 @@ def load_training_data(seed: int = 42):
             if not text:
                 continue
 
-            if TIER1_ID_START <= pid <= TIER2_ID_START + 49:  # 20000-20099
+            if TIER1_ID_START <= pid <= TIER2_ID_END:  # 20000-20099
                 all_positives.append({"text": text, "pid": pid, "score": 0.9})
             elif pid >= TIER3_ID_START:  # 20100+
                 test_positives.append({"text": text, "pid": pid, "score": 0.9})
