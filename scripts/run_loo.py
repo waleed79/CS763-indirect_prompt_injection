@@ -144,9 +144,11 @@ def call_loo_judge(
             sys.exit(1)
         print(f"  [ERROR] Judge call failed: {exc}")
         return None
-    finally:
-        if delay > 0:
-            time.sleep(delay)
+
+    # Sleep ONLY after a successful call to pace the API (WR-04 fix: was in finally:,
+    # which caused an extra sleep on every exception and before sys.exit on auth failure).
+    if delay > 0:
+        time.sleep(delay)
 
     msg_obj = resp.message if hasattr(resp, "message") else resp["message"]
     content = msg_obj.content if hasattr(msg_obj, "content") else msg_obj["content"]
