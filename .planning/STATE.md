@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.2 in progress — plan 02/4 complete (adaptive corpus + eval harness extension)
-stopped_at: Phase 03.2 Plan 02 complete — nq_poisoned_v5 built (1189 docs), 30 ATK-08/09 adaptive entries, run_eval.py adaptive tier support, train_defense.py --seed flag, 3 seed LR artifacts; TestAdaptiveCorpus 3/3 green, TestSeedVariance 2/2 green
-last_updated: "2026-04-24T19:11:00.000Z"
+status: Phase 03.2 in progress — plan 03/4 complete (LOO causal attribution)
+stopped_at: Phase 03.2 Plan 03 complete — scripts/run_loo.py (DEF-05) implemented; LOO run for llama3.2:3b (AUC=0.372) and mistral:7b (AUC=0.410); TestLooExcludeFn 2/2 green, TestLooJudge 4/4 green; honest negative result: clean chunks more attributable than injected ones
+last_updated: "2026-04-24T21:00:00.000Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 12
-  completed_plans: 22
+  completed_plans: 23
   percent: 92
 ---
 
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.1 — multi-signal defense fusion (next phase)
+**Current focus:** Phase 03.2 — adaptive attacks + causal attribution (plan 03 of 4 complete)
 
 ## Current Position
 
 Phase: 03.2 (adaptive-attacks-causal-attribution) — IN PROGRESS
-Plan: 2 of 4 COMPLETE
-Last activity: 2026-04-24
+Plan: 3 of 4 COMPLETE
+Last activity: 2026-04-24 (03.2-03 LOO causal attribution complete)
 
 Progress: [█████████░] 92%
 
@@ -34,7 +34,7 @@ Progress: [█████████░] 92%
 
 **Velocity:**
 
-- Total plans completed: 9
+- Total plans completed: 23
 - Average duration: —
 - Total execution time: —
 
@@ -48,11 +48,11 @@ Progress: [█████████░] 92%
 | 02.3 | 2 | Complete (verified 2026-04-21) |
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
-| 03.2 | 1/3 | In progress |
+| 03.2 | 3/4 | In progress |
 
 **Recent Trend:**
 
-- Last 5 plans: 02.3-01, 02.3-02, 02.4-01, 02.4-02, 02.4-03
+- Last 5 plans: 02.4-03, 03.1-06, 03.1-07, 03.2-02, 03.2-03
 - Trend: On track
 
 ## Accumulated Context
@@ -113,6 +113,9 @@ Recent decisions affecting current work:
 - [Phase 03.2-02]: ATK08_INDIRECT_TEMPLATE uses 'response' not 'answer'; ATK09_DECLARATIVE_TEMPLATE uses 'conclusion' not 'answer' — 'answer' is in IMPERATIVE_VERBS; Rule 1 fix applied at template definition time
 - [Phase 03.2-02]: ADAPTIVE_ID_START defined both in generate_poisoned_corpus.py (local constant for corpus build) and rag/constants.py (single-source-of-truth for evaluation); different modules, no shadow conflict
 - [Phase 03.2-02]: Stale test_train_defense_has_no_seed_flag_yet replaced with positive presence assertion test_seed_flag_exists_in_train_defense — inverts guard once flag is implemented per plan 03.2-01 instructions
+- [Phase 03.2-03]: LOO ROC AUC below 0.5 for both models (llama: 0.372, mistral: 0.410) — honest negative result: clean chunks appear MORE attributable by LOO divergence because they contain unique factual content; injected chunks are redundant (same payload repeated), removing one does not restore clean model behavior
+- [Phase 03.2-03]: Only Tier 4 fragment A retrieved in top-3 (pids 20200/20203/20206); B/C never appear — co-retrieval rate insufficient for Tier 4 fragmentation attack, confirming Phase 02.4-03 finding; fragment A influence=1.0 when retrieved but retrieved only 3 times across 50 queries
+- [Phase 03.2-03]: parse_judge_output copied directly into run_loo.py (no cross-script imports) — avoids importlib issues in test stubs; identical 8-line implementation maintained in both run_judge.py and run_loo.py
 
 ### Pending Todos
 
@@ -120,11 +123,10 @@ None.
 
 ### Blockers/Concerns
 
-- Defense classifier training data source not yet determined (needed for Phase 3.1)
 - kimi-k2.5:cloud is available in `ollama list` but queries require a paid Ollama subscription the team does not have (403 at request time); Phase 02.4 Tier 3 payloads were generated with gpt-oss:20b-cloud instead — research objective preserved, forward compatibility kept via `--model` flag
 
 ## Session Continuity
 
-Last session: 2026-04-24T19:11:00.000Z
-Stopped at: Phase 03.2 Plan 02 complete — nq_poisoned_v5 (1189 docs), 30 ATK-08/09 adaptive entries, run_eval.py adaptive tier, train_defense.py --seed, 3 seed LR artifacts; TestAdaptiveCorpus 3/3 green, TestSeedVariance 2/2 green
-Resume file: None (proceed to Phase 03.2 Plan 03 — scripts/run_loo.py DEF-05 LOO causal attribution)
+Last session: 2026-04-24T21:00:00.000Z
+Stopped at: Phase 03.2 Plan 03 complete — scripts/run_loo.py LOO attribution (DEF-05); llama AUC=0.372, mistral AUC=0.410; 6/6 tests green; logs/loo_results_llama.json + logs/loo_results_mistral.json produced
+Resume file: None (proceed to Phase 03.2 Plan 04 — adaptive attack evals + arms race table)

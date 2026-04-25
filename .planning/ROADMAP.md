@@ -160,7 +160,7 @@ Plans:
 Plans:
 - [x] 03.2-01-PLAN.md — Wave 0 test stubs: TestAdaptiveCorpus (ATK-08/09 payload validation), TestLooExcludeFn (DEF-05 contract), TestSeedVariance (EVAL-05 --seed flag) (completed 2026-04-24)
 - [x] 03.2-02-PLAN.md — ATK-08/09 corpus (nq_poisoned_v5 collection), run_eval.py adaptive tier support (ADAPTIVE_ID_START, ADAPTIVE_HIJACK_STRS), train_defense.py --seed/--lr-output flags + 3 EVAL-05 seed runs (completed 2026-04-24)
-- [ ] 03.2-03-PLAN.md — scripts/run_loo.py (DEF-05: LOO causal attribution loop + judge calls + ROC AUC); run LOO for llama3.2:3b and mistral:7b
+- [x] 03.2-03-PLAN.md — scripts/run_loo.py (DEF-05: LOO causal attribution loop + judge calls + ROC AUC); run LOO for llama3.2:3b (AUC=0.372) and mistral:7b (AUC=0.410) (completed 2026-04-24)
 - [ ] 03.2-04-PLAN.md — Adaptive attack evals (ATK-08/09 vs fused, threshold sweep D-17, EVAL-05 aggregation), assemble arms race summary table in ablation_table.json + human checkpoint
 **UI hint**: no
 
