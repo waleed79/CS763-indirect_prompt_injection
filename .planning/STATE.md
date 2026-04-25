@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 IN PROGRESS — Plan 03 (ATK-02 poisoning ratio sweep) complete
-stopped_at: Phase 03.3 Plan 03 complete — ATK-02 ratio sweep driver + 5 corpora (0.5%/1%/2%/5%/10%); Tier-1 pool cycling into ATK02_SWEEP_ID_START (21000-21049); 147 passed 29 skipped 0 failed; commits 7d03788/2b316dd
-last_updated: "2026-04-25T07:05:00Z"
+status: Phase 03.3 IN PROGRESS — Plan 04 (EVAL-06 retriever transferability) complete
+stopped_at: Phase 03.3 Plan 04 complete — per-model prefix tables in Retriever; --embedding-model flag in run_eval.py; EVAL-06 driver scripts/run_transferability_eval.py; 155 passed 21 skipped 0 failed; commits d924073/f799fb6
+last_updated: "2026-04-25T07:13:49Z"
 progress:
   total_phases: 11
   completed_phases: 6
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 ## Current Position
 
 Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
-Plan: 3 of 7 COMPLETE
-Last activity: 2026-04-25 (03.3-03 ATK-02: poisoning ratio sweep driver + 5 corpora)
+Plan: 4 of 7 COMPLETE
+Last activity: 2026-04-25 (03.3-04 EVAL-06: per-model prefix tables + transferability driver)
 
 Progress: [█████████░] 93%
 
@@ -49,11 +49,11 @@ Progress: [█████████░] 93%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
-| 03.3 | 3/7 | In progress (03.3-03 ATK-02 ratio sweep complete 2026-04-25) |
+| 03.3 | 4/7 | In progress (03.3-04 EVAL-06 transferability complete 2026-04-25) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.2-04, 03.3-01, 03.3-02, 03.3-03, (next: 03.3-04)
+- Last 5 plans: 03.3-01, 03.3-02, 03.3-03, 03.3-04, (next: 03.3-05)
 - Trend: On track
 
 ## Accumulated Context
@@ -122,6 +122,9 @@ Recent decisions affecting current work:
 - [Phase 03.3-03]: ATK02_SWEEP_ID_START (21000-21049) used for cycle-1 Tier-1 pool extension — NOT p.passage_id + 50 which collides with T2 range (20050-20099); threat T-3.3-03-03 mitigated
 - [Phase 03.3-03]: p._replace() used for NamedTuple field update — Passage is NamedTuple not dataclass; dataclasses.replace() raises TypeError; Rule 1 auto-fix at execution time
 - [Phase 03.3-03]: math.ceil(ratio * n_clean) with dynamic n_clean=len(clean) — PoisonedRAG adversary-favoring rounding; n_clean never hardcoded; 5/10/20/50/100 poisoned docs at 0.5%/1%/2%/5%/10%
+- [Phase 03.3-04]: Prefix application is encode-time only — index() encodes prefixed texts but stores documents=all_texts (un-prefixed) in ChromaDB; retrieve() encodes prefixed query but RetrievalResult.text is un-prefixed; prevents prefix leakage into LLM prompts
+- [Phase 03.3-04]: EVAL-06 driver uses option (A) — indexes each per-model collection in-process via Retriever.index(), then invokes run_eval.py via subprocess with --embedding-model to match eval model to indexed collection
+- [Phase 03.3-04]: subprocess.run(list_argv, check=True) with no shell=True — enforces T-3.3-01 threat mitigation in run_transferability_eval.py
 
 ### Pending Todos
 
@@ -133,6 +136,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-25T07:05:00Z
-Stopped at: Phase 03.3 Plan 03 complete — ATK-02 ratio sweep driver (scripts/run_ratio_sweep.py) + 5 corpora (corpus_ratio_0005/0010/0020/0050/0100.jsonl); Tier-1 pool cycling into ATK02_SWEEP_ID_START band; 147 passed 29 skipped 0 failed; commits 7d03788/2b316dd
-Resume file: None (proceed to Phase 03.3 Plan 04 — next plan)
+Last session: 2026-04-25T07:13:49Z
+Stopped at: Phase 03.3 Plan 04 complete — per-model prefix tables in rag/retriever.py; --embedding-model flag in scripts/run_eval.py; EVAL-06 driver scripts/run_transferability_eval.py (3 models, secure subprocess); 155 passed 21 skipped 0 failed; commits d924073/f799fb6
+Resume file: None (proceed to Phase 03.3 Plan 05 — next plan)
