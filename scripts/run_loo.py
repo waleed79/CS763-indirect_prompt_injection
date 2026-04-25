@@ -41,6 +41,10 @@ except ImportError:
     sys.exit(1)
 
 from rag.config import load_config
+from rag.constants import (
+    TIER1_ID_START, TIER2_ID_START, TIER3_ID_START,
+    TIER1B_ID_START, TIER4_ID_START, ADAPTIVE_ID_START,
+)
 from rag.pipeline import RAGPipeline, set_global_seed
 
 # ---------------------------------------------------------------------------
@@ -186,16 +190,18 @@ def run_loo_for_query(
             answer_full, answer_removed, i, delay
         )
 
-        # Determine tier from passage_id ranges
-        if passage_id >= 20500:
+        # Determine tier from passage_id ranges (WR-03: use rag.constants, not literals)
+        if passage_id >= ADAPTIVE_ID_START:
             tier = "adaptive"
-        elif passage_id >= 20200:
+        elif passage_id >= TIER4_ID_START:
             tier = "tier4"
-        elif passage_id >= 20100:
+        elif passage_id >= TIER1B_ID_START:
+            tier = "tier1b"
+        elif passage_id >= TIER3_ID_START:
             tier = "tier3"
-        elif passage_id >= 20050:
+        elif passage_id >= TIER2_ID_START:
             tier = "tier2"
-        elif passage_id >= 20000:
+        elif passage_id >= TIER1_ID_START:
             tier = "tier1"
         else:
             tier = "clean"
