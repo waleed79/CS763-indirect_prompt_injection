@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 IN PROGRESS — Plan 06 (EVAL-08 XSS/SSRF taxonomy) complete
-stopped_at: Phase 03.3 Plan 06 complete — docs/xss_ssrf_taxonomy.md with 3 required D-18 mapping rows (Stored XSS/SSRF/CSP); commit 185ba8e
-last_updated: "2026-04-25T07:26:52Z"
+status: Phase 03.3 COMPLETE — Plan 07 (EVAL-V2-01 cross-model full matrix) complete; all 7 plans done
+stopped_at: Phase 03.3 Plan 07 complete — scripts/run_eval_matrix.py + 45 per-cell logs in logs/eval_matrix/ (3 LLMs × 3 defenses × 5 tiers); causal→def02 fallback per CONTEXT D-12
+last_updated: "2026-04-27T22:30:00Z"
 progress:
   total_phases: 11
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 12
-  completed_plans: 25
-  percent: 95
+  completed_plans: 26
+  percent: 98
 ---
 
 # Project State
@@ -20,15 +20,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 4 attack tiers, 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.3 — quick evaluation additions (Plan 03 ATK-02 ratio sweep complete)
+**Current focus:** Phase 03.3 COMPLETE — proceed to Phase 03.4 (full evaluation + final report)
 
 ## Current Position
 
-Phase: 03.3 (quick-evaluation-additions) — IN PROGRESS
-Plan: 6 of 7 COMPLETE
-Last activity: 2026-04-25 (03.3-06 EVAL-08: XSS/SSRF taxonomy docs/xss_ssrf_taxonomy.md)
+Phase: 03.3 (quick-evaluation-additions) — COMPLETE
+Plan: 7 of 7 COMPLETE
+Last activity: 2026-04-27 (03.3-07 EVAL-V2-01: cross-model 3×3×5 matrix in logs/eval_matrix/)
 
-Progress: [█████████░] 93%
+Progress: [██████████] 98%
 
 ## Performance Metrics
 
@@ -49,11 +49,11 @@ Progress: [█████████░] 93%
 | 02.4 | 3 | Complete (verified 2026-04-23) |
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
-| 03.3 | 6/7 | In progress (03.3-06 EVAL-08 XSS/SSRF taxonomy complete 2026-04-25) |
+| 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-02, 03.3-03, 03.3-04, 03.3-05, 03.3-06
+- Last 5 plans: 03.3-03, 03.3-04, 03.3-05, 03.3-06, 03.3-07
 - Trend: On track
 
 ## Accumulated Context
@@ -127,6 +127,10 @@ Recent decisions affecting current work:
 - [Phase 03.3-04]: subprocess.run(list_argv, check=True) with no shell=True — enforces T-3.3-01 threat mitigation in run_transferability_eval.py
 - [Phase 03.3-05]: TIER_CONFIG dict is single source of truth for per-tier anchor/retrieved_key/hijack_key — build_judge_user_message reads anchor from TIER_CONFIG[tier]["anchor"]; eliminates hardcoded JUDGE_USER_TEMPLATE and TIER3_ANCHOR_SUBSTRING
 - [Phase 03.3-05]: --tier default=tier3 preserves Phase 2.4 pilot CLI behavior; empty-tier guard generalized to n_tier==0 check avoiding ZeroDivisionError for any tier including tier4
+- [Phase 03.3-07]: subprocess.run(list_argv, check=False) with no shell=True — T-3.3-07-01 mitigation enforced by tests/test_eval_v2_01_driver.py; check=False (not check=True) so single-cell failure does not abort the 45-cell matrix
+- [Phase 03.3-07]: resolve_defenses() falls back to DEFENSES_FALLBACK = [no_defense, fused, def02] when models/causal_attribution/ready.flag absent — fired at execution time per CONTEXT D-12 since Phase 3.2 causal artifacts not yet present; stderr warning contains literal "causal artifact not found" for greppability
+- [Phase 03.3-07]: Cross-model finding — gemma4:31b-cloud is 0% ASR across all 5 tiers × 3 defenses; cloud-scale instruction-following is robust to substring-level injection independent of defense layer (citable result for Phase 3.4)
+- [Phase 03.3-07]: Tier 1b (Unicode homoglyph) is the strongest naive injection on llama3.2:3b — 22% no_defense rising to 35% under DEF-02 (DEF-02 substring detector keyed on ASCII HACKED is bypassed by Cyrillic НАСКЕД payload) — confirms ATK-01b stealth hypothesis
 
 ### Pending Todos
 
@@ -138,6 +142,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-25T07:26:52Z
-Stopped at: Phase 03.3 Plan 06 complete — docs/xss_ssrf_taxonomy.md with 3 D-18 mapping rows (Stored XSS/SSRF/CSP ↔ IPI analogs); commit 185ba8e
-Resume file: None (proceed to Phase 03.3 Plan 07 — EVAL-V2-01 cross-model full matrix)
+Last session: 2026-04-27T22:30:00Z
+Stopped at: Phase 03.3 Plan 07 complete — scripts/run_eval_matrix.py + 45 per-cell logs in logs/eval_matrix/ (3 LLMs × 3 defenses × 5 tiers); causal→def02 fallback per CONTEXT D-12 (Phase 3.2 not yet landed)
+Resume file: None (Phase 03.3 closed; proceed to Phase 03.4 — full evaluation and final report)

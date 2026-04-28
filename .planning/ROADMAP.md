@@ -199,7 +199,7 @@ Plans:
 - [x] 03.3-04-PLAN.md — EVAL-06 retriever transferability (nomic, mxbai, MiniLM) with task-prefix support (completed 2026-04-25)
 - [x] 03.3-05-PLAN.md — EVAL-V2-02 LLM-as-judge extension to 5 tiers (TIER_CONFIG + --tier flag) (completed 2026-04-25)
 - [x] 03.3-06-PLAN.md — EVAL-08 XSS/SSRF taxonomy mapping table (docs/xss_ssrf_taxonomy.md) (completed 2026-04-25)
-- [ ] 03.3-07-PLAN.md — EVAL-V2-01 cross-model full matrix driver (3 LLMs × 3 defenses × 5 tiers; Wave 2, depends on Plans 01/02/04 and Phase 3.2)
+- [x] 03.3-07-PLAN.md — EVAL-V2-01 cross-model full matrix driver (3 LLMs × 3 defenses × 5 tiers = 45 cells in logs/eval_matrix/; causal→def02 fallback per CONTEXT D-12) (completed 2026-04-27)
 **UI hint**: no
 
 ### Phase 3.4: Full Evaluation and Final Report
