@@ -204,8 +204,8 @@ class TestAdaptiveCorpus:
         """All adaptive passages must have passage_id in [ADAPTIVE_ID_START, ADAPTIVE_ID_START+99].
 
         Ensures ATK-08/09 entries occupy the reserved 20500–20599 block and do not
-        collide with earlier tiers (T1: 20000–20049, T2: 20050–20099, T3: 20100–20199,
-        T4: 20200–20299, T1b: 20150–20199, ATK-01b: 20150–20199, gap: 20300–20499).
+        collide with earlier tiers (T1: 20000–20049, T2: 20050–20099,
+        T3: 20100–20149, T1b: 20150–20199, T4: 20200–20299, gap: 20300–20499).
         """
         if not _adaptive_available:
             pytest.skip("generate_poisoned_corpus missing adaptive symbols — Wave 1 not yet implemented")
