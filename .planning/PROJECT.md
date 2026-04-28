@@ -6,14 +6,14 @@ A security research project investigating indirect prompt injection attacks on R
 
 ## Core Value
 
-Demonstrate an **attack-defense arms race** for indirect prompt injection in RAG systems — escalating through 4 attack tiers (naive, context-blending, LLM-generated, cross-chunk fragmentation) and 2 defense generations (multi-signal fusion, causal attribution), showing that per-chunk defenses are fundamentally insufficient and multi-signal defense-in-depth is required.
+Demonstrate an **attack-defense arms race** for indirect prompt injection in RAG systems — escalating through 5 attack tiers (T1 naive, T1b Unicode-homoglyph obfuscation, T2 context-blending, T3 LLM-generated semantic, T4 cross-chunk fragmentation) plus an adaptive tier (ATK-08/09), and 2 defense generations (multi-signal fusion, causal attribution), showing that per-chunk defenses are fundamentally insufficient and multi-signal defense-in-depth is required.
 
 ## Requirements
 
 ### Validated
 
 - [x] Build a functional RAG pipeline with retrieval corpus, embedding model, vector store, and LLM — *Validated in Phase 2.1*
-- [x] Design and implement indirect prompt injection attacks via corpus poisoning (4 tiers: naive, context-blend, LLM-generated, cross-chunk fragmentation) — *Validated in Phases 2.2, 2.4*
+- [x] Design and implement indirect prompt injection attacks via corpus poisoning (5 tiers: T1 naive, T1b Unicode-homoglyph, T2 context-blend, T3 LLM-generated, T4 cross-chunk fragmentation) — *Validated in Phases 2.2, 2.4, 3.3*
 - [x] Measure ASR across multiple attack strategies with retrieval rate decomposition — *Validated in Phase 2.3*
 - [x] Develop multi-signal defense fusion (BERT + perplexity + imperative ratio + retrieval fingerprint) — *Validated in Phase 3.1*
 - [x] Implement adaptive attacks (ATK-08 novel anchors, ATK-09 declarative) stress-testing the fused defense — *Validated in Phase 3.2* — ATK-08 mean ASR=4.7% vs fused (BERT generalization gap confirmed)

@@ -186,11 +186,11 @@ Plans:
   2. XSS/SSRF taxonomy (EVAL-08): formal mapping table connecting IPI attack classes to web security vulnerability classes with specific examples per mapping (stored XSS ↔ corpus poisoning, SSRF ↔ tool-call injection, CSP ↔ context sanitization)
   3. Poisoning ratio sweep (ATK-02, deferred from Phase 2.2): ASR measured at 5 poisoning ratios (0.5%, 1%, 2%, 5%, 10% of corpus size) — produces the ASR-vs-poisoning-ratio curve needed for the final results section
   4. Obfuscated encoding tier (ATK-01b, deferred from Phase 2.2): one additional attack variant using encoding obfuscation (Base64-encoded payload, Unicode homoglyphs, or whitespace-padded tokens) measured against the undefended pipeline to complete the 3-tier taxonomy
-  5. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all 4 tiers × 3 defense levels) is run against llama3.2:3b and mistral:7b, and additionally against `gemma4:31b-cloud` (Google lineage; added 2026-04-23, see rationale above) — demonstrates attack generalizability across LLM architectures and lineages; this is a differentiating result vs. single-model RAG attack papers
+  5. Cross-model full matrix (EVAL-V2-01): the complete attack/defense experiment matrix (all **5 tiers** — T1, T1b, T2, T3, T4 — × 3 defense levels) is run against llama3.2:3b, mistral:7b, and `gemma4:31b-cloud` (Google lineage; added 2026-04-23, see rationale above) = **45 cells** in `logs/eval_matrix/`. T1b is included because Plan 02 (ATK-01b homoglyph tier) lands in Wave 1 before Plan 07 (matrix driver) in Wave 2. Demonstrates attack generalizability across LLM architectures and lineages; this is a differentiating result vs. single-model RAG attack papers
 
 **Future Work (Phase 3.4 limitations footnote — not required to pass):**
 - Human stealthiness study (EVAL-07): 3-evaluator blind classification task, deferred due to 6-day timeline
-- Hard-target test against `minimax-m2.5:cloud`: all 4 tiers; informative regardless of outcome (breakthrough or documented resistance)
+- Hard-target test against `minimax-m2.5:cloud`: all 5 tiers (T1, T1b, T2, T3, T4); informative regardless of outcome (breakthrough or documented resistance)
 
 **Plans**: 7 plans
 - [x] 03.3-01-PLAN.md — Wave 0 test stubs for all Phase 3.3 deliverables (ATK-01b, ATK-02, EVAL-06, EVAL-V2-01, EVAL-V2-02) (completed 2026-04-25)
@@ -207,7 +207,13 @@ Plans:
 **Depends on**: Phase 3.1, Phase 3.2, Phase 3.3
 **Requirements**: EVAL-02, EVAL-03, EVAL-04, PH3-01, PH3-02, PH3-03, PH3-04, PH3-05
 **Success Criteria** (what must be TRUE):
-  1. Results tables show ASR for all 4 attack tiers × 3 defense levels (no defense, individual signals, fused defense, causal attribution) across 4 LLM columns: llama3.2:3b, mistral:7b, gpt-oss:20b-cloud, gpt-oss:120b-cloud — with per-variant Tier-1 breakdown included. The llama3.2:3b Tier-1/2 undefended row is seeded from `logs/attack_baseline.json` (Phase 2.2, 10-query frozen reference) alongside the Phase 2.3 100-query canonical runs.
+  1. Results tables aggregate evidence from three sources, all of which now exist:
+     **(a) Phase 2.3 cross-LLM undefended baseline** — 4 LLMs (`llama3.2:3b`, `mistral:7b`, `gpt-oss:20b-cloud`, `gpt-oss:120b-cloud`) on Tier 1/2 attacks (`logs/eval_harness_undefended_*.json`).
+     **(b) Phase 3.3 EVAL-V2-01 cross-model defense matrix** — 3 LLMs (`llama3.2:3b`, `mistral:7b`, `gemma4:31b-cloud`) × 3 defenses (`no_defense`, `fused`, `def02`) × 5 attack tiers (T1, T1b, T2, T3, T4) = 45 cells in `logs/eval_matrix/` and aggregated in `logs/eval_matrix/_summary.json`.
+     **(c) Phase 3.1 single-LLM defense ablation** — `llama3.2:3b` × 7 defense modes (off, def02, bert, perplexity, imperative, fingerprint, fused) × 4 tiers in `logs/ablation_table.json`.
+     The llama3.2:3b Tier-1/2 undefended row is seeded from `logs/attack_baseline.json` (Phase 2.2 10-query frozen reference) alongside the Phase 2.3 100-query canonical runs.
+     **Note on the third defense column in (b):** `def02` is used in place of a runtime `causal` defense by deliberate design — Phase 3.2-03 measured LOO ROC AUC at 0.372 (llama) / 0.410 (mistral), both below random, so wiring LOO inline as a runtime filter would only confirm Phase 3.2's published negative result. `def02` (weak prompt-only baseline; counter-productive on llama per Phase 3.1-07) is the more informative third comparison point. See `.planning/phases/03.3-quick-evaluation-additions/03.3-07-SUMMARY.md` "On the third defense column" for the full framing.
+     **Note on LLM column substitution in (b):** `gemma4:31b-cloud` (Google lineage) was added in Phase 3.3 CONTEXT (2026-04-23) for cross-architecture diversity. The four LLMs in (a) are still cited where Tier 1/2 undefended cross-LLM behavior is the question; the three LLMs in (b) cover the fully-defended matrix.
   2. At least one figure shows the escalation narrative (attack tier vs. defense generation effectiveness across the arms race)
   3. Adaptive attack results demonstrate the arms race dynamic (defense works → attacker adapts → need better defense)
   4. **Utility-Security Tradeoff subsection**: includes an ASR-vs-retrieval-rate figure and a per-mode FPR table drawn from `logs/ablation_table.json` (retrieval_rate column + fpr column). Explicitly shows the fused defense's 88% → 50% poisoned retrieval drop and its 76% clean-query FPR cost. This makes the utility price of the defense visible and honest rather than hiding behind ASR-only numbers.
