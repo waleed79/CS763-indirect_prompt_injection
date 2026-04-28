@@ -404,7 +404,7 @@ def main() -> None:
         fpr = sum(1 for r in unpaired_results if r.get("chunks_removed", 0) > 0) / n_unpaired
 
     output = {
-        "phase": "03.2",
+        "phase": "03.3",
         "corpus": args.corpus,
         "collection": args.collection,
         "llm_model": eval_cfg.llm_model,
