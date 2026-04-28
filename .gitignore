@@ -8,8 +8,10 @@ __pycache__/
 
 # ChromaDB persisted data (large, local-only)
 chroma_db/
+.chroma/
 
 # Retrieval logs (generated artifacts)
+# Specific result files are committed selectively via `git add -f` when canonical.
 logs/
 
 # HuggingFace model cache (downloaded by scripts)
@@ -23,3 +25,17 @@ logs/
 *.egg-info/
 dist/
 build/
+
+# Local Claude Code state (per-machine; not part of project)
+.claude/
+
+# HuggingFace Trainer intermediate checkpoints (large; regenerable from train_defense.py)
+models/bert_classifier/checkpoint-*/
+models/bert_s*/checkpoint-*/
+
+# EVAL-05 multi-seed BERT final models (large, ~2.5 GB each; regenerable from
+# `python scripts/train_defense.py --seed N --bert-output models/bert_sN`).
+# The small lr_meta_classifier_s*.json files ARE committed for fast reproducibility checks.
+models/bert_s1/
+models/bert_s2/
+models/bert_s3/
