@@ -87,7 +87,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
   - Signal 2: Perplexity anomaly (max windowed NLL via GPT-2)
   - Signal 3: Imperative sentence ratio (regex-based mood detection)
   - Signal 4: Retrieval score fingerprint anomaly (z-score vs `models/signal4_baseline.json` mu/std)
-- [x] **DEF-05**: Causal influence attribution — leave-one-out analysis measuring per-chunk influence/relevance ratio to detect chunks that disproportionately change LLM output *(completed Phase 3.2-03; llama AUC=0.372, mistral AUC=0.410 — honest negative result: clean chunks more attributable than injected ones because injected chunks are redundant; documented in Phase 3.4 limitations)*
+- [x] **DEF-05**: Causal influence attribution — leave-one-out analysis measuring per-chunk influence/relevance ratio *(implementation completed Phase 3.2-03; SC reclassified per 03.2-VERIFICATION.md framing B, 2026-04-28: AUC=0.372 llama / 0.410 mistral both below random ⇒ DEF-05 is a **failed defense hypothesis with a citable mechanistic explanation** (injected chunks are redundant — removing one does not restore clean behavior). The implementation requirement is met; the empirical SC ("metric distinguishes injected from clean") is NOT satisfied. The negative result is the contribution. Goes into Phase 3.4 limitations as one of the three required bullets.)*
 - [x] **DEF-01**: BERT-based context sanitization classifier detecting imperative/instructional commands in retrieved chunks *(retained as Signal 1 within DEF-04 — see above)*
 - [x] **DEF-03**: Defense integrated into RAG pipeline as a filter between retrieval and generation *(see above — defense_fn hook in pipeline.query)*
 
@@ -144,7 +144,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
 | DEF-02 | Phase 3.1 Plan 03 | **Complete** (counter-productive on llama — Phase 3.1-07) |
 | DEF-03 | Phase 3.1 Plan 02 | **Complete** (defense_fn hook in pipeline.query) |
 | DEF-04 | Phase 3.1 Plans 02/04/05/06 | **Complete** (FusedDefense; 0% ASR on T1/T2/T3 at FPR=76%) |
-| DEF-05 | Phase 3.2 Plan 03 | **Complete** (LOO AUC=0.372 llama / 0.410 mistral — negative result) |
+| DEF-05 | Phase 3.2 Plan 03 | **Implementation complete; SC re-classified as negative result** (LOO AUC=0.372 llama / 0.410 mistral, both below random — feeds Phase 3.4 limitations) |
 | ATK-06 | Phase 2.4 Plan 01 | **Complete** (gpt-oss:20b-cloud Rule-3 substitution for kimi) |
 | ATK-07 | Phase 2.4 Plan 02 | **Complete** (Tier 4 fragments A/B/C; co-retrieval limited per design) |
 | ATK-08 | Phase 3.2 Plan 02 | **Complete** (novel-anchor-token adaptive) |
