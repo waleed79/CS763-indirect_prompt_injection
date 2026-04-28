@@ -38,7 +38,7 @@ CLOUD_MARKER = "cloud"
 # Default corpus and collection used by the matrix driver.
 # These match the Phase 2.4 poisoned corpus that contains all 5 attack tiers.
 DEFAULT_CORPUS = "data/corpus_poisoned.jsonl"
-DEFAULT_COLLECTION = "nq_poisoned_v4"
+DEFAULT_COLLECTION = "nq_poisoned_v5"
 
 # Mapping from driver defense names to run_eval.py --defense flag values.
 DEFENSE_FLAG_MAP = {
