@@ -39,3 +39,10 @@ models/bert_s*/checkpoint-*/
 models/bert_s1/
 models/bert_s2/
 models/bert_s3/
+
+# Phase 3.1 BERT classifier final model (256 MB; regenerable from
+# `python scripts/train_defense.py` per REPLICATION instructions in README).
+# Scrubbed from git history 2026-04-28 to keep repo under GitHub's 100 MB
+# single-file limit. The small companion files (config.json, tokenizer.json,
+# tokenizer_config.json, training_args.bin) ARE committed.
+models/bert_classifier/model.safetensors

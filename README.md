@@ -189,6 +189,48 @@ pytest
 
 Test suite covers: chunking, corpus loading, generator, logger, pipeline, retriever, and reproducibility.
 
+### Reproducing the trained defense models
+
+The Phase 3.1 BERT classifier (`models/bert_classifier/model.safetensors`,
+≈256 MB) and the Phase 3.2 multi-seed BERT models
+(`models/bert_s{1,2,3}/`, ≈2.5 GB each) are **gitignored** to keep the
+repo under GitHub's 100 MB single-file limit. The small companion
+artifacts that the defense pipeline needs (`config.json`,
+`tokenizer.json`, `tokenizer_config.json`, `training_args.bin`,
+`models/lr_meta_classifier*.json`, `models/signal4_baseline.json`) ARE
+committed.
+
+To regenerate the trained models locally (≈30 min on CPU per seed):
+
+```bash
+# Default classifier (used by FusedDefense canonical run)
+python scripts/train_defense.py
+
+# EVAL-05 multi-seed runs (Phase 3.2)
+python scripts/train_defense.py --seed 1 --bert-output models/bert_s1 \
+    --lr-output models/lr_meta_classifier_s1.json
+python scripts/train_defense.py --seed 2 --bert-output models/bert_s2 \
+    --lr-output models/lr_meta_classifier_s2.json
+python scripts/train_defense.py --seed 3 --bert-output models/bert_s3 \
+    --lr-output models/lr_meta_classifier_s3.json
+```
+
+After training, the defense pipeline (`--defense fused`) loads
+`models/bert_classifier/` plus the LR meta-classifier transparently.
+
+The full evaluation matrix (3 LLMs × 3 defenses × 5 attack tiers = 45
+cells) can then be reproduced with:
+
+```bash
+# Pre-flight: confirm Ollama has the three target models pulled
+ollama list  # expect llama3.2:3b, mistral:7b, gemma4:31b-cloud
+
+python scripts/run_eval_matrix.py
+```
+
+Per-cell logs land in `logs/eval_matrix/`; the aggregate is
+`logs/eval_matrix/_summary.json`.
+
 ---
 
 ## Configuration

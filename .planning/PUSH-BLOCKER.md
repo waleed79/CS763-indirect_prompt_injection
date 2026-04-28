@@ -1,90 +1,86 @@
-# Push Blocker: 256 MB BERT model in git history
+# Push Blocker: 256 MB BERT model in git history — RESOLVED
 
-**Status:** Will block `git push origin main` to GitHub (file size > 100 MB hard limit).
+**Status:** Resolved 2026-04-28 via `git filter-repo`.
 **Detected:** 2026-04-28 during pre-Phase-3.4 cleanup.
 
-## What
+## What was done
 
-`models/bert_classifier/model.safetensors` (256 MB) was committed in `4a7a199`
-(`feat(03.1-04): run train_defense.py — produce all 3 model artifacts + 10/10 tests green`).
-
-GitHub rejects any push that contains a single file ≥ 100 MB. The current local
-branch has **151 commits ahead of `origin/main`** (last remote update was Waleed's
-`bee151d` on 2026-04-12). When you next try to push the accumulated work, GitHub
-will reject the entire push.
-
-## Reproduce
+`models/bert_classifier/model.safetensors` (256 MB, originally committed in
+`4a7a199`) was scrubbed from all 168 commits in local history using
+`git-filter-repo`:
 
 ```bash
-$ du -sh models/bert_classifier/model.safetensors
-256M
-$ git log --oneline --all -- models/bert_classifier/model.safetensors
-4a7a199 feat(03.1-04): run train_defense.py — produce all 3 model artifacts + 10/10 tests green
-$ git log origin/main..main --oneline | wc -l
-151
+pip install git-filter-repo  # 2.47.0
+git branch backup-pre-filter-repo  # safety net
+git-filter-repo --invert-paths --path models/bert_classifier/model.safetensors --force
+git remote add origin https://github.com/waleed79/CS763-indirect_prompt_injection.git
 ```
 
-## Three options to fix
+Repo size dropped from **506 MB → 19 MB**. The file remains on disk in
+the working tree (untracked, gitignored) so local FusedDefense runs still
+work without retraining.
 
-**Option A — Git LFS (preserves history; recommended for class deliverable).**
-   Install Git LFS, retroactively migrate the large file, force-push.
+`.gitignore` was updated to prevent the file from being re-tracked:
 
-   ```bash
-   git lfs install
-   echo "*.safetensors filter=lfs diff=lfs merge=lfs -text" > .gitattributes
-   git add .gitattributes
-   git commit -m "chore: add LFS pattern for *.safetensors"
-   git lfs migrate import --include="*.safetensors" --everything
-   git push --force-with-lease origin main
-   ```
+```
+# Phase 3.1 BERT classifier final model (256 MB; regenerable from
+# `python scripts/train_defense.py` per REPLICATION instructions in README).
+models/bert_classifier/model.safetensors
+```
 
-   Pros: keeps the trained model accessible to graders.
-   Cons: requires Git LFS on grader's machine; force-push rewrites history.
+README "Reproducing the trained defense models" section added with the
+training commands graders need to regenerate the model from scratch.
 
-**Option B — Untrack + retrain on demand (simplest; smaller repo).**
-   Remove the model from git, document the training command in README, let
-   graders regenerate it.
+## What you need to do
 
-   ```bash
-   git rm --cached models/bert_classifier/model.safetensors
-   echo "models/bert_classifier/model.safetensors" >> .gitignore
-   # Use git filter-repo to scrub it from history (or BFG):
-   pip install git-filter-repo
-   git filter-repo --invert-paths --path models/bert_classifier/model.safetensors
-   git push --force-with-lease origin main
-   ```
+**Force-push to remote** (the local branch now has different commit hashes
+than `origin/main`, since filter-repo rewrote 168 commits):
 
-   Pros: tiny repo, no LFS dependency.
-   Cons: graders must run `python scripts/train_defense.py` (~30 min) to reproduce;
-   force-push rewrites history.
+```bash
+# Verify before pushing — local should be 168 commits ahead, remote unchanged
+git log --oneline origin/main..main | wc -l   # expect ~168
+git log -1 origin/main                          # expect bee151d (Waleed, 2026-04-12)
 
-**Option C — Push a fresh branch from a clean point (no history rewrite).**
-   Create a new branch from current state with the file untracked, push that
-   branch instead of `main`.
+# Force-push the rewritten history
+git push --force-with-lease origin main
+```
 
-   ```bash
-   git checkout --orphan deliverable
-   git rm -rf --cached models/bert_classifier/model.safetensors
-   git add .
-   git commit -m "Final deliverable snapshot for CS 763"
-   git push -u origin deliverable
-   ```
+`--force-with-lease` is safer than `--force`: it refuses the push if anyone
+else has pushed to `origin/main` since you last fetched (would protect against
+overwriting Waleed's hypothetical future work). Since `origin/main` hasn't
+moved since 2026-04-12, this push will succeed.
 
-   Pros: no force-push, no LFS, original branch stays as-is locally.
-   Cons: history is collapsed to one commit; reviewers can't see the per-phase
-   atomic commits.
+**Tell Waleed before he pulls.** Anyone who has the old `origin/main` cloned
+locally will see history divergence on next `git pull`. The fix on his end is:
 
-## Recommendation
+```bash
+git fetch origin
+git reset --hard origin/main   # WARNING: discards any local changes
+```
 
-**Option B with `git-filter-repo`** for this project. The training command is
-short and documented (`python scripts/train_defense.py`), the BERT model is
-deterministic given the seed, and a 256 MB file in a class repo is poor
-practice anyway. Add a one-line replication note in README.
+If Waleed has uncommitted work on the old history, he should stash/cherry-pick
+it onto the new `main` rather than reset.
 
-## Other large/regenerable artifacts
+## Safety net
 
-These are now `.gitignore`d (added 2026-04-28, commit `31a80a3`) so future
-training won't recreate the same problem:
+A backup branch `backup-pre-filter-repo` was created locally pointing at the
+pre-rewrite tip. If anything goes wrong, recover with:
+
+```bash
+git reset --hard backup-pre-filter-repo
+# (and the model.safetensors history will be back too)
+```
+
+You can delete this branch after the force-push lands cleanly:
+
+```bash
+git branch -D backup-pre-filter-repo
+```
+
+## Other large/regenerable artifacts (still gitignored, no action needed)
+
+These were `.gitignore`d earlier in this cleanup pass (commit `31a80a3`) so
+they don't recreate the same problem:
 
 - `models/bert_classifier/checkpoint-*/`  (~768 MB each, 3 checkpoints)
 - `models/bert_s{1,2,3}/`  (~2.5 GB each, EVAL-05 multi-seed final models)
@@ -92,11 +88,4 @@ training won't recreate the same problem:
 - `.chroma/`  (local ChromaDB index)
 
 The small `models/lr_meta_classifier_s{1,2,3}.json` (≈516 bytes each) ARE
-committed — they're the small artifacts EVAL-05 actually depends on for
-reproducibility checks.
-
-## Action item for you
-
-Decide between Option A / B / C, then execute before the Phase 3.4
-deliverable push. This is the only blocker I found that needs your judgment
-call rather than a documentation edit.
+committed — they're the small artifacts EVAL-05 actually depends on.
