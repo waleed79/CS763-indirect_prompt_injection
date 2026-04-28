@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.3 COMPLETE — Plan 07 (EVAL-V2-01 cross-model full matrix) complete; all 7 plans done
-stopped_at: Phase 03.3 Plan 07 complete — scripts/run_eval_matrix.py + 45 per-cell logs in logs/eval_matrix/ (3 LLMs × 3 defenses × 5 tiers); causal→def02 fallback per CONTEXT D-12
-last_updated: "2026-04-27T22:30:00Z"
+status: Phase 03.4 PLANNED — 6 plans across 4 waves (Wave 0 scaffolding + Wave 1 parallel make_results/make_figures/loo_neg_doc + Wave 2 writeup + Wave 3 manual paste/submit); ready to execute
+stopped_at: Phase 03.4 plans verified by gsd-plan-checker (iteration 2/3 — all 2 blockers + 5 warnings resolved); RESEARCH.md flagged 3 blocking issues now baked into plans (matplotlib/seaborn install, SSRF API10→API7 fix, AttriBoT≠LODO disambiguation)
+last_updated: "2026-04-28T03:00:00Z"
 progress:
   total_phases: 11
   completed_phases: 7
-  total_plans: 12
+  total_plans: 18
   completed_plans: 26
   percent: 98
 ---

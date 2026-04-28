@@ -220,7 +220,14 @@ Plans:
   5. A limitations section honestly names at least 3 findings: (a) the **T3/T4 baseline puzzle** (paired ASR for Tier 3 and Tier 4 was 0% on llama3.2:3b undefended — defense cannot "reduce" what was never hitting; the result is methodologically correct but requires explanation rather than being framed as a defense win); (b) the **DEF-02 counter-productive finding** (system-prompt hardening *increased* paired ASR on llama3.2:3b from 2% → 8% on T1 and 12% → 38% on T2 — classified as priming/substring-leak/behavior-change per `logs/def02_priming_analysis.md`); (c) fundamental limits of per-chunk defenses vs. cross-chunk-aware approaches
   6. Comparison to PoisonedRAG/BadRAG (PH3-05) is included — methodology differences are described and expected ASR differences discussed; this positions the contribution relative to the 2024-2025 literature (required, not optional)
   7. The Phase 3 document is submitted to the course Google Doc by Apr 30
-**Plans**: TBD
+**Plans**: 6 plans
+Plans:
+- [ ] 03.4-01-PLAN.md — Wave 0 scaffolding: pip install matplotlib/seaborn/tabulate, create figures/ + docs/results/ dirs, fix SSRF taxonomy citation API10:2023→API7:2023, run 5 ATK-02 ratio-sweep evals (D-06 inputs), schema-probe all log files, write 4 test stubs (test_make_results, test_make_figures, test_writeup_structure, test_loo_neg_doc)
+- [ ] 03.4-02-PLAN.md — Wave 1 (parallel): scripts/make_results.py — emit 4 Markdown + 4 CSV tables into docs/results/ from logs/ablation_table.json + _summary.json + eval_harness_undefended_*.json + attack_baseline.json; aggregates 3 sources per ROADMAP SC-1
+- [ ] 03.4-03-PLAN.md — Wave 1 (parallel): scripts/make_figures.py — render all 5 PNG figures (D-03 30-bar arms race, D-04 two-panel utility-security, D-05 two-panel inverted-ROC + scatter, D-06 log-scale ratio sweep, D-12 viridis_r heatmap)
+- [ ] 03.4-04-PLAN.md — Wave 1 (parallel): logs/loo_negative_result_analysis.md — D-16 6-section DEF-05 failed-hypothesis analysis doc parallel to def02_priming_analysis.md style
+- [ ] 03.4-05-PLAN.md — Wave 2: docs/phase3_results.md — 13-section writeup per CONTEXT D-09 (hero findings to §8(e)+(f), CR-02 disclosure in §1, SSRF API7:2023 in §12, AttriBoT≠LODO disambiguation in §11)
+- [ ] 03.4-06-PLAN.md — Wave 3 (manual checkpoint): paste docs/phase3_results.md into existing Phase 1 Google Doc, upload 5 PNGs, verify paste fidelity, submit by Apr 30, record evidence in 03.4-SUBMISSION.md
 
 **Optional:** EVAL-02 (utility metrics), EVAL-03 (ASR-utility curve), EVAL-04 (held-out attack evaluation), PH3-04 (failure case analysis)
 
@@ -267,7 +274,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
 | 3.2 Adaptive Attacks & Causal Attribution | 4/4 | Complete | 2026-04-24 |
 | 3.3 Quick Evaluation Additions | 6/7 | In progress 2026-04-25 | - |
-| 3.4 Full Evaluation and Final Report | 0/? | Not started | - |
+| 3.4 Full Evaluation and Final Report | 0/6 | Planned 2026-04-28 | - |
 | 4 Final Presentation | 0/? | Not started | - |
 
 ---
