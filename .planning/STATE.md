@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.4 IN PROGRESS — Wave 1 Plan 02 (make_results) COMPLETE 2026-04-29; Plan 03 (make_figures) + Plan 04 (loo_neg_doc) ready to run in parallel
-stopped_at: Phase 03.4 Plan 02 complete — scripts/make_results.py runnable from scratch, 4/4 unit tests PASS, 8 result tables (4 .md + 4 .csv) emitted into docs/results/, DEFENSE_DISPLAY single-source-of-truth established for Plan 03
+status: Phase 03.4 IN PROGRESS — Wave 1 Plan 03 (make_figures) COMPLETE 2026-04-29; Plan 04 (loo_neg_doc) ready to run; Wave 2 Plan 05 (writeup) gains 5 ready-to-embed PNGs in figures/
+stopped_at: Phase 03.4 Plan 03 complete — scripts/make_figures.py runnable from scratch, 3/3 unit tests PASS (was SKIPPED in Wave 0), all 5 PNGs (D-03/04/05/06/12) emitted into figures/ with sizes 43-136 KB, B-2 D-03 non-zero invariants and W-5 D-12 fail-loud invariants asserted before save_atomic
 last_updated: "2026-04-29T07:30:00Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 18
-  completed_plans: 28
+  completed_plans: 29
   percent: 99
 ---
 
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.4 IN PROGRESS — Wave 1 Plan 02 (make_results) COMPLETE; Plan 03 (make_figures) + Plan 04 (loo_neg_doc) ready to run in parallel; Wave 2 Plan 05 (writeup) gains 4 ready-to-embed Markdown tables in docs/results/
+**Current focus:** Phase 03.4 IN PROGRESS — Wave 1 Plans 02 (make_results) + 03 (make_figures) COMPLETE; Plan 04 (loo_neg_doc) ready to run; Wave 2 Plan 05 (writeup) gains 4 .md tables AND 5 PNG figures ready to embed verbatim
 
 ## Current Position
 
 Phase: 03.4 (full-evaluation-and-final-report) — IN PROGRESS
-Plan: 2 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results done)
-Last activity: 2026-04-29 (03.4-02: scripts/make_results.py + 8 result tables; 4/4 unit tests PASS)
+Plan: 3 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results + Wave 1 make_figures done)
+Last activity: 2026-04-29 (03.4-03: scripts/make_figures.py + 5 PNG figures; 3/3 unit tests PASS)
 
 Progress: [██████████] 99%
 
@@ -34,7 +34,7 @@ Progress: [██████████] 99%
 
 **Velocity:**
 
-- Total plans completed: 26
+- Total plans completed: 27
 - Average duration: —
 - Total execution time: —
 
@@ -50,11 +50,11 @@ Progress: [██████████] 99%
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
-| 03.4 | 2/6 | In progress (03.4-02 make_results.py + 8 tables complete 2026-04-29) |
+| 03.4 | 3/6 | In progress (03.4-03 make_figures.py + 5 PNGs complete 2026-04-29) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-05, 03.3-06, 03.3-07, 03.4-01, 03.4-02
+- Last 5 plans: 03.3-06, 03.3-07, 03.4-01, 03.4-02, 03.4-03
 - Trend: On track
 
 ## Accumulated Context
@@ -140,6 +140,10 @@ Recent decisions affecting current work:
 - [Phase 03.4-02]: ablation_table.json `defense_mode` inner field uses run_eval CLI short-names (`bert`, `fused`, `off`) which collapse `fused_fixed_0.5` and `fused_tuned_threshold` into a single `fused` value — load_ablation in scripts/make_results.py uses the dict KEY as the canonical `defense_mode` and preserves the inner field as `defense_mode_raw`; without this fix the ablation table loses the "Fused (tuned)" distinction
 - [Phase 03.4-02]: DEFENSE_DISPLAY in scripts/make_results.py is the single source of truth for defense column display labels (T-3.4-W1-05) — handles BOTH ablation top-level keys (bert_only, fused_fixed_0.5) AND inner short-names (bert, fused, off); to be mirrored verbatim by Plan 03 figure renderer to prevent label drift between tables and figures
 - [Phase 03.4-02]: Adaptive arms-race row uses paired_asr_adaptive (not asr_adaptive) — adaptive_fused_*.json has both keys; the paired number is the citable headline for Plan 05 §2 continuity with Phase 2.3 paired ASR; FPR=nan for source (a) Undefended baseline rows (no defense to false-positive on; honest absence rather than fabricated 0)
+- [Phase 03.4-03]: matplotlib infers savefig format from file extension and rejects `.tmp` ("Format 'tmp' is not supported"); save_atomic helper passes `format="png"` explicitly so the atomic-write idiom (write to .tmp + os.replace) works. Caught Rule-1 bug on first execution; one-line fix.
+- [Phase 03.4-03]: B-2 fail-loud invariants on D-03 data matrix in render_d03_arms_race — assert np.nansum(data)>0 AND np.nanmax(data)>0.05 AND non-zero-cell-count>=5 BEFORE save_atomic. Catches the all-zero placeholder regression class (silent figure with all bars at zero height). Verified live: nansum=1.44, nanmax=0.38, 10 non-zero cells.
+- [Phase 03.4-03]: W-5 fail-loud invariants on D-12 cross-model heatmap in render_d12_cross_model_heatmap — assert matrix.shape==(5,3) AND not matrix.isna().any().any() before sns.heatmap. Catches model-name schema drift (underscore vs colon) with explicit AssertionError; main() returns 2 on failure so CI/scripted callers see the error instead of a silently degraded figure.
+- [Phase 03.4-03]: DEFENSE_DISPLAY copied verbatim from scripts/make_results.py (T-3.4-W1-05 single source of truth) rather than imported. Importing scripts/ modules without __init__.py requires importlib.util.spec_from_file_location; copying with a comment pointer is simpler. Future label additions land in make_results.py first and are mirrored here within the same plan/PR.
 
 ### Pending Todos
 
@@ -152,5 +156,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-29T07:30:00Z
-Stopped at: Phase 03.4 Plan 02 complete — scripts/make_results.py (550 lines) runnable from scratch, 4/4 unit tests PASS (was SKIPPED in Wave 0), 8 result tables (4 .md + 4 .csv) emitted into docs/results/, DEFENSE_DISPLAY single-source-of-truth established for Plan 03 figure renderer; Plan 03 (make_figures) + Plan 04 (loo_neg_doc) ready to run in parallel
-Resume file: None (Plan 02 closed; Plans 03/04 still in Wave 1 unblocked, Plan 05 writeup gains 4 ready-to-embed Markdown tables)
+Stopped at: Phase 03.4 Plan 03 complete — scripts/make_figures.py (370 lines) runnable from scratch, 3/3 unit tests PASS (was SKIPPED in Wave 0), all 5 PNGs (D-03 arms race, D-04 utility-security 2-panel, D-05 LOO ROC+scatter 2-panel with AUC=0.372/0.414, D-06 ratio sweep log-x, D-12 cross-model heatmap viridis_r) emitted into figures/ with B-2/W-5 fail-loud invariants asserted; Plan 04 (loo_neg_doc) still unblocked
+Resume file: None (Plan 03 closed; Plan 04 in Wave 1 unblocked, Plan 05 writeup now has 4 ready-to-embed Markdown tables AND 5 ready-to-embed PNG figures)

@@ -48,7 +48,7 @@ Per course slides: "A clear problem statement with strong motivation. Literature
 
 - [x] **EVAL-01**: ASR measurement — track how often attacks succeed *(completed Phase 2.3 — run_eval.py emits asr_overall, asr_tier{1,1b,2,3,4,adaptive}, retrieval_rate, conditional_asr_*, paired_asr_*)*
 - [ ] **EVAL-02**: **[optional]** Utility preservation metrics — measure answer quality on benign queries with/without defense active
-- [ ] **EVAL-03**: **[optional]** ASR-utility tradeoff curve as a results graphic
+- [x] **EVAL-03**: **[optional]** ASR-utility tradeoff curve as a results graphic — delivered as figures/fig2_utility_security.png (D-04 two-panel) by Phase 03.4-03
 - [ ] **EVAL-04**: **[optional]** Held-out attack category evaluation (test defense on attack types not seen during training)
 - [x] **EVAL-05**: Results aggregated over 3+ random seeds with standard deviation *(completed Phase 3.2-04 — eval05_aggregation block in logs/ablation_table.json with mean+std for asr_tier{1,2,3,4,adaptive}, fpr, retrieval_rate across seeds 1/2/3)*
 
@@ -156,7 +156,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
 | EVAL-V2-01 | Phase 3.3 Plan 07 | **Complete** (3 LLMs × 3 defenses × 5 tiers = 45 cells) |
 | EVAL-V2-02 | Phase 3.3 Plan 05 | **Complete** |
 | EVAL-02 [optional] | Phase 3.4 | Pending |
-| EVAL-03 [optional] | Phase 3.4 | Pending |
+| EVAL-03 [optional] | Phase 3.4 Plan 03 | **Complete** (D-04 two-panel figure rendered to figures/fig2_utility_security.png) |
 | EVAL-04 [optional] | Phase 3.4 | Pending |
 | PH3-01 | Phase 3.4 | Pending |
 | PH3-02 | Phase 3.4 | Pending |
