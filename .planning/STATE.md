@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.4 IN PROGRESS — Wave 1 Plan 04 (loo_neg_doc) COMPLETE 2026-04-29; Wave 1 fully closed (Plans 02/03/04); Wave 2 Plan 05 (writeup) unblocked with 4 .md tables, 5 PNG figures, AND the DEF-05 mechanistic analysis doc to cite by path
-stopped_at: Phase 03.4 Plan 04 complete — logs/loo_negative_result_analysis.md (245 lines, 6 D-16 sections) committed at c7b8e7b, 5/5 unit tests PASS (was SKIPPED in Wave 0), AUC 0.372 (llama JSON-exact) and 0.410 (mistral canonical; 0.414 JSON-rounded form footnoted) cited from logs/loo_results_*.json aggregate.roc_auc; mechanism §3 covers (i) injected-chunk redundancy + (ii) clean-chunk uniqueness + (iii) net anti-correlation
-last_updated: "2026-04-29T07:38:15Z"
+status: Phase 03.4 IN PROGRESS — Wave 2 Plan 05 (writeup) COMPLETE 2026-04-29; docs/phase3_results.md (656 lines, 13 ## N. sections) committed; 12/12 writeup-structure unit tests SKIPPED→PASSED; Plan 06 (Apr 30 manual Google Doc paste) unblocked
+stopped_at: Phase 03.4 Plan 05 complete — docs/phase3_results.md (656 lines) at commits ecdbc7f (§1-§7 W-6 safety checkpoint) + 7573e52 (§1-§13 final). 12/12 tests in tests/test_writeup_structure.py PASSED (was SKIPPED in Wave 0): 13 sections; 5 figure refs (fig1-fig5); 8 academic citations (Greshake/PoisonedRAG/BadRAG/OWASP/CSP/CWE-79/CWE-918/Capital One); §5 cites loo_negative_result_analysis.md; §9 names 3 SC-5 limitations; §12 inlines 3-row taxonomy with corrected API7:2023; §11 disambiguates LODO 2602.14161 vs AttriBoT 2411.15102; §1 CR-02 disclosure; §8(e)+(f) hero findings (gemma4 0%, T1b 22%→35%); §4 88%→50%/76% utility-security; 0 API10:2023 / 0 footnote syntax
+last_updated: "2026-04-29T23:50:00Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 18
-  completed_plans: 29
+  completed_plans: 30
   percent: 99
 ---
 
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.4 IN PROGRESS — Wave 1 fully closed (Plans 02/03/04 all COMPLETE 2026-04-29); Wave 2 Plan 05 (writeup) unblocked with 4 .md tables + 5 PNG figures + DEF-05 mechanistic analysis doc all ready to cite
+**Current focus:** Phase 03.4 IN PROGRESS — Wave 2 Plan 05 (writeup) COMPLETE 2026-04-29; docs/phase3_results.md (656 lines, 13 sections, 12/12 tests PASSED) committed; Plan 06 (Apr 30 manual Google Doc paste) unblocked — final task before phase deadline
 
 ## Current Position
 
 Phase: 03.4 (full-evaluation-and-final-report) — IN PROGRESS
-Plan: 4 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results + make_figures + loo_neg_doc done)
-Last activity: 2026-04-29 (03.4-04: logs/loo_negative_result_analysis.md, 245 lines, 5/5 unit tests SKIPPED→PASSED)
+Plan: 5 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results + make_figures + loo_neg_doc + Wave 2 writeup done)
+Last activity: 2026-04-29 (03.4-05: docs/phase3_results.md, 656 lines, 12/12 unit tests SKIPPED→PASSED, 2 commits per W-6)
 
 Progress: [██████████] 99%
 
@@ -50,11 +50,11 @@ Progress: [██████████] 99%
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
-| 03.4 | 4/6 | In progress (03.4-04 logs/loo_negative_result_analysis.md complete 2026-04-29) |
+| 03.4 | 5/6 | In progress (03.4-05 docs/phase3_results.md complete 2026-04-29; Plan 06 manual paste pending Apr 30) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-07, 03.4-01, 03.4-02, 03.4-03, 03.4-04
+- Last 5 plans: 03.4-01, 03.4-02, 03.4-03, 03.4-04, 03.4-05
 - Trend: On track
 
 ## Accumulated Context
@@ -147,6 +147,9 @@ Recent decisions affecting current work:
 - [Phase 03.4-04]: Mistral LOO ROC AUC has two canonical decimal forms in the project: **0.410** (used in Phase 03.2-03 SUMMARY, the test literal in tests/test_loo_neg_doc.py, and most downstream prose) vs **0.414** (the JSON-rounded form 0.41379→0.414, used in the Phase 03.4-03 ROC figure label). Both refer to the same logs/loo_results_mistral.json aggregate.roc_auc=0.41379... measurement; logs/loo_negative_result_analysis.md cites 0.410 in the table with a dagger footnote disclosing 0.414. Future writeup edits should preserve both forms or pick one and update both places consistently.
 - [Phase 03.4-04]: logs/ is gitignored (.gitignore line 15); canonical analysis docs are force-added with `git add -f`. Pattern established by logs/def02_priming_analysis.md (commit cd1b804) and logs/ablation_table.json; logs/loo_negative_result_analysis.md follows the same pattern (commit c7b8e7b).
 - [Phase 03.4-04]: D-16 6-section contract enforced via tests/test_loo_neg_doc.py: f'## {n}.' literal heading checks for n in 1..6. Future analysis-doc plans following the same pattern should use exact `## N. Title` heading literals (no `### N`, no other heading levels) so a single grep `^## [1-6]\.` matches all required section anchors.
+- [Phase 03.4-05]: Writeup follows the same `## N.` heading-literal pattern (n in 1..13) for tests/test_writeup_structure.py; tables are inlined as Markdown pipe tables (NOT raw `| col |` text per RESEARCH Pitfall 3); references use plain numbered list (NOT `[^N]` footnote syntax per RESEARCH Pitfall 4) so Google Docs paste preserves them; 12 collected tests in tests/test_writeup_structure.py (plan-prompt's "11 tests" was a count mismatch — the test class added test_cr02_disclosure since plan was written, bringing total to 12).
+- [Phase 03.4-05]: Figure 5 (cross-model heatmap) placed at start of §8(e) where it directly supports the gemma4 hero finding rather than at §7 retriever-transferability; the figure is a 5-tier × 3-LLM heatmap whose visual story is the gemma4 column being uniformly zero, not embedding-model variance. Plan outline ambiguous; this placement maximizes narrative coherence with no contract violation (figure filename literal still present, satisfying test_all_five_figures_referenced).
+- [Phase 03.4-05]: W-6 safety checkpoint pattern executed verbatim: intermediate commit ecdbc7f after initial Write completes (mirrors Phase-3.3 atomic-write `os.replace` pattern at the document level), final commit 7573e52 supersedes with one-line `Document status:` enhancement; both commits in `git log -- docs/phase3_results.md` per acceptance contract.
 
 ### Pending Todos
 
