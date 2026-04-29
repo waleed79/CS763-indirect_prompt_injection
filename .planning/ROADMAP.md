@@ -223,7 +223,7 @@ Plans:
 **Plans**: 6 plans
 Plans:
 - [x] 03.4-01-PLAN.md — Wave 0 scaffolding: pip install matplotlib/seaborn/tabulate, create figures/ + docs/results/ dirs, fix SSRF taxonomy citation API10:2023→API7:2023, run 5 ATK-02 ratio-sweep evals (D-06 inputs), schema-probe all log files, write 4 test stubs (test_make_results, test_make_figures, test_writeup_structure, test_loo_neg_doc) — **COMPLETE 2026-04-29**
-- [ ] 03.4-02-PLAN.md — Wave 1 (parallel): scripts/make_results.py — emit 4 Markdown + 4 CSV tables into docs/results/ from logs/ablation_table.json + _summary.json + eval_harness_undefended_*.json + attack_baseline.json; aggregates 3 sources per ROADMAP SC-1
+- [x] 03.4-02-PLAN.md — Wave 1 (parallel): scripts/make_results.py — emit 4 Markdown + 4 CSV tables into docs/results/ from logs/ablation_table.json + _summary.json + eval_harness_undefended_*.json + attack_baseline.json; aggregates 3 sources per ROADMAP SC-1 — **COMPLETE 2026-04-29** (8 tables emitted, 4/4 unit tests PASS, DEFENSE_DISPLAY single-source-of-truth established)
 - [ ] 03.4-03-PLAN.md — Wave 1 (parallel): scripts/make_figures.py — render all 5 PNG figures (D-03 30-bar arms race, D-04 two-panel utility-security, D-05 two-panel inverted-ROC + scatter, D-06 log-scale ratio sweep, D-12 viridis_r heatmap)
 - [ ] 03.4-04-PLAN.md — Wave 1 (parallel): logs/loo_negative_result_analysis.md — D-16 6-section DEF-05 failed-hypothesis analysis doc parallel to def02_priming_analysis.md style
 - [ ] 03.4-05-PLAN.md — Wave 2: docs/phase3_results.md — 13-section writeup per CONTEXT D-09 (hero findings to §8(e)+(f), CR-02 disclosure in §1, SSRF API7:2023 in §12, AttriBoT≠LODO disambiguation in §11)

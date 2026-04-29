@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.4 IN PROGRESS — Wave 0 scaffolding (Plan 01) COMPLETE 2026-04-29; Wave 1 plans (02 make_results, 03 make_figures, 04 loo_neg_doc) ready to run in parallel
-stopped_at: Phase 03.4 Plan 01 complete — env ready (matplotlib 3.10.9 + seaborn 0.13.2 + tabulate 0.9.0), 5 D-06 ratio logs (asr 4%→16%), 4 test stubs (24 tests, all SKIP), SSRF citation fixed, schema probe resolves OQ2 as UNPAIRED
-last_updated: "2026-04-29T07:00:00Z"
+status: Phase 03.4 IN PROGRESS — Wave 1 Plan 02 (make_results) COMPLETE 2026-04-29; Plan 03 (make_figures) + Plan 04 (loo_neg_doc) ready to run in parallel
+stopped_at: Phase 03.4 Plan 02 complete — scripts/make_results.py runnable from scratch, 4/4 unit tests PASS, 8 result tables (4 .md + 4 .csv) emitted into docs/results/, DEFENSE_DISPLAY single-source-of-truth established for Plan 03
+last_updated: "2026-04-29T07:30:00Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 18
-  completed_plans: 27
+  completed_plans: 28
   percent: 99
 ---
 
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.4 IN PROGRESS — Wave 0 (Plan 01) COMPLETE; Wave 1 plans (02 make_results, 03 make_figures, 04 loo_neg_doc) ready to run in parallel
+**Current focus:** Phase 03.4 IN PROGRESS — Wave 1 Plan 02 (make_results) COMPLETE; Plan 03 (make_figures) + Plan 04 (loo_neg_doc) ready to run in parallel; Wave 2 Plan 05 (writeup) gains 4 ready-to-embed Markdown tables in docs/results/
 
 ## Current Position
 
 Phase: 03.4 (full-evaluation-and-final-report) — IN PROGRESS
-Plan: 1 of 6 COMPLETE (Wave 0 scaffolding done)
-Last activity: 2026-04-29 (03.4-01: env install + 5 ratio evals + 4 stubs + schema probe + SSRF citation fix)
+Plan: 2 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results done)
+Last activity: 2026-04-29 (03.4-02: scripts/make_results.py + 8 result tables; 4/4 unit tests PASS)
 
 Progress: [██████████] 99%
 
@@ -34,7 +34,7 @@ Progress: [██████████] 99%
 
 **Velocity:**
 
-- Total plans completed: 25
+- Total plans completed: 26
 - Average duration: —
 - Total execution time: —
 
@@ -50,11 +50,11 @@ Progress: [██████████] 99%
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
-| 03.4 | 1/6 | In progress (03.4-01 Wave 0 scaffolding complete 2026-04-29) |
+| 03.4 | 2/6 | In progress (03.4-02 make_results.py + 8 tables complete 2026-04-29) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-04, 03.3-05, 03.3-06, 03.3-07, 03.4-01
+- Last 5 plans: 03.3-05, 03.3-06, 03.3-07, 03.4-01, 03.4-02
 - Trend: On track
 
 ## Accumulated Context
@@ -137,6 +137,9 @@ Recent decisions affecting current work:
 - [Phase 03.4-01]: ratio-sweep evals use --tier-filter tier1 (NOT --tier; that flag does not exist) and --defense off (NOT --defense no_defense; that value does not exist); plan front-loaded these CLI verifications after RESEARCH found stale references in 03.4-CONTEXT.md
 - [Phase 03.4-01]: D-06 ratio-sweep ASR climbs 4%→16% over 0.5%→10% poisoning ratio with mild non-monotonicity at 0010→0020 and 0050→0100 (LLM stochasticity at n=100); retrieval_rate climbs monotonically 29%→82%; FPR=0% (no defense to false-positive on); shape matches PoisonedRAG Fig. 3
 - [Phase 03.4-01]: ASCII-safe head display in schema probes (encode/backslashreplace) — avoids cp1252 cascade in conda run on Windows when source files contain non-ASCII chars (e.g. ↔ U+2194 in xss_ssrf_taxonomy.md heading); pattern documented for future probe scripts
+- [Phase 03.4-02]: ablation_table.json `defense_mode` inner field uses run_eval CLI short-names (`bert`, `fused`, `off`) which collapse `fused_fixed_0.5` and `fused_tuned_threshold` into a single `fused` value — load_ablation in scripts/make_results.py uses the dict KEY as the canonical `defense_mode` and preserves the inner field as `defense_mode_raw`; without this fix the ablation table loses the "Fused (tuned)" distinction
+- [Phase 03.4-02]: DEFENSE_DISPLAY in scripts/make_results.py is the single source of truth for defense column display labels (T-3.4-W1-05) — handles BOTH ablation top-level keys (bert_only, fused_fixed_0.5) AND inner short-names (bert, fused, off); to be mirrored verbatim by Plan 03 figure renderer to prevent label drift between tables and figures
+- [Phase 03.4-02]: Adaptive arms-race row uses paired_asr_adaptive (not asr_adaptive) — adaptive_fused_*.json has both keys; the paired number is the citable headline for Plan 05 §2 continuity with Phase 2.3 paired ASR; FPR=nan for source (a) Undefended baseline rows (no defense to false-positive on; honest absence rather than fabricated 0)
 
 ### Pending Todos
 
@@ -148,6 +151,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29T07:00:00Z
-Stopped at: Phase 03.4 Plan 01 complete — Wave 0 scaffolding (matplotlib/seaborn/tabulate installed, 5 D-06 ratio logs asr 4%→16%, 4 stubs SKIP, SSRF API7:2023 fix, schema probe resolves OQ2 as UNPAIRED); Wave 1 unblocked
-Resume file: None (Plan 01 closed; Wave 1 plans 02/03/04 ready to run in parallel)
+Last session: 2026-04-29T07:30:00Z
+Stopped at: Phase 03.4 Plan 02 complete — scripts/make_results.py (550 lines) runnable from scratch, 4/4 unit tests PASS (was SKIPPED in Wave 0), 8 result tables (4 .md + 4 .csv) emitted into docs/results/, DEFENSE_DISPLAY single-source-of-truth established for Plan 03 figure renderer; Plan 03 (make_figures) + Plan 04 (loo_neg_doc) ready to run in parallel
+Resume file: None (Plan 02 closed; Plans 03/04 still in Wave 1 unblocked, Plan 05 writeup gains 4 ready-to-embed Markdown tables)
