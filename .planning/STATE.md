@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.4 IN PROGRESS — Wave 1 Plan 03 (make_figures) COMPLETE 2026-04-29; Plan 04 (loo_neg_doc) ready to run; Wave 2 Plan 05 (writeup) gains 5 ready-to-embed PNGs in figures/
-stopped_at: Phase 03.4 Plan 03 complete — scripts/make_figures.py runnable from scratch, 3/3 unit tests PASS (was SKIPPED in Wave 0), all 5 PNGs (D-03/04/05/06/12) emitted into figures/ with sizes 43-136 KB, B-2 D-03 non-zero invariants and W-5 D-12 fail-loud invariants asserted before save_atomic
-last_updated: "2026-04-29T07:30:00Z"
+status: Phase 03.4 IN PROGRESS — Wave 1 Plan 04 (loo_neg_doc) COMPLETE 2026-04-29; Wave 1 fully closed (Plans 02/03/04); Wave 2 Plan 05 (writeup) unblocked with 4 .md tables, 5 PNG figures, AND the DEF-05 mechanistic analysis doc to cite by path
+stopped_at: Phase 03.4 Plan 04 complete — logs/loo_negative_result_analysis.md (245 lines, 6 D-16 sections) committed at c7b8e7b, 5/5 unit tests PASS (was SKIPPED in Wave 0), AUC 0.372 (llama JSON-exact) and 0.410 (mistral canonical; 0.414 JSON-rounded form footnoted) cited from logs/loo_results_*.json aggregate.roc_auc; mechanism §3 covers (i) injected-chunk redundancy + (ii) clean-chunk uniqueness + (iii) net anti-correlation
+last_updated: "2026-04-29T07:38:15Z"
 progress:
   total_phases: 11
   completed_phases: 7
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.4 IN PROGRESS — Wave 1 Plans 02 (make_results) + 03 (make_figures) COMPLETE; Plan 04 (loo_neg_doc) ready to run; Wave 2 Plan 05 (writeup) gains 4 .md tables AND 5 PNG figures ready to embed verbatim
+**Current focus:** Phase 03.4 IN PROGRESS — Wave 1 fully closed (Plans 02/03/04 all COMPLETE 2026-04-29); Wave 2 Plan 05 (writeup) unblocked with 4 .md tables + 5 PNG figures + DEF-05 mechanistic analysis doc all ready to cite
 
 ## Current Position
 
 Phase: 03.4 (full-evaluation-and-final-report) — IN PROGRESS
-Plan: 3 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results + Wave 1 make_figures done)
-Last activity: 2026-04-29 (03.4-03: scripts/make_figures.py + 5 PNG figures; 3/3 unit tests PASS)
+Plan: 4 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results + make_figures + loo_neg_doc done)
+Last activity: 2026-04-29 (03.4-04: logs/loo_negative_result_analysis.md, 245 lines, 5/5 unit tests SKIPPED→PASSED)
 
 Progress: [██████████] 99%
 
@@ -50,11 +50,11 @@ Progress: [██████████] 99%
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
-| 03.4 | 3/6 | In progress (03.4-03 make_figures.py + 5 PNGs complete 2026-04-29) |
+| 03.4 | 4/6 | In progress (03.4-04 logs/loo_negative_result_analysis.md complete 2026-04-29) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-06, 03.3-07, 03.4-01, 03.4-02, 03.4-03
+- Last 5 plans: 03.3-07, 03.4-01, 03.4-02, 03.4-03, 03.4-04
 - Trend: On track
 
 ## Accumulated Context
@@ -144,6 +144,9 @@ Recent decisions affecting current work:
 - [Phase 03.4-03]: B-2 fail-loud invariants on D-03 data matrix in render_d03_arms_race — assert np.nansum(data)>0 AND np.nanmax(data)>0.05 AND non-zero-cell-count>=5 BEFORE save_atomic. Catches the all-zero placeholder regression class (silent figure with all bars at zero height). Verified live: nansum=1.44, nanmax=0.38, 10 non-zero cells.
 - [Phase 03.4-03]: W-5 fail-loud invariants on D-12 cross-model heatmap in render_d12_cross_model_heatmap — assert matrix.shape==(5,3) AND not matrix.isna().any().any() before sns.heatmap. Catches model-name schema drift (underscore vs colon) with explicit AssertionError; main() returns 2 on failure so CI/scripted callers see the error instead of a silently degraded figure.
 - [Phase 03.4-03]: DEFENSE_DISPLAY copied verbatim from scripts/make_results.py (T-3.4-W1-05 single source of truth) rather than imported. Importing scripts/ modules without __init__.py requires importlib.util.spec_from_file_location; copying with a comment pointer is simpler. Future label additions land in make_results.py first and are mirrored here within the same plan/PR.
+- [Phase 03.4-04]: Mistral LOO ROC AUC has two canonical decimal forms in the project: **0.410** (used in Phase 03.2-03 SUMMARY, the test literal in tests/test_loo_neg_doc.py, and most downstream prose) vs **0.414** (the JSON-rounded form 0.41379→0.414, used in the Phase 03.4-03 ROC figure label). Both refer to the same logs/loo_results_mistral.json aggregate.roc_auc=0.41379... measurement; logs/loo_negative_result_analysis.md cites 0.410 in the table with a dagger footnote disclosing 0.414. Future writeup edits should preserve both forms or pick one and update both places consistently.
+- [Phase 03.4-04]: logs/ is gitignored (.gitignore line 15); canonical analysis docs are force-added with `git add -f`. Pattern established by logs/def02_priming_analysis.md (commit cd1b804) and logs/ablation_table.json; logs/loo_negative_result_analysis.md follows the same pattern (commit c7b8e7b).
+- [Phase 03.4-04]: D-16 6-section contract enforced via tests/test_loo_neg_doc.py: f'## {n}.' literal heading checks for n in 1..6. Future analysis-doc plans following the same pattern should use exact `## N. Title` heading literals (no `### N`, no other heading levels) so a single grep `^## [1-6]\.` matches all required section anchors.
 
 ### Pending Todos
 
@@ -155,6 +158,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29T07:30:00Z
-Stopped at: Phase 03.4 Plan 03 complete — scripts/make_figures.py (370 lines) runnable from scratch, 3/3 unit tests PASS (was SKIPPED in Wave 0), all 5 PNGs (D-03 arms race, D-04 utility-security 2-panel, D-05 LOO ROC+scatter 2-panel with AUC=0.372/0.414, D-06 ratio sweep log-x, D-12 cross-model heatmap viridis_r) emitted into figures/ with B-2/W-5 fail-loud invariants asserted; Plan 04 (loo_neg_doc) still unblocked
-Resume file: None (Plan 03 closed; Plan 04 in Wave 1 unblocked, Plan 05 writeup now has 4 ready-to-embed Markdown tables AND 5 ready-to-embed PNG figures)
+Last session: 2026-04-29T07:38:15Z
+Stopped at: Phase 03.4 Plan 04 complete — logs/loo_negative_result_analysis.md (245 lines, 6 D-16 sections, ~14.8 KB) written and committed at c7b8e7b; 5/5 unit tests transitioned SKIPPED→PASSED (test_six_required_sections, test_per_model_aucs_cited, test_redundancy_mechanism_explained, test_counterfactual_section, test_pointers_section); per-model AUCs 0.372 (llama JSON-exact) and 0.410 (mistral canonical, with 0.414 JSON-rounded form footnoted) cited from logs/loo_results_*.json aggregate.roc_auc; mechanism §3 covers (i) injected-chunk redundancy + (ii) clean-chunk uniqueness + (iii) net anti-correlation; style parallels logs/def02_priming_analysis.md (top metadata, horizontal rules, numeric table, bold Conclusion: lines); Wave 1 fully closed
+Resume file: None (Plan 04 closed; Wave 2 Plan 05 writeup unblocked with 4 .md tables + 5 PNG figures + DEF-05 mechanistic analysis doc all ready to cite from §5 and §13)

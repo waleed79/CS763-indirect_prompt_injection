@@ -225,7 +225,7 @@ Plans:
 - [x] 03.4-01-PLAN.md — Wave 0 scaffolding: pip install matplotlib/seaborn/tabulate, create figures/ + docs/results/ dirs, fix SSRF taxonomy citation API10:2023→API7:2023, run 5 ATK-02 ratio-sweep evals (D-06 inputs), schema-probe all log files, write 4 test stubs (test_make_results, test_make_figures, test_writeup_structure, test_loo_neg_doc) — **COMPLETE 2026-04-29**
 - [x] 03.4-02-PLAN.md — Wave 1 (parallel): scripts/make_results.py — emit 4 Markdown + 4 CSV tables into docs/results/ from logs/ablation_table.json + _summary.json + eval_harness_undefended_*.json + attack_baseline.json; aggregates 3 sources per ROADMAP SC-1 — **COMPLETE 2026-04-29** (8 tables emitted, 4/4 unit tests PASS, DEFENSE_DISPLAY single-source-of-truth established)
 - [x] 03.4-03-PLAN.md — Wave 1 (parallel): scripts/make_figures.py — render all 5 PNG figures (D-03 30-bar arms race, D-04 two-panel utility-security, D-05 two-panel inverted-ROC + scatter, D-06 log-scale ratio sweep, D-12 viridis_r heatmap) — **COMPLETE 2026-04-29** (5 PNGs emitted to figures/, 3/3 unit tests PASS, B-2 D-03 non-zero invariants and W-5 D-12 fail-loud invariants asserted; AUC=0.372/0.414 computed live from loo_results_*.json)
-- [ ] 03.4-04-PLAN.md — Wave 1 (parallel): logs/loo_negative_result_analysis.md — D-16 6-section DEF-05 failed-hypothesis analysis doc parallel to def02_priming_analysis.md style
+- [x] 03.4-04-PLAN.md — Wave 1 (parallel): logs/loo_negative_result_analysis.md — D-16 6-section DEF-05 failed-hypothesis analysis doc parallel to def02_priming_analysis.md style — **COMPLETE 2026-04-29** (245 lines, 5/5 unit tests PASS, AUC 0.372/0.410 cited from loo_results_*.json with 0.414 JSON-rounded form footnoted)
 - [ ] 03.4-05-PLAN.md — Wave 2: docs/phase3_results.md — 13-section writeup per CONTEXT D-09 (hero findings to §8(e)+(f), CR-02 disclosure in §1, SSRF API7:2023 in §12, AttriBoT≠LODO disambiguation in §11)
 - [ ] 03.4-06-PLAN.md — Wave 3 (manual checkpoint): paste docs/phase3_results.md into existing Phase 1 Google Doc, upload 5 PNGs, verify paste fidelity, submit by Apr 30, record evidence in 03.4-SUBMISSION.md
 
@@ -274,7 +274,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 3.1 Multi-Signal Defense Fusion | 7/7 | Complete | 2026-04-24 |
 | 3.2 Adaptive Attacks & Causal Attribution | 4/4 | Complete | 2026-04-24 |
 | 3.3 Quick Evaluation Additions | 6/7 | In progress 2026-04-25 | - |
-| 3.4 Full Evaluation and Final Report | 0/6 | Planned 2026-04-28 | - |
+| 3.4 Full Evaluation and Final Report | 4/6 | In progress 2026-04-29 | - |
 | 4 Final Presentation | 0/? | Not started | - |
 
 ---
