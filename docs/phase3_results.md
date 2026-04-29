@@ -3,6 +3,7 @@
 **Course:** CS 763 (Computer Security) — UW-Madison Spring 2026
 **Team:** Musa & Waleed
 **Phase:** 3 (final results, due 2026-04-30)
+**Document status:** Final draft — Apr 29 internal review checkpoint (CONTEXT D-11) complete.
 **Source artifacts:** scripts/make_results.py + scripts/make_figures.py + logs/ablation_table.json + logs/eval_matrix/_summary.json + logs/loo_results_*.json + docs/xss_ssrf_taxonomy.md + logs/def02_priming_analysis.md + logs/loo_negative_result_analysis.md
 
 ---
