@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.4 PLANNED — 6 plans across 4 waves (Wave 0 scaffolding + Wave 1 parallel make_results/make_figures/loo_neg_doc + Wave 2 writeup + Wave 3 manual paste/submit); ready to execute
-stopped_at: Phase 03.4 plans verified by gsd-plan-checker (iteration 2/3 — all 2 blockers + 5 warnings resolved); RESEARCH.md flagged 3 blocking issues now baked into plans (matplotlib/seaborn install, SSRF API10→API7 fix, AttriBoT≠LODO disambiguation)
-last_updated: "2026-04-28T03:00:00Z"
+status: Phase 03.4 IN PROGRESS — Wave 0 scaffolding (Plan 01) COMPLETE 2026-04-29; Wave 1 plans (02 make_results, 03 make_figures, 04 loo_neg_doc) ready to run in parallel
+stopped_at: Phase 03.4 Plan 01 complete — env ready (matplotlib 3.10.9 + seaborn 0.13.2 + tabulate 0.9.0), 5 D-06 ratio logs (asr 4%→16%), 4 test stubs (24 tests, all SKIP), SSRF citation fixed, schema probe resolves OQ2 as UNPAIRED
+last_updated: "2026-04-29T07:00:00Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 18
-  completed_plans: 26
-  percent: 98
+  completed_plans: 27
+  percent: 99
 ---
 
 # Project State
@@ -20,21 +20,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.3 COMPLETE — proceed to Phase 03.4 (full evaluation + final report)
+**Current focus:** Phase 03.4 IN PROGRESS — Wave 0 (Plan 01) COMPLETE; Wave 1 plans (02 make_results, 03 make_figures, 04 loo_neg_doc) ready to run in parallel
 
 ## Current Position
 
-Phase: 03.3 (quick-evaluation-additions) — COMPLETE
-Plan: 7 of 7 COMPLETE
-Last activity: 2026-04-27 (03.3-07 EVAL-V2-01: cross-model 3×3×5 matrix in logs/eval_matrix/)
+Phase: 03.4 (full-evaluation-and-final-report) — IN PROGRESS
+Plan: 1 of 6 COMPLETE (Wave 0 scaffolding done)
+Last activity: 2026-04-29 (03.4-01: env install + 5 ratio evals + 4 stubs + schema probe + SSRF citation fix)
 
-Progress: [██████████] 98%
+Progress: [██████████] 99%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 24
+- Total plans completed: 25
 - Average duration: —
 - Total execution time: —
 
@@ -50,10 +50,11 @@ Progress: [██████████] 98%
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
+| 03.4 | 1/6 | In progress (03.4-01 Wave 0 scaffolding complete 2026-04-29) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.3-03, 03.3-04, 03.3-05, 03.3-06, 03.3-07
+- Last 5 plans: 03.3-04, 03.3-05, 03.3-06, 03.3-07, 03.4-01
 - Trend: On track
 
 ## Accumulated Context
@@ -131,6 +132,11 @@ Recent decisions affecting current work:
 - [Phase 03.3-07]: resolve_defenses() falls back to DEFENSES_FALLBACK = [no_defense, fused, def02] when models/causal_attribution/ready.flag absent — fired at execution time per CONTEXT D-12 since Phase 3.2 causal artifacts not yet present; stderr warning contains literal "causal artifact not found" for greppability
 - [Phase 03.3-07]: Cross-model finding — gemma4:31b-cloud is 0% ASR across all 5 tiers × 3 defenses; cloud-scale instruction-following is robust to substring-level injection independent of defense layer (citable result for Phase 3.4)
 - [Phase 03.3-07]: Tier 1b (Unicode homoglyph) is the strongest naive injection on llama3.2:3b — 22% no_defense rising to 35% under DEF-02 (DEF-02 substring detector keyed on ASCII HACKED is bypassed by Cyrillic НАСКЕД payload) — confirms ATK-01b stealth hypothesis
+- [Phase 03.4-01]: OQ2 resolved (UNPAIRED) — logs/eval_matrix/_summary.json asr_overall column matches per-cell aggregate.asr_overall (all 100 queries), NOT paired_asr_tier1 (50 paired); Plans 02 and 03 must read paired numbers from per-cell .log files when paired ASR is required
+- [Phase 03.4-01]: Wave 0 stubs use importlib.util.spec_from_file_location guards (NOT plain `from scripts.X import main`) — pattern carried from Phase 3.2 test_loo.py; lets pytest --collect-only succeed cleanly before production code lands; 24 tests SKIP across 4 stub files
+- [Phase 03.4-01]: ratio-sweep evals use --tier-filter tier1 (NOT --tier; that flag does not exist) and --defense off (NOT --defense no_defense; that value does not exist); plan front-loaded these CLI verifications after RESEARCH found stale references in 03.4-CONTEXT.md
+- [Phase 03.4-01]: D-06 ratio-sweep ASR climbs 4%→16% over 0.5%→10% poisoning ratio with mild non-monotonicity at 0010→0020 and 0050→0100 (LLM stochasticity at n=100); retrieval_rate climbs monotonically 29%→82%; FPR=0% (no defense to false-positive on); shape matches PoisonedRAG Fig. 3
+- [Phase 03.4-01]: ASCII-safe head display in schema probes (encode/backslashreplace) — avoids cp1252 cascade in conda run on Windows when source files contain non-ASCII chars (e.g. ↔ U+2194 in xss_ssrf_taxonomy.md heading); pattern documented for future probe scripts
 
 ### Pending Todos
 
@@ -142,6 +148,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-27T22:30:00Z
-Stopped at: Phase 03.3 Plan 07 complete — scripts/run_eval_matrix.py + 45 per-cell logs in logs/eval_matrix/ (3 LLMs × 3 defenses × 5 tiers); causal→def02 fallback per CONTEXT D-12 (Phase 3.2 not yet landed)
-Resume file: None (Phase 03.3 closed; proceed to Phase 03.4 — full evaluation and final report)
+Last session: 2026-04-29T07:00:00Z
+Stopped at: Phase 03.4 Plan 01 complete — Wave 0 scaffolding (matplotlib/seaborn/tabulate installed, 5 D-06 ratio logs asr 4%→16%, 4 stubs SKIP, SSRF API7:2023 fix, schema probe resolves OQ2 as UNPAIRED); Wave 1 unblocked
+Resume file: None (Plan 01 closed; Wave 1 plans 02/03/04 ready to run in parallel)
