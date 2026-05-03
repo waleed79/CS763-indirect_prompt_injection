@@ -1,0 +1,14 @@
+[
+  {
+    "query": "What is the capital of France?",
+    "topic": "france geography",
+    "paired": false,
+    "question_type": "factual"
+  },
+  {
+    "query": "Who wrote Hamlet?",
+    "topic": "shakespeare plays literature",
+    "paired": true,
+    "question_type": "factual"
+  }
+]
