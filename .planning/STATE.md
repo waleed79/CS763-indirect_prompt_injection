@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
-status: Phase 03.4 IN PROGRESS — Wave 2 Plan 05 (writeup) COMPLETE 2026-04-29; docs/phase3_results.md (656 lines, 13 ## N. sections) committed; 12/12 writeup-structure unit tests SKIPPED→PASSED; Plan 06 (Apr 30 manual Google Doc paste) unblocked
-stopped_at: Phase 03.4 Plan 05 complete — docs/phase3_results.md (656 lines) at commits ecdbc7f (§1-§7 W-6 safety checkpoint) + 7573e52 (§1-§13 final). 12/12 tests in tests/test_writeup_structure.py PASSED (was SKIPPED in Wave 0): 13 sections; 5 figure refs (fig1-fig5); 8 academic citations (Greshake/PoisonedRAG/BadRAG/OWASP/CSP/CWE-79/CWE-918/Capital One); §5 cites loo_negative_result_analysis.md; §9 names 3 SC-5 limitations; §12 inlines 3-row taxonomy with corrected API7:2023; §11 disambiguates LODO 2602.14161 vs AttriBoT 2411.15102; §1 CR-02 disclosure; §8(e)+(f) hero findings (gemma4 0%, T1b 22%→35%); §4 88%→50%/76% utility-security; 0 API10:2023 / 0 footnote syntax
-last_updated: "2026-04-29T23:50:00Z"
+status: Phase 03.4 COMPLETE — all 6 plans done; Phase 3 Results submitted to Google Doc 2026-04-30; proceed to Phase 4 (Presentation, May 5-7)
+stopped_at: Phase 03.4 Plan 06 complete — manual Google Doc paste submitted 2026-04-30; 13 sections + 5 PNGs in course doc; SUBMISSION.md committed. Phase 4 (Presentation) is the only remaining phase.
+last_updated: "2026-05-02T00:00:00Z"
 progress:
   total_phases: 11
-  completed_phases: 7
+  completed_phases: 8
   total_plans: 18
-  completed_plans: 30
-  percent: 99
+  completed_plans: 31
+  percent: 100
 ---
 
 # Project State
@@ -20,21 +20,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.4 IN PROGRESS — Wave 2 Plan 05 (writeup) COMPLETE 2026-04-29; docs/phase3_results.md (656 lines, 13 sections, 12/12 tests PASSED) committed; Plan 06 (Apr 30 manual Google Doc paste) unblocked — final task before phase deadline
+**Current focus:** Phase 03.4 COMPLETE — all 6 plans done; Phase 3 Results submitted to Google Doc 2026-04-30; next: Phase 4 (Presentation, May 5-7)
 
 ## Current Position
 
-Phase: 03.4 (full-evaluation-and-final-report) — IN PROGRESS
-Plan: 5 of 6 COMPLETE (Wave 0 scaffolding + Wave 1 make_results + make_figures + loo_neg_doc + Wave 2 writeup done)
-Last activity: 2026-04-29 (03.4-05: docs/phase3_results.md, 656 lines, 12/12 unit tests SKIPPED→PASSED, 2 commits per W-6)
+Phase: 04 (final-presentation) — NOT STARTED
+Plan: 0 of TBD
+Last activity: 2026-04-30 (03.4-06: Google Doc submission complete; SUBMISSION.md committed)
 
-Progress: [██████████] 99%
+Progress: [██████████] 100% (research phases)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 27
+- Total plans completed: 31
 - Average duration: —
 - Total execution time: —
 
@@ -50,12 +50,12 @@ Progress: [██████████] 99%
 | 03.1 | 7/7 | Complete (verified 2026-04-24) |
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
-| 03.4 | 5/6 | In progress (03.4-05 docs/phase3_results.md complete 2026-04-29; Plan 06 manual paste pending Apr 30) |
+| 03.4 | 6/6 | Complete (submitted to Google Doc 2026-04-30) |
 
 **Recent Trend:**
 
-- Last 5 plans: 03.4-01, 03.4-02, 03.4-03, 03.4-04, 03.4-05
-- Trend: On track
+- Last 5 plans: 03.4-02, 03.4-03, 03.4-04, 03.4-05, 03.4-06
+- Trend: Complete
 
 ## Accumulated Context
 
