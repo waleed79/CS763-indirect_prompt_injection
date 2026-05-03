@@ -1,16 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.5
+milestone: v1.0
 milestone_name: milestone
-status: Phase 04 PLANNED 2026-05-02 — 7 plans across 5 waves; poster (May 4) decoupled from GIF capture so Wave 2 ships in parallel; ready to execute
-stopped_at: Phase 04 plans committed (7 plans, 5 waves) and verified by gsd-plan-checker (round 2 PASSED); next is /gsd-execute-phase 4
-last_updated: "2026-05-02T18:30:00Z"
+status: Ready to execute
+stopped_at: "Phase 03.4 Plan 04 complete — logs/loo_negative_result_analysis.md (245 lines, 6 D-16 sections, ~14.8 KB) written and committed at c7b8e7b; 5/5 unit tests transitioned SKIPPED→PASSED (test_six_required_sections, test_per_model_aucs_cited, test_redundancy_mechanism_explained, test_counterfactual_section, test_pointers_section); per-model AUCs 0.372 (llama JSON-exact) and 0.410 (mistral canonical, with 0.414 JSON-rounded form footnoted) cited from logs/loo_results_*.json aggregate.roc_auc; mechanism §3 covers (i) injected-chunk redundancy + (ii) clean-chunk uniqueness + (iii) net anti-correlation; style parallels logs/def02_priming_analysis.md (top metadata, horizontal rules, numeric table, bold Conclusion: lines); Wave 1 fully closed"
+last_updated: "2026-05-03T02:01:52.362Z"
+last_activity: 2026-05-03
 progress:
   total_phases: 11
-  completed_phases: 8
-  total_plans: 18
-  completed_plans: 31
-  percent: 100
+  completed_phases: 9
+  total_plans: 44
+  completed_plans: 38
+  percent: 86
 ---
 
 # Project State
@@ -20,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 03.4 COMPLETE — all 6 plans done; Phase 3 Results submitted to Google Doc 2026-04-30; next: Phase 4 (Presentation, May 5-7)
+**Current focus:** Phase 04 — final-presentation
 
 ## Current Position
 
-Phase: 04 (final-presentation) — READY TO EXECUTE
-Plan: 0 of 7
-Last activity: 2026-05-02 (Phase 4 planning: research + patterns + 7 plans + plan-checker round 2 PASSED)
+Phase: 04 (final-presentation) — EXECUTING
+Plan: 2 of 7
+Last activity: 2026-05-03
 
 Progress: [██████████] 100% (research phases)
 
@@ -161,6 +162,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29T07:38:15Z
+Last session: 2026-05-03T02:01:52.352Z
 Stopped at: Phase 03.4 Plan 04 complete — logs/loo_negative_result_analysis.md (245 lines, 6 D-16 sections, ~14.8 KB) written and committed at c7b8e7b; 5/5 unit tests transitioned SKIPPED→PASSED (test_six_required_sections, test_per_model_aucs_cited, test_redundancy_mechanism_explained, test_counterfactual_section, test_pointers_section); per-model AUCs 0.372 (llama JSON-exact) and 0.410 (mistral canonical, with 0.414 JSON-rounded form footnoted) cited from logs/loo_results_*.json aggregate.roc_auc; mechanism §3 covers (i) injected-chunk redundancy + (ii) clean-chunk uniqueness + (iii) net anti-correlation; style parallels logs/def02_priming_analysis.md (top metadata, horizontal rules, numeric table, bold Conclusion: lines); Wave 1 fully closed
-Resume file: None (Plan 04 closed; Wave 2 Plan 05 writeup unblocked with 4 .md tables + 5 PNG figures + DEF-05 mechanistic analysis doc all ready to cite from §5 and §13)
+Resume file: None

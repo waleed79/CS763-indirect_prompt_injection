@@ -245,7 +245,7 @@ Plans:
 
 **Plans**: 7 plans
 Plans:
-- [ ] 04-01-PLAN.md — Wave 0 setup: install qrcode[pil]==8.2, create tests/test_phase4_assets.py stubs, capture verified GitHub URL + figure inventory + course poster template check
+- [x] 04-01-PLAN.md — Wave 0 setup: install qrcode[pil]==8.2, create tests/test_phase4_assets.py stubs, capture verified GitHub URL + figure inventory + course poster template check
 - [ ] 04-02-PLAN.md — Wave 1: scripts/make_diagrams.py — render Diagram A (RAG pipeline w/ poisoned chunk highlighted #D62728) + Diagram B (4-signal defense pipeline) at 300 DPI
 - [ ] 04-03-PLAN.md — Wave 1: scripts/make_qr.py — emit figures/qr_github.png encoding the verified GitHub repo URL
 - [ ] 04-04-PLAN.md — Wave 1: scripts/make_demo_gif.md recipe + manual Win+G capture of Tier-2 mistral:7b hijack → figures/demo_tier2_mistral.gif (≤2 MB, 30-45s)
@@ -285,7 +285,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 3.2 Adaptive Attacks & Causal Attribution | 4/4 | Complete | 2026-04-24 |
 | 3.3 Quick Evaluation Additions | 7/7 | Complete | 2026-04-27 |
 | 3.4 Full Evaluation and Final Report | 6/6 | Complete | 2026-04-30 |
-| 4 Final Presentation | 0/? | Not started | - |
+| 4 Final Presentation | 1/7 | In Progress|  |
 
 ---
 *Roadmap created: 2026-03-31*

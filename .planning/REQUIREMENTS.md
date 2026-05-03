@@ -67,7 +67,7 @@ Per course slides: "Final results, evaluations, and findings. Mention any limita
 Per course slides: "10-12 min presentation per team. If you have a clear write-up, it will be easy. This is for fellow students."
 
 - [ ] **PRES-01**: 10-12 minute presentation covering problem, approach, results, and conclusions
-- [ ] **PRES-02**: At least 2 plots/visualizations (e.g., ASR bar chart, architecture diagram)
+- [x] **PRES-02**: At least 2 plots/visualizations (e.g., ASR bar chart, architecture diagram)
 - [ ] **PRES-03**: **[optional]** Live or recorded demo of the attack pipeline
 - [ ] **PRES-04**: Presentation accessible to fellow students (define RAG and prompt injection clearly)
 
@@ -164,7 +164,7 @@ Per course slides: "10-12 min presentation per team. If you have a clear write-u
 | PH3-04 [optional] | Phase 3.4 | Pending |
 | PH3-05 | Phase 3.4 | Pending (required, not optional) |
 | PRES-01 | Phase 4 | Pending |
-| PRES-02 | Phase 4 | Pending |
+| PRES-02 | Phase 4 | Complete |
 | PRES-03 [optional] | Phase 4 | Pending |
 | PRES-04 | Phase 4 | Pending |
 
