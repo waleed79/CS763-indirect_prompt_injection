@@ -160,6 +160,10 @@ None.
 
 - kimi-k2.5:cloud is available in `ollama list` but queries require a paid Ollama subscription the team does not have (403 at request time); Phase 02.4 Tier 3 payloads were generated with gpt-oss:20b-cloud instead — research objective preserved, forward compatibility kept via `--model` flag
 
+### Roadmap Evolution
+
+- Phase 5 added (2026-05-03): Honest FPR metrics — per-chunk, answer-preserved, and LLM-as-judge utility cost. Reviewer-driven follow-up to replace coarse 76% query-level FPR with three more honest user-visible-cost metrics on the existing clean-query eval set. Run `/gsd-plan-phase 5` to break down.
+
 ## Session Continuity
 
 Last session: 2026-05-02T22:05:00.000Z

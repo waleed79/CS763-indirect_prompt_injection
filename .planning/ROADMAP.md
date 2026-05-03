@@ -25,6 +25,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 3.3: Quick Evaluation Additions** - Retriever transferability, human stealthiness evaluation, XSS/SSRF taxonomy mapping
 - [ ] **Phase 3.4: Full Evaluation and Final Report** - Complete experiment matrix, arms race analysis, limitations, and Phase 3 writeup (due Apr 30)
 - [ ] **Phase 4: Final Presentation** - 10-12 minute presentation with arms race narrative, plots, and demo (May 5-7)
+- [ ] **Phase 5: Honest FPR Metrics** - Per-chunk FPR, answer-preserved FPR, and LLM-as-judge utility cost to replace the coarse 76% query-level FPR (post-presentation refinement)
 
 ## Phase Details
 
@@ -286,6 +287,29 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 3.3 Quick Evaluation Additions | 7/7 | Complete | 2026-04-27 |
 | 3.4 Full Evaluation and Final Report | 6/6 | Complete | 2026-04-30 |
 | 4 Final Presentation | 4/7 | In Progress|  |
+
+### Phase 5: Honest FPR metrics — per-chunk, answer-preserved, and LLM-as-judge utility cost
+
+**Goal:** Replace the project's coarse query-level FPR (currently 76%, "any chunk removed on a clean query") with three more honest utility-cost metrics so the defense's user-visible cost is pinned down rather than reported as an upper bound.
+
+**Depends on:** Phase 3.4 (uses existing clean-query eval set + ablation infrastructure); Phase 4 narrative is downstream consumer
+
+**Requirements**:
+- New: per-chunk FPR = (clean chunks flagged) / (total clean chunks) across all clean queries
+- New: answer-preserved FPR = clean queries where defense removed ≥1 chunk AND the LLM answer degraded vs defense-off
+- New: LLM-as-judge FPR = degradation rate from pairwise judge over (defense-on answer, defense-off answer) on clean queries
+- Update ablation table in Phase 3.4 report with the three new columns
+- Update writeup sections that currently cite the 76% number to cite the new metrics with the original as upper bound
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 5 to break down)
+
+**Notes:**
+- Reuse existing clean-query eval set from Phase 3.4; no new data collection unless judge run requires re-inference
+- Judge model selection (e.g. gpt-oss:20b-cloud, gemma4:31b-cloud, or smaller local model) to be locked in plan phase
+- "Answer degraded" definition to be locked in plan phase (exact-match drop vs judge-scored)
 
 ---
 *Roadmap created: 2026-03-31*
