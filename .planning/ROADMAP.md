@@ -241,9 +241,19 @@ Plans:
   1. The slide deck fits a 10-12 minute delivery with problem, approach, results, and conclusions covered
   2. At least two visualizations are included (e.g., ASR bar chart and system architecture diagram)
   3. RAG and indirect prompt injection are defined on slides in terms a security student without RAG background can follow
-**Plans**: TBD
+**Goal**: Deliver a 36×48" academic poster (May 4) AND a 10-12 minute Google Slides talk deck (May 5-7) for CS 763. Both leverage Phase 3.4 results (5 PNG figures + canonical writeup) plus 2 new architecture diagrams (RAG attack surface, 4-signal defense pipeline), a pre-recorded Tier-2 demo GIF on mistral:7b, and a QR code linking to the public GitHub repo.
 
-**Optional requirements in this phase:** PRES-03 (live or recorded attack demo)
+**Plans**: 7 plans
+Plans:
+- [ ] 04-01-PLAN.md — Wave 0 setup: install qrcode[pil]==8.2, create tests/test_phase4_assets.py stubs, capture verified GitHub URL + figure inventory + course poster template check
+- [ ] 04-02-PLAN.md — Wave 1: scripts/make_diagrams.py — render Diagram A (RAG pipeline w/ poisoned chunk highlighted #D62728) + Diagram B (4-signal defense pipeline) at 300 DPI
+- [ ] 04-03-PLAN.md — Wave 1: scripts/make_qr.py — emit figures/qr_github.png encoding the verified GitHub repo URL
+- [ ] 04-04-PLAN.md — Wave 1: scripts/make_demo_gif.md recipe + manual Win+G capture of Tier-2 mistral:7b hijack → figures/demo_tier2_mistral.gif (≤2 MB, 30-45s)
+- [ ] 04-05-PLAN.md — Wave 2: compose 36×48" Google Slides poster per CONTEXT D-15 (9 sections: header/problem/diagrams/attacks/defense/2 hero panels/findings/limitations/QR); export PDF; ship by May 4
+- [ ] 04-06-PLAN.md — Wave 3: compose 12-15 slide Google Slides 16:9 talk deck per CONTEXT D-11 (title/hook/RAG/threat model/5 tiers/demo GIF/defense/arms race hero/DEF-02/ATK-08/cross-model/limitations/conclusion/Q&A); ship by May 5-7
+- [ ] 04-07-PLAN.md — Wave 4: stopwatch dry-run (PRES-01 timing) + 2-person pedagogical clarity review (PRES-04) + final poster + talk submission record in 04-SUBMISSION.md (mirrors 03.4-SUBMISSION.md pattern)
+
+**Optional requirements in this phase:** PRES-03 (live or recorded attack demo) — Plan 04 satisfies via pre-recorded GIF (D-12)
 
 ## Progress
 
