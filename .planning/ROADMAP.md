@@ -248,7 +248,7 @@ Plans:
 - [x] 04-01-PLAN.md — Wave 0 setup: install qrcode[pil]==8.2, create tests/test_phase4_assets.py stubs, capture verified GitHub URL + figure inventory + course poster template check
 - [x] 04-02-PLAN.md — Wave 1: scripts/make_diagrams.py — render Diagram A (RAG pipeline w/ poisoned chunk highlighted #D62728) + Diagram B (4-signal defense pipeline) at 300 DPI
 - [x] 04-03-PLAN.md — Wave 1: scripts/make_qr.py — emit figures/qr_github.png encoding the verified GitHub repo URL
-- [ ] 04-04-PLAN.md — Wave 1: scripts/make_demo_gif.md recipe + manual Win+G capture of Tier-2 mistral:7b hijack → figures/demo_tier2_mistral.gif (≤2 MB, 30-45s)
+- [x] 04-04-PLAN.md — Wave 1: scripts/make_demo_gif.md recipe + manual Win+G capture of Tier-2 mistral:7b hijack → figures/demo_tier2_mistral.gif (≤2 MB, 30-45s)
 - [ ] 04-05-PLAN.md — Wave 2: compose 36×48" Google Slides poster per CONTEXT D-15 (9 sections: header/problem/diagrams/attacks/defense/2 hero panels/findings/limitations/QR); export PDF; ship by May 4
 - [ ] 04-06-PLAN.md — Wave 3: compose 12-15 slide Google Slides 16:9 talk deck per CONTEXT D-11 (title/hook/RAG/threat model/5 tiers/demo GIF/defense/arms race hero/DEF-02/ATK-08/cross-model/limitations/conclusion/Q&A); ship by May 5-7
 - [ ] 04-07-PLAN.md — Wave 4: stopwatch dry-run (PRES-01 timing) + 2-person pedagogical clarity review (PRES-04) + final poster + talk submission record in 04-SUBMISSION.md (mirrors 03.4-SUBMISSION.md pattern)
@@ -285,7 +285,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 3.2 Adaptive Attacks & Causal Attribution | 4/4 | Complete | 2026-04-24 |
 | 3.3 Quick Evaluation Additions | 7/7 | Complete | 2026-04-27 |
 | 3.4 Full Evaluation and Final Report | 6/6 | Complete | 2026-04-30 |
-| 4 Final Presentation | 3/7 | In Progress|  |
+| 4 Final Presentation | 4/7 | In Progress|  |
 
 ---
 *Roadmap created: 2026-03-31*
