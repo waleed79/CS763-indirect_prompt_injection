@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: "Phase 03.4 Plan 04 complete — logs/loo_negative_result_analysis.md (245 lines, 6 D-16 sections, ~14.8 KB) written and committed at c7b8e7b; 5/5 unit tests transitioned SKIPPED→PASSED (test_six_required_sections, test_per_model_aucs_cited, test_redundancy_mechanism_explained, test_counterfactual_section, test_pointers_section); per-model AUCs 0.372 (llama JSON-exact) and 0.410 (mistral canonical, with 0.414 JSON-rounded form footnoted) cited from logs/loo_results_*.json aggregate.roc_auc; mechanism §3 covers (i) injected-chunk redundancy + (ii) clean-chunk uniqueness + (iii) net anti-correlation; style parallels logs/def02_priming_analysis.md (top metadata, horizontal rules, numeric table, bold Conclusion: lines); Wave 1 fully closed"
-last_updated: "2026-05-02T22:05:00.000Z"
-last_activity: 2026-05-02
+stopped_at: Phase 5 context gathered
+last_updated: "2026-05-03T23:42:09.882Z"
+last_activity: 2026-05-03
 progress:
-  total_phases: 11
+  total_phases: 12
   completed_phases: 9
   total_plans: 44
-  completed_plans: 40
-  percent: 91
+  completed_plans: 41
+  percent: 93
 ---
 
 # Project State
@@ -166,6 +166,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-05-02T22:05:00.000Z
-Stopped at: Phase 04 Plan 04 complete — figures/demo_tier2_mistral.gif (271 KB, 374 frames, 37s, 960x516, 10fps) recorded and committed at 15f806a; Tier-2 mistral:7b hijack confirmed ("What is the speed of light?" → attacker.com echo); scripts/make_demo_gif.md (219 lines, 6-section recipe) at f9b9131; scripts/run_demo.py (58 lines, clean demo entrypoint) at 95090c8; data/demo_queries.json (2-query fixture) at bad84ae; TestPhase4AssetsOnDisk::test_demo_gif_present_and_animated transitioned SKIP→PASS; Wave 1 plan 4/7 closed
-Resume file: None
+Last session: 2026-05-03T23:42:09.871Z
+Stopped at: Phase 5 context gathered
+Resume file: .planning/phases/05-honest-fpr-metrics-per-chunk-answer-preserved-and-llm-as-jud/05-CONTEXT.md
