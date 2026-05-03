@@ -1,5 +1,7 @@
 # Phase 4: Final Presentation - Research
 
+> **Filename convention (binding):** All seven PLAN files use `figures/diagram_a_rag_pipeline.png`, `figures/diagram_b_defense_pipeline.png`, `figures/qr_github.png`, `figures/demo_tier2_mistral.gif`. If anything below uses `diagA_*`, `diagB_*`, or `qr_github_repo.png`, treat that as a stale draft — the PLAN-side names win.
+
 **Researched:** 2026-05-02
 **Domain:** Academic poster + slide deck production (CS 763 course delivery)
 **Confidence:** HIGH

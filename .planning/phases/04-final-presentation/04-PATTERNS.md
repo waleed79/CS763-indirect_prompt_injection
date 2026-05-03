@@ -1,5 +1,7 @@
 # Phase 4: Final Presentation - Pattern Map
 
+> **Filename convention (binding):** All seven PLAN files use `figures/diagram_a_rag_pipeline.png`, `figures/diagram_b_defense_pipeline.png`, `figures/qr_github.png`, `figures/demo_tier2_mistral.gif`. If anything below uses `diagA_*`, `diagB_*`, or `qr_github_repo.png`, treat that as a stale draft — the PLAN-side names win.
+
 **Mapped:** 2026-05-02
 **Files analyzed:** 3 NEW Python files + 4 NEW asset outputs
 **Analogs found:** 3 / 3 NEW Python files (100% — all map cleanly to Phase 3.4 patterns)
