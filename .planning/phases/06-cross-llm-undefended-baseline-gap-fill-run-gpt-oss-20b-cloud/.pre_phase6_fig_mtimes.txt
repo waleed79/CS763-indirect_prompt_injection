@@ -1,2 +1,0 @@
-1777447652 figures/fig1_arms_race.png
-1777447654 figures/fig5_cross_model_heatmap.png
