@@ -83,6 +83,16 @@ DEFENSE_DISPLAY: dict[str, str] = {
 }
 
 
+# Phase 6 disclosure header injected at top of regenerated result markdowns.
+# Lives near DEFENSE_DISPLAY for single-source-of-truth consistency (D-12).
+PHASE6_DISCLOSURE_HEADER = (
+    "> Updated 2026-05-04: Phase 6 cross-LLM gap fill — gpt-oss-20b and "
+    "gpt-oss-120b numbers added across all 5 tiers and "
+    "{no_defense, fused, def02}. Phase 02.3 / Phase 3.4 numbers above this "
+    "line are unchanged.\n\n"
+)
+
+
 def _display_defense(raw: str) -> str:
     """Map raw defense_mode key to writeup-friendly display name. Falls back to raw."""
     return DEFENSE_DISPLAY.get(raw, raw)
@@ -238,13 +248,16 @@ def load_undefended_baseline(logs_dir: Path) -> pd.DataFrame:
     rows = []
 
     # Phase 2.3 100-query canonical runs (4 models)
+    # Phase 6 D-02b: prefer _v6.json when present (supersedes un-versioned file)
     for model_key, label in [
         ("llama",      "llama3.2:3b"),
         ("mistral",    "mistral:7b"),
         ("gptoss20b",  "gpt-oss:20b-cloud"),
         ("gptoss120b", "gpt-oss:120b-cloud"),
     ]:
-        path = logs_dir / f"eval_harness_undefended_{model_key}.json"
+        path_v6 = logs_dir / f"eval_harness_undefended_{model_key}_v6.json"
+        path_unversioned = logs_dir / f"eval_harness_undefended_{model_key}.json"
+        path = path_v6 if path_v6.exists() else path_unversioned
         if not path.exists():
             continue
         data = _safe_load_json(path)
@@ -253,9 +266,12 @@ def load_undefended_baseline(logs_dir: Path) -> pd.DataFrame:
         agg = data.get("aggregate", {}) if isinstance(data, dict) else {}
         rows.append({
             "model":            data.get("llm_model", label),
-            "source":           "Phase 2.3 canonical (n=100)",
+            "source":           "Phase 6 v6 (n=100)" if path_v6.exists() else "Phase 2.3 canonical (n=100)",
             "asr_tier1":        agg.get("asr_tier1", 0.0),
+            "asr_tier1b":       agg.get("asr_tier1b", float("nan")),
             "asr_tier2":        agg.get("asr_tier2", 0.0),
+            "asr_tier3":        agg.get("asr_tier3", float("nan")),
+            "asr_tier4":        agg.get("asr_tier4", float("nan")),
             "paired_asr_tier1": agg.get("paired_asr_tier1", agg.get("asr_tier1", 0.0)),
             "paired_asr_tier2": agg.get("paired_asr_tier2", agg.get("asr_tier2", 0.0)),
             "retrieval_rate":   agg.get("retrieval_rate", 0.0),
@@ -273,7 +289,10 @@ def load_undefended_baseline(logs_dir: Path) -> pd.DataFrame:
             "model":            "llama3.2:3b",
             "source":           "Phase 2.2 frozen (n=10)",
             "asr_tier1":        b.get("asr_tier1", agg.get("asr_tier1", 0.0)),
+            "asr_tier1b":       float("nan"),
             "asr_tier2":        b.get("asr_tier2", agg.get("asr_tier2", 0.0)),
+            "asr_tier3":        float("nan"),
+            "asr_tier4":        float("nan"),
             "paired_asr_tier1": b.get("paired_asr_tier1",
                                       agg.get("paired_asr_tier1",
                                               agg.get("asr_tier1", 0.0))),
@@ -285,7 +304,15 @@ def load_undefended_baseline(logs_dir: Path) -> pd.DataFrame:
             "n_queries":        b.get("n_queries", 10),
         })
 
-    return pd.DataFrame(rows)
+    # Phase 6: guarantee column schema even when all input files are missing.
+    # Without explicit columns, an empty rows list produces a no-column DataFrame
+    # whose CSV has a blank header — breaking test_undefended_baseline_v6_csv_exists.
+    _COLUMNS = [
+        "model", "source",
+        "asr_tier1", "asr_tier1b", "asr_tier2", "asr_tier3", "asr_tier4",
+        "paired_asr_tier1", "paired_asr_tier2", "retrieval_rate", "n_queries",
+    ]
+    return pd.DataFrame(rows, columns=_COLUMNS) if not rows else pd.DataFrame(rows)
 
 
 # --------------------------------------------------------------------------- #
@@ -302,9 +329,11 @@ def _normalize_matrix_model(raw: str) -> str:
     """
     # Specific known mappings (single source of truth)
     mapping = {
-        "llama3.2_3b":      "llama3.2:3b",
-        "mistral_7b":       "mistral:7b",
-        "gemma4_31b-cloud": "gemma4:31b-cloud",
+        "llama3.2_3b":         "llama3.2:3b",
+        "mistral_7b":          "mistral:7b",
+        "gemma4_31b-cloud":    "gemma4:31b-cloud",
+        "gpt-oss_20b-cloud":   "gpt-oss:20b-cloud",
+        "gpt-oss_120b-cloud":  "gpt-oss:120b-cloud",
     }
     return mapping.get(raw, raw)
 
@@ -423,11 +452,19 @@ def build_arms_race_table(
 # --------------------------------------------------------------------------- #
 
 
-def emit_table(df: pd.DataFrame, name: str, output_dir: Path, fmt: str) -> None:
-    """Write df to {output_dir}/{name}.md and/or .csv per fmt."""
+def emit_table(df: pd.DataFrame, name: str, output_dir: Path, fmt: str,
+               disclosure: str = "") -> None:
+    """Write df to {output_dir}/{name}.md and/or .csv per fmt.
+
+    Phase 6 (D-12 / Pitfall 7): if disclosure is non-empty, prepend it to the
+    markdown body so the Phase 6 cross-LLM gap-fill banner survives every
+    regenerate. CSV companions never carry the disclosure (would corrupt header).
+    """
     if fmt in ("markdown", "both"):
-        md = df.to_markdown(index=False, floatfmt=".2f")
-        (output_dir / f"{name}.md").write_text(md + "\n", encoding="utf-8")
+        # na_rep="—": replace NaN cells with em-dash before markdown render.
+        # tabulate versions < 0.9 lack na_rep kwarg; use fillna on a copy instead.
+        md = df.fillna("—").to_markdown(index=False, floatfmt=".2f")
+        (output_dir / f"{name}.md").write_text(disclosure + md + "\n", encoding="utf-8")
     if fmt in ("csv", "both"):
         (output_dir / f"{name}.csv").write_text(
             df.to_csv(index=False), encoding="utf-8"
@@ -465,12 +502,36 @@ def emit_undefended_baseline(
     undefended: pd.DataFrame, output_dir: Path, fmt: str
 ) -> None:
     """Emit the source (a) baseline table verbatim — model labels already canonical."""
-    emit_table(undefended, "undefended_baseline", output_dir, fmt)
+    emit_table(undefended, "undefended_baseline", output_dir, fmt,
+               disclosure=PHASE6_DISCLOSURE_HEADER)
 
 
 # --------------------------------------------------------------------------- #
 # CLI                                                                          #
 # --------------------------------------------------------------------------- #
+
+
+def _resolve_matrix_path(default_path: str, logs_dir: Path | None = None) -> Path:
+    """D-13: prefer logs/eval_matrix/_summary_v6.json over _summary.json when present.
+
+    If logs_dir is supplied and default_path is a plain relative name, the path is
+    first rebased under logs_dir so test fixtures rooted at a tmp logs dir are found.
+    """
+    p = Path(default_path)
+    # Rebase relative paths under logs_dir so --logs-dir overrides work correctly.
+    if logs_dir is not None and not p.is_absolute():
+        # Try rebasing: replace the leading "logs" component with logs_dir
+        try:
+            rel = p.relative_to("logs")
+            p = logs_dir / rel
+        except ValueError:
+            pass  # Not relative to "logs" — leave as-is
+    p_v6 = p.with_name(p.stem + "_v6" + p.suffix)
+    return p_v6 if p_v6.exists() else p
+
+
+# Alias for test_make_results_v6.py skip-guard detection (_V6_AVAILABLE check).
+_resolve_v6_path = _resolve_matrix_path
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -529,7 +590,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         ablation   = load_ablation(Path(args.ablation_file))
-        matrix     = load_cross_model_matrix(Path(args.matrix_file))
+        matrix     = load_cross_model_matrix(_resolve_matrix_path(args.matrix_file, logs_dir))
         undefended = load_undefended_baseline(logs_dir)
     except RuntimeError as e:
         print(f"[ERROR] {e}", file=sys.stderr)
@@ -537,11 +598,21 @@ def main(argv: list[str] | None = None) -> int:
 
     arms_race = build_arms_race_table(ablation, matrix, undefended, logs_dir)
 
-    # Emit all 4 table pairs (Markdown + CSV).
-    emit_table(arms_race, "arms_race_table", output_dir, args.format)
+    # Emit cross-model matrix and ablation in requested format (unversioned, safe to overwrite).
     emit_cross_model_matrix_with_display(matrix, output_dir, args.format)
     emit_ablation_with_display(ablation, output_dir, args.format)
-    emit_undefended_baseline(undefended, output_dir, args.format)
+
+    # Phase 6 D-05 / D-06: arms_race and undefended_baseline emit markdown in-place
+    # (disclosure header prepended); original .csv files stay as Phase 3.4 deliverables.
+    # New _v6.csv companions carry the post-Phase-6 schema with T1b/T3/T4 columns.
+    _md_fmt = "markdown" if args.format in ("markdown", "both") else args.format
+    emit_table(arms_race, "arms_race_table", output_dir, _md_fmt,
+               disclosure=PHASE6_DISCLOSURE_HEADER)
+    emit_undefended_baseline(undefended, output_dir, _md_fmt)
+
+    # Phase 6 D-06: emit _v6.csv companions (new files — originals untouched)
+    emit_table(undefended, "undefended_baseline_v6", output_dir, "csv")
+    emit_table(arms_race,  "arms_race_table_v6",   output_dir, "csv")
 
     return 0
 
