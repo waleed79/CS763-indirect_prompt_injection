@@ -208,6 +208,8 @@ fingerprint-only signal (6% FPR, 2% T1 ASR) corresponds to a permissive CSP poli
 report-only mode. Web security has lived with this strict/permissive tradeoff for a
 decade; RAG defenses inherit the same tension.
 
+**Post-submission addendum (Phase 5).** After Phase 3.4 submission, three more honest FPR metrics were computed to refine the 76% upper bound into per-chunk, answer-preserved, and judge-scored variants. See `docs/phase5_honest_fpr.md` for the methodology and per-defense breakdown.
+
 ---
 
 ## 5. Causal Attribution Analysis
