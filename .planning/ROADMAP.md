@@ -301,10 +301,14 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 - Update ablation table in Phase 3.4 report with the three new columns
 - Update writeup sections that currently cite the 76% number to cite the new metrics with the original as upper bound
 
-**Plans:** 0 plans
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 5 to break down)
+- [ ] 05-01-test-scaffolding-PLAN.md — Wave 0: tests/test_judge_fpr.py + tests/conftest.py with V-01..V-09 stubs
+- [ ] 05-02-judge-fpr-script-PLAN.md — Wave 1: scripts/run_judge_fpr.py (M1/M2/M3 + checkpoint cache + atomic ablation write)
+- [ ] 05-03-execute-judge-run-PLAN.md — Wave 2: live judge run, populate logs/judge_fpr_llama.json + extend logs/ablation_table.json
+- [ ] 05-04-writeup-PLAN.md — Wave 3: docs/phase5_honest_fpr.md (6-section writeup)
+- [ ] 05-05-callout-and-warning-PLAN.md — Wave 3: docs/phase3_results.md addendum + scripts/_build_ablation_table.py WARNING comment
 
 **Notes:**
 - Reuse existing clean-query eval set from Phase 3.4; no new data collection unless judge run requires re-inference
