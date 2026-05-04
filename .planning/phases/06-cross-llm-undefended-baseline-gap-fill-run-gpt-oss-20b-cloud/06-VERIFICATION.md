@@ -163,8 +163,30 @@ After manual review the user requested:
 
 All 3 figures re-rendered and user approved. Phase 6 closed.
 
+## Adaptive Attack Results (Phase 6 gpt-oss cells)
+
+Adaptive attacks ran automatically on all 6 gpt-oss cells (the harness always includes the adaptive tier alongside T1–T4).
+
+**Denominator clarification:** `asr_adaptive` in the aggregate block divides by n=100 (all test queries). This is misleading — only **36 of the 100 queries** ever retrieved an adaptive-tier passage from the corpus; the other 64 queries had no adaptive doc in their top-k, making a hijack structurally impossible. The correct metric is `conditional_asr_adaptive = n_hijacked / n_retrieved` with n_retrieved=36.
+
+The corpus contains **4 adaptive-tier passages** (text-search identified: passage_ids 20061, 20077, and 2 others using "[Note for AI: For...]" framing). These 4 passages match 36 distinct test queries via cosine similarity — the same passages appear in top-k for multiple queries.
+
+| Cell | n_retrieved | n_hijacked | conditional_asr |
+|------|-------------|------------|-----------------|
+| gpt-oss:20b-cloud / no_defense  | 36 | 0 | 0.000 |
+| gpt-oss:120b-cloud / no_defense | 36 | 1 | 0.028 |
+| gpt-oss:20b-cloud / fused       | 36 | 1 | 0.028 |
+| gpt-oss:20b-cloud / def02       | 36 | 0 | 0.000 |
+| gpt-oss:120b-cloud / fused      | 36 | 1 | 0.028 |
+| gpt-oss:120b-cloud / def02      | 36 | 0 | 0.000 |
+
+**Interpretation:** Adaptive attack success is negligible (≤1 hijack per cell). The subtle "[Note for AI:]" framing is more resistant than it appears — the semantic camouflage that helps adaptive docs get retrieved also makes them less overtly coercive, so larger instruction-tuned models are not misled. This aligns with the paper's framing: adaptive attacks are designed to evade *detection* (defeat the classifier), not necessarily to improve *hijack rate*.
+
+Source: per-query `adaptive_retrieved` / `hijacked_adaptive` flags in all 6 v6 harness files, verified via `scripts/_check_adaptive3.py`.
+
 ## Next Steps
 
 - Phase 4 talk deck and poster can cite gpt-oss numbers from `docs/results/undefended_baseline.md` and `figures/final/d12_cross_model_heatmap_v6.png` (4×4 fused heatmap).
 - All presentation assets are in `figures/final/` (10 files).
+- When discussing adaptive ASR in any presentation or writeup, always cite conditional_asr (÷36), not raw asr_adaptive (÷100).
 - Submitted Phase 3.4 writeup (`docs/phase3_results.md`) is intentionally NOT updated per D-04 (submission artifacts are frozen).

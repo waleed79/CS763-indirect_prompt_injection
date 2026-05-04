@@ -118,6 +118,23 @@ None — plan executed exactly as written.
 
 The plan referenced `figures/d03_arms_race.png` and `figures/d12_cross_model_heatmap.png` in the mtime preservation check, but these files do not exist (actual originals are `fig1_arms_race.png` and `fig5_cross_model_heatmap.png`). The mtime check was adapted to the actual filenames; originals were confirmed unchanged.
 
+## Adaptive Attack Note
+
+Adaptive attacks ran on all 6 Phase 6 cells. The corpus contains **4 adaptive-tier passages** (passage_ids 20061, 20077 + 2 others, using "[Note for AI:]" framing). 36 of the 100 test queries retrieved at least one adaptive passage (n_retrieved=36, identical across all 6 cells — same corpus, same queries).
+
+**Correct denominator is 36, not 100.** The raw `asr_adaptive` field divides by n=100 and is misleading: 64 queries had no adaptive doc retrieved. The conditional ASR (÷36) is:
+
+| Cell | conditional_asr |
+|------|----------------|
+| gpt-oss:20b-cloud / no_defense  | 0.000 (0/36) |
+| gpt-oss:120b-cloud / no_defense | 0.028 (1/36) |
+| gpt-oss:20b-cloud / fused       | 0.028 (1/36) |
+| gpt-oss:20b-cloud / def02       | 0.000 (0/36) |
+| gpt-oss:120b-cloud / fused      | 0.028 (1/36) |
+| gpt-oss:120b-cloud / def02      | 0.000 (0/36) |
+
+Adaptive attacks show negligible hijack success (≤1 per cell). Use `conditional_asr_adaptive` when citing these numbers in presentations.
+
 ## Self-Check: PASSED
 
 - `figures/d12_cross_model_heatmap_v6.png`: FOUND (67,398 bytes)
