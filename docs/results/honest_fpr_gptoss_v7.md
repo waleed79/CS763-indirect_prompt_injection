@@ -1,0 +1,6 @@
+| composite_key           | Defense   | model              | defense_mode   |   per_chunk_fpr |   answer_preserved_fpr |   judge_fpr | judge_model       |   judge_n_calls |
+|:------------------------|:----------|:-------------------|:---------------|----------------:|-----------------------:|------------:|:------------------|----------------:|
+| gptoss20b_cloud__fused  | Fused     | gpt-oss:20b-cloud  | fused          |            0.09 |                   0.02 |        0.16 | gpt-oss:20b-cloud |              50 |
+| gptoss20b_cloud__def02  | DEF-02    | gpt-oss:20b-cloud  | def02          |            0.00 |                   0.00 |        0.06 | gpt-oss:20b-cloud |              50 |
+| gptoss120b_cloud__fused | Fused     | gpt-oss:120b-cloud | fused          |            0.09 |                   0.04 |        0.16 | gpt-oss:20b-cloud |              50 |
+| gptoss120b_cloud__def02 | DEF-02    | gpt-oss:120b-cloud | def02          |            0.00 |                   0.00 |        0.10 | gpt-oss:20b-cloud |              50 |

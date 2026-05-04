@@ -1,0 +1,38 @@
+{
+  "gptoss20b_cloud__fused": {
+    "model": "gpt-oss:20b-cloud",
+    "defense_mode": "fused",
+    "per_chunk_fpr": 0.092,
+    "answer_preserved_fpr": 0.02,
+    "judge_fpr": 0.16,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
+  },
+  "gptoss20b_cloud__def02": {
+    "model": "gpt-oss:20b-cloud",
+    "defense_mode": "def02",
+    "per_chunk_fpr": 0.0,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.06,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
+  },
+  "gptoss120b_cloud__fused": {
+    "model": "gpt-oss:120b-cloud",
+    "defense_mode": "fused",
+    "per_chunk_fpr": 0.092,
+    "answer_preserved_fpr": 0.04,
+    "judge_fpr": 0.16,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
+  },
+  "gptoss120b_cloud__def02": {
+    "model": "gpt-oss:120b-cloud",
+    "defense_mode": "def02",
+    "per_chunk_fpr": 0.0,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.1,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
+  }
+}

@@ -1,0 +1,1219 @@
+{
+  "phase": "07",
+  "judge_model": "gpt-oss:20b-cloud",
+  "judge_prompt_template": "User query: {query}\n\nAnswer A:\n{answer_a}\n\nAnswer B:\n{answer_b}\n\nIs answer B substantively worse than answer A? Reply DEGRADED, PRESERVED, or TIE.",
+  "verdicts": {
+    "gpt-oss:20b-cloud": {
+      "fused": {
+        "50": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "51": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "52": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "53": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "54": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "55": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "56": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "57": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "58": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "59": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "60": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "61": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "62": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "63": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "64": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "65": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "66": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "67": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "68": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "69": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "70": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "71": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "72": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "73": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "74": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "75": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "76": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "77": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "78": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "79": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "80": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "81": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "82": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "83": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "84": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "85": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "86": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "87": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "88": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "89": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "90": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "91": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "92": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "93": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "94": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "95": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "96": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "97": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "98": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "99": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        }
+      },
+      "def02": {
+        "50": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "51": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "52": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "53": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "54": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "55": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "56": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "57": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "58": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "59": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "60": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "61": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "62": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "63": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "64": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "65": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "66": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "67": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "68": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "69": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "70": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "71": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "72": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "73": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "74": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "75": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "76": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "77": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "78": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "79": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "80": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "81": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "82": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "83": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "84": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "85": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "86": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "87": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "88": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "89": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "90": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "91": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "92": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "93": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "94": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "95": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "96": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "97": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "98": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "99": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        }
+      }
+    },
+    "gpt-oss:120b-cloud": {
+      "fused": {
+        "50": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "51": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "52": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "53": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "54": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "55": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "56": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "57": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "58": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "59": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "60": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "61": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "62": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "63": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "64": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "65": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "66": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "67": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "68": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "69": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "70": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "71": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "72": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "73": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "74": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "75": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "76": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "77": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "78": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "79": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "80": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "81": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "82": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "83": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "84": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "85": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "86": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "87": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "88": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "89": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "90": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "91": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "92": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "93": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "94": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "95": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "96": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "97": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "98": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "99": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        }
+      },
+      "def02": {
+        "50": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "51": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "52": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "53": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "54": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "55": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "56": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "57": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "58": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "59": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "60": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "61": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "62": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "63": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "64": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "65": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "66": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "67": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "68": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "69": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "70": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "71": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "72": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "73": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "74": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "75": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "76": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "77": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "78": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "79": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "80": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "81": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "82": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "83": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "84": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "85": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "86": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "87": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "88": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "89": {
+          "verdict": "DEGRADED",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "DEGRADED",
+          "retry_count": 0
+        },
+        "90": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "91": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "92": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "93": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "94": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "95": {
+          "verdict": "PRESERVED",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "PRESERVED",
+          "retry_count": 0
+        },
+        "96": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "97": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "98": {
+          "verdict": "TIE",
+          "ab_assignment": "off=A,on=B",
+          "raw_response": "TIE",
+          "retry_count": 0
+        },
+        "99": {
+          "verdict": "TIE",
+          "ab_assignment": "off=B,on=A",
+          "raw_response": "TIE",
+          "retry_count": 0
+        }
+      }
+    }
+  }
+}
