@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 5 re-verified after iteration 1+2 fixes; Phase 7 scoped
-stopped_at: Phase 5 UAT complete; Phase 7 (gpt-oss honest-FPR extension) added to ROADMAP
-last_updated: "2026-05-04T09:30:00.000Z"
+status: All research phases complete; Phase 6 closed; README rewritten; presentation assets final
+stopped_at: Phase 6 closed (adaptive attack results documented, figure titles cleaned, README updated)
+last_updated: "2026-05-04T12:00:00.000Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 14
@@ -159,6 +159,9 @@ Recent decisions affecting current work:
 - [Phase 06-04]: emit_undefended_baseline and arms_race use markdown-only format to preserve original CSVs as Phase 3.4 deliverables; _v6.csv companions carry post-Phase-6 schema
 - [Phase 06-04]: _resolve_v6_path alias added for _resolve_matrix_path to satisfy test_make_results_v6.py skip-guard (checks hasattr _resolve_v6_path)
 - [Phase ?]: T1b for llama/mistral filled 0.0 in undefended heatmap (not measured pre-Phase-3.3-02)
+- [Phase 06 post-close]: Adaptive attack conditional ASR denominator is 36 (not 100) — 36/100 test queries retrieve an adaptive passage; raw asr_adaptive ÷ 100 is misleading; always cite conditional_asr_adaptive = hijacked/n_retrieved
+- [Phase 06 post-close]: Corpus has 4 adaptive-tier passages (passage_ids ~20061, 20077 + 2 others); no "tier" metadata field in ChromaDB — passages classified by text content only; 4 passages match 36 distinct queries via cosine similarity
+- [Phase 06 post-close]: All planning-code labels (D-XX, ATK-XX, Phase N, EVAL-V2-XX) stripped from figure set_title() calls in make_figures.py; 6 figures in figures/final/ re-rendered and updated
 
 ### Pending Todos
 
