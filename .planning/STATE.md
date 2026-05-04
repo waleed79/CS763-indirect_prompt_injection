@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase complete — ready for verification
-stopped_at: Phase 6 context gathered
-last_updated: "2026-05-04T07:16:09.075Z"
+status: Executing Phase 6 Wave 3
+stopped_at: Phase 6 Plan 04 complete — make_results.py Phase 6 aware + docs regenerated
+last_updated: "2026-05-04T12:00:00.000Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 13
   completed_phases: 10
   total_plans: 55
-  completed_plans: 50
-  percent: 91
+  completed_plans: 52
+  percent: 95
 ---
 
 # Project State
@@ -152,6 +152,9 @@ Recent decisions affecting current work:
 - [Phase 03.4-05]: Writeup follows the same `## N.` heading-literal pattern (n in 1..13) for tests/test_writeup_structure.py; tables are inlined as Markdown pipe tables (NOT raw `| col |` text per RESEARCH Pitfall 3); references use plain numbered list (NOT `[^N]` footnote syntax per RESEARCH Pitfall 4) so Google Docs paste preserves them; 12 collected tests in tests/test_writeup_structure.py (plan-prompt's "11 tests" was a count mismatch — the test class added test_cr02_disclosure since plan was written, bringing total to 12).
 - [Phase 03.4-05]: Figure 5 (cross-model heatmap) placed at start of §8(e) where it directly supports the gemma4 hero finding rather than at §7 retriever-transferability; the figure is a 5-tier × 3-LLM heatmap whose visual story is the gemma4 column being uniformly zero, not embedding-model variance. Plan outline ambiguous; this placement maximizes narrative coherence with no contract violation (figure filename literal still present, satisfying test_all_five_figures_referenced).
 - [Phase 03.4-05]: W-6 safety checkpoint pattern executed verbatim: intermediate commit ecdbc7f after initial Write completes (mirrors Phase-3.3 atomic-write `os.replace` pattern at the document level), final commit 7573e52 supersedes with one-line `Document status:` enhancement; both commits in `git log -- docs/phase3_results.md` per acceptance contract.
+- [Phase 06-04]: Used fillna('—') instead of na_rep='—' in to_markdown() — installed tabulate version lacks na_rep kwarg; functionally equivalent
+- [Phase 06-04]: emit_undefended_baseline and arms_race use markdown-only format to preserve original CSVs as Phase 3.4 deliverables; _v6.csv companions carry post-Phase-6 schema
+- [Phase 06-04]: _resolve_v6_path alias added for _resolve_matrix_path to satisfy test_make_results_v6.py skip-guard (checks hasattr _resolve_v6_path)
 
 ### Pending Todos
 
@@ -168,6 +171,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-05-04T07:16:09.059Z
+Last session: 2026-05-04T08:41:16.844Z
 Stopped at: Phase 6 context gathered
 Resume file: None
