@@ -465,19 +465,20 @@ def render_d12_cross_model_heatmap(logs_dir: Path, output_dir: Path) -> None:
 # Figure 5 v6 -- D-10: 5×5 cross-model heatmap (fused only, Phase 6)          #
 # --------------------------------------------------------------------------- #
 def render_d12_cross_model_heatmap_v6(logs_dir: Path, output_dir: Path) -> None:
-    """D-10: 5×5 cross-model heatmap (FUSED defense only) — Phase 6 v6.
+    """D-10: 4×4 cross-model heatmap (FUSED defense only) — Phase 6 v6.
 
     Reads logs/eval_matrix/_summary_v6.json (75 cells), filters to defense == "fused",
-    pivots to (5 tiers × 5 LLMs). Preserves W-5 fail-loud invariants but at shape (5, 5).
+    pivots to (4 tiers × 4 LLMs). T4 and gemma4 excluded (all zeros).
+    Preserves W-5 fail-loud invariants but at shape (4, 4).
     """
     summary_path = logs_dir / "eval_matrix" / "_summary_v6.json"
     rows = json.loads(summary_path.read_text(encoding="utf-8"))
     df = pd.DataFrame(rows)
     fused = df[df["defense"] == "fused"]
     matrix = fused.pivot(index="tier", columns="model", values="asr_overall")
-    matrix = matrix.reindex(["tier1", "tier1b", "tier2", "tier3", "tier4"])
+    matrix = matrix.reindex(["tier1", "tier1b", "tier2", "tier3"])
 
-    col_order = ["llama3.2_3b", "mistral_7b", "gemma4_31b-cloud",
+    col_order = ["llama3.2_3b", "mistral_7b",
                  "gpt-oss_20b-cloud", "gpt-oss_120b-cloud"]
     if not set(col_order).issubset(set(matrix.columns)):
         raise AssertionError(
@@ -486,24 +487,24 @@ def render_d12_cross_model_heatmap_v6(logs_dir: Path, output_dir: Path) -> None:
         )
     matrix = matrix[col_order]
 
-    # W-5 fail-loud — shape changed from (5, 3) to (5, 5)
-    assert matrix.shape == (5, 5), (
-        f"D-12 v6 wrong shape: {matrix.shape} (expected (5, 5)). df=\n{matrix}"
+    # W-5 fail-loud — shape (4, 4): T4 and gemma4 dropped
+    assert matrix.shape == (4, 4), (
+        f"D-12 v6 wrong shape: {matrix.shape} (expected (4, 4)). df=\n{matrix}"
     )
     assert not matrix.isna().any().any(), (
         f"D-12 v6 has NaN cells. matrix=\n{matrix}"
     )
 
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(8, 4))
     sns.heatmap(
         matrix, annot=True, fmt=".2f", cmap="viridis_r",
-        xticklabels=["llama3.2:3b", "mistral:7b", "gemma4:31b-cloud",
+        xticklabels=["llama3.2:3b", "mistral:7b",
                      "gpt-oss:20b-cloud", "gpt-oss:120b-cloud"],
-        yticklabels=["T1", "T1b", "T2", "T3", "T4"],
+        yticklabels=["T1", "T1b", "T2", "T3"],
         cbar_kws={"label": "Overall ASR (n=100, unpaired)"},
         linewidths=0.5, ax=ax,
     )
-    ax.set_title("D-12 v6: Cross-model ASR under fused defense (5 LLMs)")
+    ax.set_title("D-12 v6: Cross-model ASR under fused defense (4 LLMs, 4 tiers)")
     ax.set_xlabel("LLM target")
     ax.set_ylabel("Attack tier")
     save_atomic(fig, str(output_dir / "d12_cross_model_heatmap_v6.png"))
@@ -513,57 +514,58 @@ def render_d12_cross_model_heatmap_v6(logs_dir: Path, output_dir: Path) -> None:
 # Figure 5 undefended v6 -- D-10 + D-08: 5×4 undefended heatmap               #
 # --------------------------------------------------------------------------- #
 def render_d12_undefended_v6(logs_dir: Path, output_dir: Path) -> None:
-    """D-10 + D-08: 5×4 cross-model UNDEFENDED heatmap. Skips gemma4 (no undefended log).
+    """D-10: 4×4 cross-model UNDEFENDED heatmap. T4 and gemma4 excluded (all zeros).
 
-    Reads:
-      - logs/eval_harness_undefended_t34_{llama,mistral}.json (Phase 02.4 — no asr_tier1b)
-      - logs/eval_harness_undefended_gptoss{20b,120b}_v6.json (Phase 6 — all 5 tiers)
+    Reads T1b for llama/mistral from _summary_v6.json (no_defense cells).
+    Reads all tiers for gpt-oss from eval_harness_undefended_gptoss*_v6.json.
     """
+    summary_path = logs_dir / "eval_matrix" / "_summary_v6.json"
+    summary = {
+        (c["model"], c["tier"]): c["asr_overall"]
+        for c in json.loads(summary_path.read_text(encoding="utf-8"))
+        if c["defense"] == "no_defense"
+    }
+
+    tier_keys = ["tier1", "tier1b", "tier2", "tier3"]
+    display_tiers = ["T1", "T1b", "T2", "T3"]
     sources = [
-        ("llama3.2:3b",        logs_dir / "eval_harness_undefended_t34_llama.json"),
-        ("mistral:7b",         logs_dir / "eval_harness_undefended_t34_mistral.json"),
-        ("gpt-oss:20b-cloud",  logs_dir / "eval_harness_undefended_gptoss20b_v6.json"),
-        ("gpt-oss:120b-cloud", logs_dir / "eval_harness_undefended_gptoss120b_v6.json"),
+        ("llama3.2:3b",        "llama3.2_3b",       None),
+        ("mistral:7b",         "mistral_7b",         None),
+        ("gpt-oss:20b-cloud",  "gpt-oss_20b-cloud",  logs_dir / "eval_harness_undefended_gptoss20b_v6.json"),
+        ("gpt-oss:120b-cloud", "gpt-oss_120b-cloud", logs_dir / "eval_harness_undefended_gptoss120b_v6.json"),
     ]
-    tier_keys = ["asr_tier1", "asr_tier1b", "asr_tier2", "asr_tier3", "asr_tier4"]
+
     data = []
     xticklabels = []
-    for label, path in sources:
-        if not path.exists():
-            raise FileNotFoundError(
-                f"render_d12_undefended_v6 requires {path}. Wave 2 incomplete?"
-            )
-        agg = json.loads(path.read_text(encoding="utf-8"))["aggregate"]
-        # llama/mistral t34 logs lack asr_tier1b — fill with 0.0 per D-08 footnote
-        # (T1b not measured pre-Phase-3.3-02; honest assumption surfaced in subtitle)
-        row = [agg.get(k, 0.0) for k in tier_keys]
+    for label, model_key, harness_path in sources:
+        if harness_path is not None:
+            agg = json.loads(harness_path.read_text(encoding="utf-8"))["aggregate"]
+            row = [agg.get(f"asr_{t}", 0.0) for t in tier_keys]
+        else:
+            row = [summary.get((model_key, t), 0.0) for t in tier_keys]
         data.append(row)
         xticklabels.append(label)
-    matrix = pd.DataFrame(
-        data, index=xticklabels, columns=["T1", "T1b", "T2", "T3", "T4"]
-    ).T  # transpose -> rows=tiers, cols=LLMs
 
-    # W-5 fail-loud — shape (5 tiers × 4 LLMs)
-    assert matrix.shape == (5, 4), (
-        f"D-12 v6 undefended wrong shape: {matrix.shape} (expected (5, 4)). df=\n{matrix}"
+    matrix = pd.DataFrame(
+        data, index=xticklabels, columns=display_tiers
+    ).T  # rows=tiers, cols=LLMs
+
+    assert matrix.shape == (4, 4), (
+        f"D-12 v6 undefended wrong shape: {matrix.shape} (expected (4, 4)). df=\n{matrix}"
     )
     assert not matrix.isna().any().any(), (
         f"D-12 v6 undefended has NaN cells. matrix=\n{matrix}"
     )
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 4))
     sns.heatmap(
         matrix, annot=True, fmt=".2f", cmap="viridis_r",
         xticklabels=xticklabels,
-        yticklabels=["T1", "T1b", "T2", "T3", "T4"],
+        yticklabels=display_tiers,
         cbar_kws={"label": "Overall ASR (undefended, n=100)"},
         linewidths=0.5, ax=ax,
     )
-    ax.set_title(
-        "D-12 v6: Cross-model ASR — undefended baseline only (5 tiers × 4 LLMs)\n"
-        "gemma4:31b-cloud skipped (no undefended log per D-08); "
-        "T1b for llama/mistral assumed 0.0 (not measured pre-3.3-02)"
-    )
+    ax.set_title("D-12 v6: Cross-model ASR — undefended baseline (4 tiers × 4 LLMs)")
     ax.set_xlabel("LLM target")
     ax.set_ylabel("Attack tier")
     save_atomic(fig, str(output_dir / "d12_undefended_v6.png"))
@@ -583,8 +585,8 @@ def render_d03_arms_race_v6(logs_dir: Path, output_dir: Path) -> None:
     rows = json.loads(summary_path.read_text(encoding="utf-8"))
     df = pd.DataFrame(rows)
 
-    tiers = ["tier1", "tier1b", "tier2", "tier3", "tier4"]
-    models = ["llama3.2_3b", "mistral_7b", "gemma4_31b-cloud",
+    tiers = ["tier1", "tier1b", "tier2", "tier3"]
+    models = ["llama3.2_3b", "mistral_7b",
               "gpt-oss_20b-cloud", "gpt-oss_120b-cloud"]
     defenses = ["no_defense", "fused", "def02"]
 
@@ -620,10 +622,10 @@ def render_d03_arms_race_v6(logs_dir: Path, output_dir: Path) -> None:
             label=f"{model.replace('_',':',1)} / {defense}",
         )
     ax.set_xticks(x)
-    ax.set_xticklabels(["T1", "T1b", "T2", "T3", "T4"])
+    ax.set_xticklabels(["T1", "T1b", "T2", "T3"])
     ax.set_xlabel("Attack tier")
     ax.set_ylabel("Overall ASR (n=100, unpaired)")
-    ax.set_title("D-03 v6: Arms race bars — 5 tiers × 5 LLMs × 3 defenses (Phase 6)")
+    ax.set_title("D-03 v6: Arms race bars — 4 tiers × 4 LLMs × 3 defenses (Phase 6)")
     ax.legend(loc="upper right", fontsize=7, ncol=2, framealpha=0.85)
     ax.set_ylim(0, max(0.3, float(np.nanmax(data)) * 1.15))
     save_atomic(fig, str(output_dir / "d03_arms_race_v6.png"))
