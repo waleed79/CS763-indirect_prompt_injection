@@ -591,27 +591,24 @@ if v7_path is not None:
 
 **This table is empty:** All claims in this research were verified or cited — no user confirmation needed beyond the locked decisions already in CONTEXT.md.
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> All four questions resolved at plan-time (2026-05-04). Resolutions are reflected in 07-01-PLAN.md through 07-06-PLAN.md.
 
 1. **Should the Phase 5 `load_clean_records` UTF-8 bug be fixed in Phase 5 or worked around in Phase 7?**
-   - What we know: Phase 5's helper at line 101 (`Path(log_path).read_text()`) lacks `encoding="utf-8"`. Phase 5 doesn't trigger the bug because llama answers are ASCII; Phase 7 will trigger on cell answers containing smart quotes.
-   - What's unclear: D-01's "default sibling, don't touch Phase 5" lean implies Phase 7 should work around (option b). But the fix is a 1-character change that benefits any future caller — touching Phase 5 is principled.
-   - Recommendation: **Plan-time choice.** Either (a) one-line patch to Phase 5's helper (cleanest; preserves bit-for-bit deliverable test by adding `encoding="utf-8"` only — no behavior change for ASCII inputs), or (b) Phase 7 wraps with a local helper that reads via `Path.read_text(encoding="utf-8")` then passes a StringIO/dict to a refactored Phase 5 helper. Default lean: **option (a)** — the 1-char addition is provably backward-compatible.
+   - **RESOLVED: option (a).** Plan 07-01 Task 1 applies a 1-char fix to `scripts/run_judge_fpr.py:101` (adds `encoding="utf-8"` to `Path(...).read_text()`). Backward-compatible for ASCII inputs; eliminates the cp1252 hazard for any future caller. Phase 5's regression tests stay green.
+   - What we knew: Phase 5's helper at line 101 (`Path(log_path).read_text()`) lacks `encoding="utf-8"`. Phase 5 doesn't trigger the bug because llama answers are ASCII; Phase 7 triggers on cell answers containing smart quotes.
 
 2. **Is the optional v7 figure (D-06) worth rendering?**
-   - What we know: D-06 is explicitly Claude's discretion. The 10-row table covers 3 LLMs × 2 defenses × 3 metrics = 18 numbers, which a reader can scan unaided.
-   - What's unclear: Whether a heatmap/grouped-bar adds enough cross-LLM signal to justify the renderer + invariant tests + plan task.
-   - Recommendation: **Skip the figure unless the planner is already adding multiple Phase 7 figure-type plans**, in which case bundle it. The addendum prose can carry the cross-LLM observations without a chart.
+   - **RESOLVED: skip.** No figure plan was added. The 10-row addendum table covers 3 LLMs × 2 defenses × 3 metrics (18 numbers) — a reader can scan unaided. Phase 4 talk/poster already has its own visualization budget; v7 numbers can be cited inline.
+   - What we knew: D-06 is explicitly Claude's discretion. The renderer + invariant tests would have added a wave-3 task with no clear reading benefit.
 
 3. **Should bootstrap CIs (1000 resamples) on M1/M2/M3 be included?**
-   - What we know: D-13 lists this as Claude's discretion; Phase 5's writeup §6 acknowledges wide CIs (~±7pp at 95%) but does not compute them.
-   - What's unclear: Whether the addendum's "cross-LLM analysis" paragraph reads more honestly with CIs included.
-   - Recommendation: **Add CIs.** A 50-query bootstrap is cheap (<1 sec for 1000 resamples × 4 cells), the formula is canonical, and the addendum's substantive interpretation paragraph is more credible if the bands are visible. If the planner agrees, follow numpy.random.choice resampling; persist to ablation file under per-row `per_chunk_fpr_ci_lo`/`_ci_hi` etc. (additive schema; doesn't break D-02's flat-record structure).
+   - **RESOLVED: deferred.** No CI computation in any plan. Rationale: Phase 5's writeup §6 already discloses ~±7pp 95% bands at n=50; the addendum methodology note inherits this caveat, so adding numerical CIs would duplicate disclosure without changing interpretation. Captured in `<deferred>` for a hypothetical Phase 8.
+   - What we knew: A 50-query bootstrap would be cheap (<1 sec); the formula is canonical. But Phase 5 D-05's single-seed convention is normative, and adding CIs would require additive schema fields outside D-02's locked 7-field row.
 
 4. **Composite-key naming choice — `gptoss20b_cloud__fused` vs. `gpt-oss-20b-cloud__fused`?**
-   - What we know: D-02 specifies exactly `gptoss20b_cloud__fused`, `gptoss120b_cloud__fused`, etc. — no hyphens, no colons in the model token. This matches existing `logs/eval_matrix/gptoss20b_cloud__fused__all_tiers_v6.json` filename root.
-   - What's unclear: Nothing — D-02 is explicit.
-   - Recommendation: **No question; D-02 is explicit.** Use a lookup dict (`COMPOSITE_KEY_MAP` per Code Examples §3) to avoid string-mutation bugs.
+   - **RESOLVED: D-02 explicit.** Plan 07-02 uses `COMPOSITE_KEY_MAP` lookup dict with the exact 4 keys from CONTEXT D-02: `gptoss20b_cloud__fused`, `gptoss20b_cloud__def02`, `gptoss120b_cloud__fused`, `gptoss120b_cloud__def02`. Matches existing `logs/eval_matrix/...` filename roots. No string mutation.
 
 ## Environment Availability
 
