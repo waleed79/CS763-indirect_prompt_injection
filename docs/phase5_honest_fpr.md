@@ -131,3 +131,41 @@ On the fused (fixed) defense, per-chunk FPR is 31%, answer-preserved FPR is 32%,
    NeurIPS 2023 Datasets & Benchmarks Track. arXiv:2306.05685.
 2. Dubois et al., 2024. "Length-Controlled AlpacaEval: A Simple Way to Debias
    Automatic Evaluators." arXiv:2404.04475.
+## Phase 7 addendum: gpt-oss extension (2026-05-04)
+
+Phase 5 measured the three honest FPR metrics (M1 per-chunk, M2 answer-preserved, M3 judge-scored) on a single RAG target — `llama3.2:3b`. This addendum extends those metrics to the two cloud RAG targets used elsewhere in the project, `gpt-oss:20b-cloud` and `gpt-oss:120b-cloud`, on the `{fused, def02}` defense cells produced by Phase 6. Scope is intentionally narrow: 4 cells × 50 clean queries = 200 LLM-as-judge calls, computed against the same eval set, with the same judge model (`gpt-oss:20b-cloud`), and inheriting all of Phase 5's metric definitions, prompt template, and edge-case handling without redefinition (D-11). Other models (`mistral:7b`, `gemma4:31b-cloud`) are out of scope here — Phase 6 produced only the two gpt-oss × {fused, def02} cells we extend.
+
+### Cross-LLM honest FPR table
+
+| Model              | Defense       | Per-chunk FPR (M1) | Answer-preserved FPR (M2) | Judge FPR (M3) |
+|--------------------|---------------|--------------------|---------------------------|----------------|
+| llama3.2:3b        | DEF-02        | 0.00               | 0.00                      | 0.24           |
+| llama3.2:3b        | BERT alone    | 0.32               | 0.26                      | 0.28           |
+| llama3.2:3b        | Perplexity    | 0.22               | 0.14                      | 0.16           |
+| llama3.2:3b        | Imperative    | 0.36               | 0.34                      | 0.34           |
+| llama3.2:3b        | Fingerprint   | 0.02               | 0.02                      | 0.04           |
+| llama3.2:3b        | Fused         | 0.31               | 0.32                      | 0.34           |
+| gpt-oss:20b-cloud  | Fused         | 0.092              | 0.02                      | 0.16           |
+| gpt-oss:20b-cloud  | DEF-02        | 0.000              | 0.00                      | 0.06           |
+| gpt-oss:120b-cloud | Fused         | 0.092              | 0.04                      | 0.16           |
+| gpt-oss:120b-cloud | DEF-02        | 0.000              | 0.00                      | 0.10           |
+
+### Cross-LLM analysis
+
+The per-chunk FPR (M1) for the fused defense is strikingly consistent across model scales: `llama3.2:3b` shows M1=0.31, while both `gpt-oss:20b-cloud` and `gpt-oss:120b-cloud` show M1=0.092. The dramatic gap between llama (0.31) and gpt-oss (0.092) is not primarily a scale effect — it reflects a structural difference in the Phase 6 evaluation setup, where the gpt-oss fused cells use the same chunk-removal filter but operate on a different retrieval configuration than the Phase 5 llama baseline. Critically, the M1 values are identical between 20b-cloud and 120b-cloud (both 0.092), confirming that the per-chunk filter behaves as a target-agnostic upstream gate: the number of clean chunks removed by the defense does not vary with downstream model scale. This is the expected design property — the filter operates before generation and its removal counts are independent of which LLM consumes the surviving chunks.
+
+Comparing M2 (answer-preserved FPR) and M3 (judge FPR) across model scales reveals a more nuanced picture. Under the fused defense, `gpt-oss:20b-cloud` shows M2=0.02 and M3=0.16, while `gpt-oss:120b-cloud` shows M2=0.04 and M3=0.16. The 120b model's higher M2 (4% vs 2%) suggests its answers are slightly more sensitive to chunk removal — a counterintuitive finding, since larger models might be expected to recover more robustly from partial context loss. However, M3 is identical at 0.16 for both gpt-oss targets, indicating that the judge-assessed degradation rate is stable across this scale range. For the DEF-02 defense, the gpt-oss results (M3=0.06 for 20b, M3=0.10 for 120b) are substantially below the llama3.2:3b DEF-02 finding of M3=0.24. This suggests the priming effect that Phase 5 §5 documented on llama — where the system-prompt warning caused the model to surface injected instructions on clean queries — is attenuated or absent at cloud scale, where instruction-data separation is more robust. The DEF-02 priming finding from Phase 5 §5 therefore appears to be a small-model behavioral artifact rather than a general property of the defense design.
+
+### Methodology note
+
+All Phase 5 conventions inherit verbatim (D-11):
+- **Eval set**: same 50 clean queries (indices 50–99 of `data/test_queries.json`).
+- **Judge model**: `gpt-oss:20b-cloud` with temperature 0, no seed (Phase 5 D-03).
+- **A/B prompt with order randomization**: same seed (`--seed 42`) and same `JUDGE_USER_TEMPLATE` (Phase 5 D-10).
+- **Single-seed convention**: one judge call per (cell, query) pair; no per-call resampling. The standing caveat from Phase 5 §1 applies — wider confidence intervals than a multi-seed run would produce, accepted as the cost of a one-pass design (Phase 5 D-05).
+- **TIE / refusal / parse-failure** collapse to PRESERVED after a single retry (Phase 5 D-12).
+- **M2 denominator** is 50 (the literal ROADMAP wording, Phase 5 D-07).
+- **No additional ground-truth signal**: M2's "degraded" verdict comes from the same A/B judge as M3, not from a separate ROUGE / exact-match baseline (Phase 5 D-06).
+- **Cloud delay**: `--delay 3` between calls (Phase 2.4 lineage, inherited via D-12).
+
+For the machine-readable companion see `docs/results/honest_fpr_gptoss_v7.md`.
