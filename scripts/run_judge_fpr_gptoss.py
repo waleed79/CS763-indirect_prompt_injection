@@ -317,7 +317,10 @@ def main(argv: "list[str] | None" = None) -> int:
             )
             all_verdicts.setdefault(model, {})[defense] = verdicts_for_cell
             accumulated[(model, defense)] = (m1, m2, m3, n)
-            atomic_write_json(cache_path, all_verdicts)  # per-cell checkpoint
+            # Per-cell checkpoint (WR-01). Skip in dry-run to avoid writing
+            # SKIP_DRYRUN sentinels that would pollute a subsequent real M3 run.
+            if not args.dry_run:
+                atomic_write_json(cache_path, all_verdicts)
             print(
                 f"[cell] ({model}, {defense}): "
                 f"M1={m1:.4f} M2={m2:.4f} M3={m3:.4f} n_calls={n}"
