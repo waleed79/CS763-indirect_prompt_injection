@@ -164,9 +164,12 @@ class TestJudgeConsistency:
     def test_idempotent_with_cache(self, frozen_judge_cache, tmp_path, monkeypatch):
         """V-06: re-running main() with cached verdicts produces byte-identical ablation_table.json."""
         # Snapshot pre-state, run main with frozen cache, snapshot post-state, run again, compare.
-        # IN-02: explicit utf-8 on read+write so round-trip cannot corrupt the production file.
+        # main() also writes to logs/judge_fpr_llama.json — snapshot+restore that too so the
+        # production verdict file is not corrupted by the frozen all-PRESERVED cache.
         ablation_path = _LOGS_DIR / "ablation_table.json"
-        pre = ablation_path.read_text(encoding="utf-8")
+        verdicts_path = _LOGS_DIR / "judge_fpr_llama.json"
+        pre_ablation = ablation_path.read_text(encoding="utf-8")
+        pre_verdicts = verdicts_path.read_text(encoding="utf-8") if verdicts_path.exists() else None
         try:
             rc1 = main(["--cache", str(frozen_judge_cache), "--delay", "0"])
             assert rc1 == 0
@@ -176,5 +179,6 @@ class TestJudgeConsistency:
             post2 = ablation_path.read_text(encoding="utf-8")
             assert post1 == post2, "Re-run with cache produced different ablation_table.json"
         finally:
-            # Restore pre-test state
-            ablation_path.write_text(pre, encoding="utf-8")
+            ablation_path.write_text(pre_ablation, encoding="utf-8")
+            if pre_verdicts is not None:
+                verdicts_path.write_text(pre_verdicts, encoding="utf-8")
