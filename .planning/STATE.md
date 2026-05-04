@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: All research phases complete; Phase 6 closed; README rewritten; presentation assets final
+status: Phase complete — ready for verification
 stopped_at: Phase 7 context gathered
-last_updated: "2026-05-04T09:44:53.064Z"
+last_updated: "2026-05-04T10:40:24.270Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 14
   completed_phases: 10
-  total_plans: 55
-  completed_plans: 52
-  percent: 95
+  total_plans: 61
+  completed_plans: 53
+  percent: 87
 ---
 
 # Project State
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 
 ## Current Position
 
-Phase: 04 (final-presentation) — EXECUTING
-Plan: 7 of 7
+Phase: 07 (honest-fpr-metrics-gpt-oss-extension) — EXECUTING
+Plan: 1 of 6 complete
 Last activity: 2026-05-04
 
 Progress: [██████████] 100% (research phases)
@@ -54,6 +54,7 @@ Progress: [██████████] 100% (research phases)
 | 03.4 | 6/6 | Complete (submitted to Google Doc 2026-04-30) |
 | 05 | 5/5 | Complete (verified 2026-05-03) |
 | 06 | 6/6 | Complete (verified + user approved 2026-05-04) |
+| 07 | 1/6 | In Progress (Plan 01 complete 2026-05-04) |
 
 **Recent Trend:**
 
@@ -162,6 +163,9 @@ Recent decisions affecting current work:
 - [Phase 06 post-close]: Adaptive attack conditional ASR denominator is 36 (not 100) — 36/100 test queries retrieve an adaptive passage; raw asr_adaptive ÷ 100 is misleading; always cite conditional_asr_adaptive = hijacked/n_retrieved
 - [Phase 06 post-close]: Corpus has 4 adaptive-tier passages (passage_ids ~20061, 20077 + 2 others); no "tier" metadata field in ChromaDB — passages classified by text content only; 4 passages match 36 distinct queries via cosine similarity
 - [Phase 06 post-close]: All planning-code labels (D-XX, ATK-XX, Phase N, EVAL-V2-XX) stripped from figure set_title() calls in make_figures.py; 6 figures in figures/final/ re-rendered and updated
+- [Phase 07-01]: Phase 5 load_clean_records hardened with encoding='utf-8' at line 101 — prevents cp1252 UnicodeDecodeError on Windows for v6 cells with non-ASCII chars; one-line change, no behavioral delta
+- [Phase 07-01]: Wave 0 test stubs use double importlib load (_phase5 + _mod) for P7-INHERIT-* identity checks — allows asserting is-same-object on JUDGE_SYSTEM_PROMPT and parse_verdict without copy-pasting
+- [Phase 07-01]: pre-existing INTERNALERROR in full pytest --collect-only traced to tests/test_judge_per_tier.py bare module-level 'from scripts.run_judge import' (ollama absent in Python 3.13 env); out-of-scope for Plan 01; deferred
 
 ### Pending Todos
 
@@ -178,6 +182,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-05-04T09:44:53.056Z
-Stopped at: Phase 7 context gathered
-Resume file: .planning/phases/07-honest-fpr-metrics-gpt-oss-extension/07-CONTEXT.md
+Last session: 2026-05-04T11:00:00Z
+Stopped at: Completed 07-01-PLAN.md Wave 0 stubs + UTF-8 fix
+Resume file: None
