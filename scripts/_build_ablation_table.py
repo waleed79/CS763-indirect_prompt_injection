@@ -51,98 +51,120 @@ def extract_row(log_path: Path) -> dict:
     }
 
 
-table = {}
+def _build_table() -> dict:
+    """Build ablation table dict from per-defense log files (no I/O side effects)."""
+    table: dict = {}
 
-for name, fname in LLAMA_FILES.items():
-    fpath = LOGDIR / fname
-    if fpath.exists():
-        table[name] = extract_row(fpath)
-        print(f"  Loaded: {fname} -> {name}")
+    for name, fname in LLAMA_FILES.items():
+        fpath = LOGDIR / fname
+        if fpath.exists():
+            table[name] = extract_row(fpath)
+            print(f"  Loaded: {fname} -> {name}")
+        else:
+            print(f"WARNING: missing {fpath}")
+
+    for name, fname in MISTRAL_FILES.items():
+        fpath = LOGDIR / fname
+        if fpath.exists():
+            table[name] = extract_row(fpath)
+            print(f"  Loaded: {fname} -> {name}")
+        else:
+            print(f"WARNING: missing {fpath}")
+
+    # Annotate fused_tuned_threshold row with the actual threshold value used
+    lr_json = Path("models/lr_meta_classifier.json")
+    if lr_json.exists() and "fused_tuned_threshold" in table:
+        lr_data = json.loads(lr_json.read_text())
+        tuned_thresh = lr_data.get("tuned_threshold", None)
+        if tuned_thresh is not None:
+            table["fused_tuned_threshold"]["threshold_used"] = tuned_thresh
+            print(f"  Annotated fused_tuned_threshold with threshold_used={tuned_thresh:.2f}")
+
+    return table
+
+
+def _print_summary(table: dict) -> None:
+    """Print summary + SC-5/D-17/D-08 verifications. Pure stdout side effects."""
+    print(f"\nAblation table written to {OUTPUT}")
+    print(f"Rows ({len(table)}): {list(table.keys())}")
+
+    # Print summary table
+    print()
+    print(f"{'Mode':<26} {'Model':<14} {'T1 ASR':>8} {'T2 ASR':>8} {'T3 ASR':>8} {'T4 ASR':>8} {'FPR':>8} {'Ret.Rate':>10}")
+    print("-" * 96)
+    for name, row in table.items():
+        if "note" not in row:
+            print(
+                f"{name:<26} {row.get('model','?'):<14} "
+                f"{row.get('asr_t1',0)*100:>7.1f}% "
+                f"{row.get('asr_t2',0)*100:>7.1f}% "
+                f"{row.get('asr_t3',0)*100:>7.1f}% "
+                f"{row.get('asr_t4',0)*100:>7.1f}% "
+                f"{row.get('fpr',0)*100:>7.1f}% "
+                f"{row.get('retrieval_rate',0)*100:>9.1f}%"
+            )
+
+    # Part C: Verify key research finding (SC-5)
+    print()
+    print("=== SC-5 Verification: fused beats individual signals ===")
+    fused = table.get("fused_fixed_0.5", {})
+    signals = ["bert_only", "perplexity_only", "imperative_only", "fingerprint_only"]
+    tiers = ["asr_t1", "asr_t2", "asr_t3"]
+
+    better_count = 0
+    for tier in tiers:
+        fused_asr = fused.get(tier, 1.0)
+        available_signals = [s for s in signals if s in table]
+        if not available_signals:
+            print(f"  WARNING: No signal rows found for comparison")
+            continue
+        # WR-07: do not silently default missing signal-tier keys to 1.0 (would
+        # inflate SC-5 pass count). Skip the comparison and warn instead.
+        missing_signal = None
+        for s in available_signals:
+            if table[s].get(tier) is None:
+                missing_signal = s
+                break
+        if missing_signal is not None:
+            print(f"  WARNING: {missing_signal} missing {tier} key — SC-5 comparison skipped for this tier")
+            continue
+        min_signal_asr = min(table[s][tier] for s in available_signals)
+        if fused_asr <= min_signal_asr:
+            better_count += 1
+            print(f"  Fused better on {tier}: {fused_asr:.3f} <= {min_signal_asr:.3f} (min of individual signals)")
+        else:
+            print(f"  Fused NOT better on {tier}: {fused_asr:.3f} > {min_signal_asr:.3f} (min of individual signals)")
+
+    print(f"\nSC-5 result: Fused better on {better_count}/3 tiers (need >= 2 to pass SC-5)")
+    if better_count >= 2:
+        print("SC-5 PASS: Fused defense achieves lower ASR than any individual signal on >= 2 tiers")
     else:
-        print(f"WARNING: missing {fpath}")
+        print("SC-5 NOTE: Fused does not strictly beat individual signals on 2+ tiers — honest finding")
+        print("  (All signals individually also 0% ASR; fusion adds no marginal ASR reduction but maintains FPR advantage)")
 
-for name, fname in MISTRAL_FILES.items():
-    fpath = LOGDIR / fname
-    if fpath.exists():
-        table[name] = extract_row(fpath)
-        print(f"  Loaded: {fname} -> {name}")
-    else:
-        print(f"WARNING: missing {fpath}")
+    # Also check D-17: def02 T1 vs no_defense T1
+    print()
+    nd_t1 = table.get("no_defense", {}).get("asr_t1", None)
+    d02_t1 = table.get("def02", {}).get("asr_t1", None)
+    if nd_t1 is not None and d02_t1 is not None:
+        if d02_t1 < nd_t1:
+            print(f"D-17 CONFIRMED: def02 T1={d02_t1:.3f} < no_defense T1={nd_t1:.3f}")
+        else:
+            print(f"D-17 NOTE: def02 T1={d02_t1:.3f} vs no_defense T1={nd_t1:.3f} (system-prompt did not reduce T1)")
 
-# Annotate fused_tuned_threshold row with the actual threshold value used
-lr_json = Path("models/lr_meta_classifier.json")
-if lr_json.exists() and "fused_tuned_threshold" in table:
-    lr_data = json.loads(lr_json.read_text())
-    tuned_thresh = lr_data.get("tuned_threshold", None)
-    if tuned_thresh is not None:
-        table["fused_tuned_threshold"]["threshold_used"] = tuned_thresh
-        print(f"  Annotated fused_tuned_threshold with threshold_used={tuned_thresh:.2f}")
+    # D-08: perplexity T3 vs no_defense T3
+    nd_t3 = table.get("no_defense", {}).get("asr_t3", None)
+    perp_t3 = table.get("perplexity_only", {}).get("asr_t3", None)
+    if nd_t3 is not None and perp_t3 is not None:
+        print(f"D-08 CHECK: no_defense T3={nd_t3:.3f}, perplexity_only T3={perp_t3:.3f}")
+        if abs(nd_t3 - perp_t3) < 0.05:
+            print("D-08 CONFIRMED: perplexity shows near-zero T3 reduction (expected evasion finding)")
+        else:
+            print(f"D-08 NOTE: perplexity shows T3 reduction of {nd_t3-perp_t3:.3f}")
 
-with open(OUTPUT, "w") as f:
-    json.dump(table, f, indent=2)
-print(f"\nAblation table written to {OUTPUT}")
-print(f"Rows ({len(table)}): {list(table.keys())}")
 
-# Print summary table
-print()
-print(f"{'Mode':<26} {'Model':<14} {'T1 ASR':>8} {'T2 ASR':>8} {'T3 ASR':>8} {'T4 ASR':>8} {'FPR':>8} {'Ret.Rate':>10}")
-print("-" * 96)
-for name, row in table.items():
-    if "note" not in row:
-        print(
-            f"{name:<26} {row.get('model','?'):<14} "
-            f"{row.get('asr_t1',0)*100:>7.1f}% "
-            f"{row.get('asr_t2',0)*100:>7.1f}% "
-            f"{row.get('asr_t3',0)*100:>7.1f}% "
-            f"{row.get('asr_t4',0)*100:>7.1f}% "
-            f"{row.get('fpr',0)*100:>7.1f}% "
-            f"{row.get('retrieval_rate',0)*100:>9.1f}%"
-        )
-
-# Part C: Verify key research finding (SC-5)
-print()
-print("=== SC-5 Verification: fused beats individual signals ===")
-fused = table.get("fused_fixed_0.5", {})
-signals = ["bert_only", "perplexity_only", "imperative_only", "fingerprint_only"]
-tiers = ["asr_t1", "asr_t2", "asr_t3"]
-
-better_count = 0
-for tier in tiers:
-    fused_asr = fused.get(tier, 1.0)
-    available_signals = [s for s in signals if s in table]
-    if not available_signals:
-        print(f"  WARNING: No signal rows found for comparison")
-        continue
-    min_signal_asr = min(table[s].get(tier, 1.0) for s in available_signals)
-    if fused_asr <= min_signal_asr:
-        better_count += 1
-        print(f"  Fused better on {tier}: {fused_asr:.3f} <= {min_signal_asr:.3f} (min of individual signals)")
-    else:
-        print(f"  Fused NOT better on {tier}: {fused_asr:.3f} > {min_signal_asr:.3f} (min of individual signals)")
-
-print(f"\nSC-5 result: Fused better on {better_count}/3 tiers (need >= 2 to pass SC-5)")
-if better_count >= 2:
-    print("SC-5 PASS: Fused defense achieves lower ASR than any individual signal on >= 2 tiers")
-else:
-    print("SC-5 NOTE: Fused does not strictly beat individual signals on 2+ tiers — honest finding")
-    print("  (All signals individually also 0% ASR; fusion adds no marginal ASR reduction but maintains FPR advantage)")
-
-# Also check D-17: def02 T1 vs no_defense T1
-print()
-nd_t1 = table.get("no_defense", {}).get("asr_t1", None)
-d02_t1 = table.get("def02", {}).get("asr_t1", None)
-if nd_t1 is not None and d02_t1 is not None:
-    if d02_t1 < nd_t1:
-        print(f"D-17 CONFIRMED: def02 T1={d02_t1:.3f} < no_defense T1={nd_t1:.3f}")
-    else:
-        print(f"D-17 NOTE: def02 T1={d02_t1:.3f} vs no_defense T1={nd_t1:.3f} (system-prompt did not reduce T1)")
-
-# D-08: perplexity T3 vs no_defense T3
-nd_t3 = table.get("no_defense", {}).get("asr_t3", None)
-perp_t3 = table.get("perplexity_only", {}).get("asr_t3", None)
-if nd_t3 is not None and perp_t3 is not None:
-    print(f"D-08 CHECK: no_defense T3={nd_t3:.3f}, perplexity_only T3={perp_t3:.3f}")
-    if abs(nd_t3 - perp_t3) < 0.05:
-        print("D-08 CONFIRMED: perplexity shows near-zero T3 reduction (expected evasion finding)")
-    else:
-        print(f"D-08 NOTE: perplexity shows T3 reduction of {nd_t3-perp_t3:.3f}")
+if __name__ == "__main__":
+    table = _build_table()
+    with open(OUTPUT, "w", encoding="utf-8") as f:
+        json.dump(table, f, indent=2)
+    _print_summary(table)
