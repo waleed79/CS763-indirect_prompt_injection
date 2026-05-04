@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Executing Phase 6 Wave 3
-stopped_at: Phase 6 Plan 04 complete — make_results.py Phase 6 aware + docs regenerated
-last_updated: "2026-05-04T12:00:00.000Z"
+status: Phase complete — ready for verification
+stopped_at: Phase 6 context gathered
+last_updated: "2026-05-04T08:47:43.416Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 13
@@ -58,6 +58,8 @@ Progress: [██████████] 100% (research phases)
 
 - Last 5 plans: 03.4-04, 03.4-05, 03.4-06, 04-03, 04-04
 - Trend: Complete
+
+| Phase 06 P05 | 10m | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -155,6 +157,7 @@ Recent decisions affecting current work:
 - [Phase 06-04]: Used fillna('—') instead of na_rep='—' in to_markdown() — installed tabulate version lacks na_rep kwarg; functionally equivalent
 - [Phase 06-04]: emit_undefended_baseline and arms_race use markdown-only format to preserve original CSVs as Phase 3.4 deliverables; _v6.csv companions carry post-Phase-6 schema
 - [Phase 06-04]: _resolve_v6_path alias added for _resolve_matrix_path to satisfy test_make_results_v6.py skip-guard (checks hasattr _resolve_v6_path)
+- [Phase ?]: T1b for llama/mistral filled 0.0 in undefended heatmap (not measured pre-Phase-3.3-02)
 
 ### Pending Todos
 
@@ -171,6 +174,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-05-04T08:41:16.844Z
+Last session: 2026-05-04T08:47:36.359Z
 Stopped at: Phase 6 context gathered
 Resume file: None

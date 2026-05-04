@@ -321,14 +321,14 @@ Plans:
 **Goal:** Emit cross-LLM undefended (gpt-oss:20b-cloud and gpt-oss:120b-cloud) AND defended (fused, def02) eval logs against nq_poisoned_v4 with all 5 tier ASRs surfaced post-hoc; auto-rerun downstream make_results.py + make_figures.py to produce "_v6" suffixed CSVs and PNGs without overwriting Phase 3.4 originals. Closes the cross-LLM gap with 6 single-pass cloud runs (~78 min) per CONTEXT D-09.
 **Requirements**: P6-PRE, P6-RUN-20b-UND, P6-RUN-120b-UND, P6-PRO, P6-DEF, P6-MTX, P6-RES-PR, P6-RES-INT, P6-MD, P6-CSV, P6-D12-FUSED, P6-D12-UND, P6-D03, P6-FIG-INT, P6-AUTH, P6-ERR, P6-ENC
 **Depends on:** Phase 5
-**Plans:** 6 plans
+**Plans:** 4/6 plans executed
 
 Plans:
 - [x] 06-01-PLAN.md — Wave 0 test stubs (tests/test_phase6_eval.py + tests/test_make_results_v6.py — 12 + 3 stub classes for all P6-* requirements)
 - [x] 06-02-PLAN.md — Wave 1 driver scripts/run_phase6_eval.py (sanity-assert + ollama preflight + 6 cell plan + provenance mutation + _summary_v6.json composer; logic only, no cloud calls)
 - [ ] 06-03-PLAN.md — Wave 2 [BLOCKING] cloud execution: invoke driver against gpt-oss:{20b,120b}-cloud × {off,fused,def02} = 6 runs, ~78 min total
-- [ ] 06-04-PLAN.md — Wave 3 make_results.py edits (path resolvers, disclosure header constant, emit_table extension, _v6.csv emissions) + regenerate docs/results/ MDs and CSVs
-- [ ] 06-05-PLAN.md — Wave 4 make_figures.py — 3 new renderers (5×5 fused heatmap, 5×4 undefended heatmap, arms-race v6 bars) + render 3 v6 PNGs
+- [x] 06-04-PLAN.md — Wave 3 make_results.py edits (path resolvers, disclosure header constant, emit_table extension, _v6.csv emissions) + regenerate docs/results/ MDs and CSVs
+- [x] 06-05-PLAN.md — Wave 4 make_figures.py — 3 new renderers (5×5 fused heatmap, 5×4 undefended heatmap, arms-race v6 bars) + render 3 v6 PNGs
 - [ ] 06-06-PLAN.md — Wave 5 verification: full pytest, originals-untouched audit, manual figure eyeball, write 06-VERIFICATION.md
 
 ---
