@@ -345,11 +345,11 @@ Plans:
 - Emit logs/ablation_table_gptoss_v7.json with M1/M2/M3 × 4 cells
 - Extend docs/phase5_honest_fpr.md so the M1/M2/M3 table covers 3 RAG targets (llama + gpt-oss:20b + gpt-oss:120b), preserving the original llama row verbatim
 
-**Plans:** 6 plans
+**Plans:** 2/6 plans executed
 
 Plans:
-- [ ] 07-01-PLAN.md — Wave 0 test stubs (tests/test_phase7_judge_fpr.py + tests/test_make_results_v7.py — 24 P7-* IDs) + UTF-8 fix to scripts/run_judge_fpr.py:101
-- [ ] 07-02-PLAN.md — Wave 1 sibling script scripts/run_judge_fpr_gptoss.py (importlib reuse of Phase 5 helpers, CELL_LOG_MAP, --dry-run M1-only fast path)
+- [x] 07-01-PLAN.md — Wave 0 test stubs (tests/test_phase7_judge_fpr.py + tests/test_make_results_v7.py — 24 P7-* IDs) + UTF-8 fix to scripts/run_judge_fpr.py:101
+- [x] 07-02-PLAN.md — Wave 1 sibling script scripts/run_judge_fpr_gptoss.py (importlib reuse of Phase 5 helpers, CELL_LOG_MAP, --dry-run M1-only fast path)
 - [ ] 07-03-PLAN.md — Wave 1 scripts/make_results.py v7 path-resolver branch + emit_honest_fpr_gptoss_v7 (parallel with Plan 02; disjoint files)
 - [ ] 07-04-PLAN.md — Wave 2 [BLOCKING] live cloud judge run (~26 min, 200 calls) + emit logs/ablation_table_gptoss_v7.json + logs/judge_fpr_gptoss_v7.json + docs/results/honest_fpr_gptoss_v7.{md,csv} + human-verify checkpoint on M3 numbers
 - [ ] 07-05-PLAN.md — Wave 3 docs/phase5_honest_fpr.md addendum (10-row M1/M2/M3 table + 1-2 paragraph cross-LLM analysis + methodology note; in-place append; original prose untouched; docs/phase3_results.md untouched)
