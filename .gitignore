@@ -1,63 +1,17 @@
-# Python bytecode
-__pycache__/
-*.pyc
-*.pyo
-
-# Pytest cache
-.pytest_cache/
-
-# ChromaDB persisted data (large, local-only)
-chroma_db/
-.chroma/
-
-# Retrieval logs (generated artifacts)
-# Specific result files are committed selectively via `git add -f` when canonical.
-# logs/
-
-# HuggingFace model cache (downloaded by scripts)
-.cache/
-
-# Jupyter checkpoints
-.ipynb_checkpoints/
-
-# Environment
-.env
-*.egg-info/
-dist/
-build/
-
-# Local Claude Code state and GSD planning (per-machine; not part of project)
-.claude/
-.planning/
-
-# macOS metadata
-.DS_Store
-**/.DS_Store
-
-# Presentation / slide files (not part of implementation)
-*.pptx
-*.ppt
-*.key
-
-# Large media files (not part of implementation)
-*.mp4
-*.mov
-*.avi
+# Only excluding files that exceed GitHub's 100 MB per-file hard limit
+# or that are multi-GB regenerable training artifacts.
+# Everything else (planning, claude state, chroma DB, pptx, etc.) is committed.
 
 # HuggingFace Trainer intermediate checkpoints (large; regenerable)
 models/bert_classifier/checkpoint-*/
 models/bert_s*/checkpoint-*/
 
-# EVAL-05 multi-seed BERT final models (large, ~2.5 GB each; regenerable from
-# `python scripts/train_defense.py --seed N --bert-output models/bert_sN`).
-# The small lr_meta_classifier_s*.json files ARE committed for fast reproducibility checks.
+# EVAL-05 multi-seed BERT final models (~2.5 GB each; regenerable from
+# `python scripts/train_defense.py --seed N --bert-output models/bert_sN`)
 models/bert_s1/
 models/bert_s2/
 models/bert_s3/
 
-# Phase 3.1 BERT classifier final model (256 MB; regenerable from
-# `python scripts/train_defense.py` per REPLICATION instructions in README).
-# Scrubbed from git history 2026-04-28 to keep repo under GitHub's 100 MB
-# single-file limit. The small companion files (config.json, tokenizer.json,
-# tokenizer_config.json, training_args.bin) ARE committed.
+# Phase 3.1 BERT classifier final model (256 MB; exceeds GitHub 100 MB limit)
+# Regenerate with: python scripts/train_defense.py
 models/bert_classifier/model.safetensors
