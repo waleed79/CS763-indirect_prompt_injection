@@ -26,7 +26,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 3.4: Full Evaluation and Final Report** - Complete experiment matrix, arms race analysis, limitations, and Phase 3 writeup (due Apr 30)
 - [ ] **Phase 4: Final Presentation** - 10-12 minute presentation with arms race narrative, plots, and demo (May 5-7)
 - [x] **Phase 5: Honest FPR Metrics** - Per-chunk FPR, answer-preserved FPR, and LLM-as-judge utility cost to replace the coarse 76% query-level FPR (post-presentation refinement) (completed 2026-05-03)
-- [ ] **Phase 7: Honest FPR Metrics — gpt-oss extension** - Extend Phase 5's three honest FPR metrics (M1 per-chunk, M2 answer-preserved, M3 judge-scored) to the gpt-oss-20b-cloud and gpt-oss-120b-cloud RAG targets on the {fused, def02} cells produced by Phase 6. Compute M1/M2 from existing Phase 6 v6 logs (no cloud calls); M3 requires ~200 cloud-judge calls (gpt-oss:20b-cloud as judge, mirroring Phase 5 setup). Output: logs/ablation_table_gptoss_v7.json + extended Phase 5 writeup. Wall-clock budget: ~26 min cloud + ~5 min downstream regen.
+- [x] **Phase 7: Honest FPR Metrics — gpt-oss extension** - Extend Phase 5's three honest FPR metrics (M1 per-chunk, M2 answer-preserved, M3 judge-scored) to the gpt-oss-20b-cloud and gpt-oss-120b-cloud RAG targets on the {fused, def02} cells produced by Phase 6. Compute M1/M2 from existing Phase 6 v6 logs (no cloud calls); M3 requires ~200 cloud-judge calls (gpt-oss:20b-cloud as judge, mirroring Phase 5 setup). Output: logs/ablation_table_gptoss_v7.json + extended Phase 5 writeup. Wall-clock budget: ~26 min cloud + ~5 min downstream regen. (completed 2026-05-04)
 
 ## Phase Details
 
@@ -345,7 +345,7 @@ Plans:
 - Emit logs/ablation_table_gptoss_v7.json with M1/M2/M3 × 4 cells
 - Extend docs/phase5_honest_fpr.md so the M1/M2/M3 table covers 3 RAG targets (llama + gpt-oss:20b + gpt-oss:120b), preserving the original llama row verbatim
 
-**Plans:** 5/6 plans executed
+**Plans:** 6/6 plans complete
 
 Plans:
 - [x] 07-01-PLAN.md — Wave 0 test stubs (tests/test_phase7_judge_fpr.py + tests/test_make_results_v7.py — 24 P7-* IDs) + UTF-8 fix to scripts/run_judge_fpr.py:101
@@ -353,7 +353,7 @@ Plans:
 - [x] 07-03-PLAN.md — Wave 1 scripts/make_results.py v7 path-resolver branch + emit_honest_fpr_gptoss_v7 (parallel with Plan 02; disjoint files)
 - [x] 07-04-PLAN.md — Wave 2 [BLOCKING] live cloud judge run (~26 min, 200 calls) + emit logs/ablation_table_gptoss_v7.json + logs/judge_fpr_gptoss_v7.json + docs/results/honest_fpr_gptoss_v7.{md,csv} + human-verify checkpoint on M3 numbers
 - [x] 07-05-PLAN.md — Wave 3 docs/phase5_honest_fpr.md addendum (10-row M1/M2/M3 table + 1-2 paragraph cross-LLM analysis + methodology note; in-place append; original prose untouched; docs/phase3_results.md untouched)
-- [ ] 07-06-PLAN.md — Wave 4 verification: full pytest, originals-untouched audit, numerical-fidelity audit (30/30 cells); produce 07-VERIFICATION.md
+- [x] 07-06-PLAN.md — Wave 4 verification: full pytest, originals-untouched audit, numerical-fidelity audit (30/30 cells); produce 07-VERIFICATION.md
 
 **Notes:**
 - M1/M2 are pure log-replay (no cloud calls) — near-instant
