@@ -2,6 +2,13 @@
 
 Reads all 7 llama defense logs + 2 mistral logs and assembles
 logs/ablation_table.json with one row per defense mode.
+
+WARNING: this script rebuilds ablation_table.json from per-defense logs and
+wipes any keys not produced by extract_row(). If you have run
+scripts/_assemble_ablation.py (Phase 3.2 causal-attribution keys) or
+scripts/run_judge_fpr.py (Phase 5 honest-FPR keys: per_chunk_fpr,
+answer_preserved_fpr, judge_fpr, judge_model, judge_n_calls) to extend the
+schema, re-run those scripts after this one to restore the extended schema.
 """
 import json
 from pathlib import Path
