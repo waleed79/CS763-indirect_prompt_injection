@@ -41,27 +41,27 @@ metrics:
 
 # Phase 6 Plan 05: Figure Renderers — 3 New v6 PNGs Summary
 
-**One-liner:** Added 3 Phase 6 figure renderers to `make_figures.py` and emitted `d12_cross_model_heatmap_v6.png` (5×5 fused heatmap), `d12_undefended_v6.png` (5×4 undefended heatmap), and `d03_arms_race_v6.png` (arms race bars extended to 5 LLMs × 3 defenses × 5 tiers).
+**One-liner:** Added 3 Phase 6 figure renderers to `make_figures.py` and emitted `d12_cross_model_heatmap_v6.png` (4×4 fused heatmap), `d12_undefended_v6.png` (4×4 undefended heatmap with real T1b), and `d03_arms_race_v6.png` (arms race bars, 4 tiers × 4 LLMs × 3 defenses). T4 and gemma4 dropped from all figures (both all-zero). `figures/final/` assembled with 10 presentation-ready files including `demo_tier2_mistral.gif`.
 
 ## New Renderer Functions
 
 ### `render_d12_cross_model_heatmap_v6`
-- **Shape assertion:** `assert matrix.shape == (5, 5)` — 5 attack tiers (T1, T1b, T2, T3, T4) × 5 LLMs (llama3.2:3b, mistral:7b, gemma4:31b-cloud, gpt-oss:20b-cloud, gpt-oss:120b-cloud)
+- **Shape assertion:** `assert matrix.shape == (4, 4)` — 4 attack tiers (T1, T1b, T2, T3) × 4 LLMs (llama3.2:3b, mistral:7b, gpt-oss:20b-cloud, gpt-oss:120b-cloud); T4 and gemma4 dropped (all-zero)
 - **Source:** `logs/eval_matrix/_summary_v6.json`, filtered to `defense == "fused"`
-- **Output:** `figures/d12_cross_model_heatmap_v6.png` — 67,398 bytes
-- **Description:** 5×5 viridis_r heatmap showing overall ASR under fused defense for all 5 Phase 6 LLM targets; answers the D-10 cross-model-with-defenses question left open by Phase 3.3-07.
+- **Output:** `figures/d12_cross_model_heatmap_v6.png`
+- **Description:** 4×4 viridis_r heatmap showing overall ASR under fused defense for 4 LLM targets; answers the D-10 cross-model-with-defenses question left open by Phase 3.3-07.
 
 ### `render_d12_undefended_v6`
-- **Shape assertion:** `assert matrix.shape == (5, 4)` — 5 tiers × 4 LLMs (gemma4 excluded per D-08)
-- **Sources:** `logs/eval_harness_undefended_t34_{llama,mistral}.json` (Phase 02.4, no asr_tier1b) + `logs/eval_harness_undefended_gptoss{20b,120b}_v6.json` (Phase 6, all 5 tiers); missing T1b filled with 0.0
-- **Output:** `figures/d12_undefended_v6.png` — 81,757 bytes
-- **Description:** 5×4 viridis_r heatmap of undefended baseline ASR across 4 LLMs and all 5 attack tiers; gemma4 absent and T1b assumption for llama/mistral surfaced in subtitle.
+- **Shape assertion:** `assert matrix.shape == (4, 4)` — 4 tiers × 4 LLMs (gemma4 excluded per D-08; T4 dropped as all-zero)
+- **Sources:** T1b for llama/mistral pulled from `_summary_v6.json` no_defense cells (real values: llama=0.22, mistral=0.05); gpt-oss tiers from harness v6 files. No 0.0 fill or assumption disclaimer needed.
+- **Output:** `figures/d12_undefended_v6.png`
+- **Description:** 4×4 viridis_r heatmap of undefended baseline ASR across 4 LLMs and 4 attack tiers; gemma4 absent, T1b fully populated with measured values.
 
 ### `render_d03_arms_race_v6`
 - **Shape assertion:** `assert np.nansum(data) > 0`, `assert np.nanmax(data) > 0.05`, `assert nonzero_count >= 5` (B-2 invariants)
-- **Source:** `logs/eval_matrix/_summary_v6.json` (75 cells, 5 LLMs × 3 defenses × 5 tiers)
-- **Output:** `figures/d03_arms_race_v6.png` — 81,488 bytes
-- **Description:** Grouped bar chart extending the Phase 3 arms race figure to all 5 Phase 6 LLMs (15 bar groups per tier), showing D-11 cross-LLM attack-defense landscape.
+- **Source:** `logs/eval_matrix/_summary_v6.json` (75 cells); T4 tier and gemma4 model excluded from bar groups
+- **Output:** `figures/d03_arms_race_v6.png`
+- **Description:** Grouped bar chart extending the Phase 3 arms race figure to 4 LLMs × 3 defenses × 4 tiers, showing D-11 cross-LLM attack-defense landscape.
 
 ## ALL_RENDERERS Extension
 
@@ -80,11 +80,30 @@ ALL_RENDERERS = {
 
 ## Emitted PNGs
 
-| File | Size | Description |
-|------|------|-------------|
-| `figures/d12_cross_model_heatmap_v6.png` | 67,398 B | 5×5 fused-defense ASR heatmap (all 5 LLMs) |
-| `figures/d12_undefended_v6.png` | 81,757 B | 5×4 undefended ASR heatmap (gemma4 skipped) |
-| `figures/d03_arms_race_v6.png` | 81,488 B | Grouped bars: 5 tiers × 5 LLMs × 3 defenses |
+| File | Description |
+|------|-------------|
+| `figures/d12_cross_model_heatmap_v6.png` | 4×4 fused-defense ASR heatmap (4 LLMs, T4+gemma4 removed) |
+| `figures/d12_undefended_v6.png` | 4×4 undefended ASR heatmap (real T1b for all models) |
+| `figures/d03_arms_race_v6.png` | Grouped bars: 4 tiers × 4 LLMs × 3 defenses |
+
+## figures/final/ — Presentation Assembly
+
+10 files assembled for the talk deck / poster:
+
+| File | Type | Source |
+|------|------|--------|
+| `d12_cross_model_heatmap_v6.png` | Updated v6 | Rendered this wave |
+| `d12_undefended_v6.png` | Updated v6 | Rendered this wave |
+| `d03_arms_race_v6.png` | Updated v6 | Rendered this wave |
+| `demo_tier2_mistral.gif` | Demo | Added manually by user |
+| `diagram_a_rag_pipeline.png` | Architecture | Phase 03.4 |
+| `diagram_b_defense_pipeline.png` | Architecture | Phase 03.4 |
+| `fig2_utility_security.png` | Result | Phase 03.4 |
+| `fig3_loo_causal.png` | Result | Phase 03.4 |
+| `fig4_ratio_sweep.png` | Result | Phase 03.4 |
+| `qr_github.png` | QR code | Phase 03.4 |
+
+`fig1_arms_race.png` and `fig5_cross_model_heatmap.png` excluded — superseded by the v6 versions above.
 
 ## Verification
 

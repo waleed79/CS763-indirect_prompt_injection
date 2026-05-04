@@ -152,9 +152,19 @@ OK both MDs carry disclosure
 
 5. **ASR magnitudes**: Both cloud-scale gpt-oss models show zero susceptibility to T1/T3/T4 injection patterns. Only T1b (homoglyph/obfuscation) and T2 (indirect referral) achieve nonzero ASR at 0.06 / 0.02 levels. This is consistent with the expectation that larger, instruction-tuned models have stronger instruction-following that resists direct injection but may still yield to subtle obfuscation strategies.
 
+## Post-Approval Revisions (user eyeball checkpoint)
+
+After manual review the user requested:
+- Remove T4 from all 3 figures (all-zero across all models)
+- Remove gemma4 from all 3 figures (all-zero everywhere)
+- `d12_undefended_v6`: use real T1b values for llama/mistral from `_summary_v6.json` (llama=0.22, mistral=0.05) instead of 0.0 fill; remove gemma and T1b assumption footnotes from subtitle
+- All figures now 4×4 shape
+- `figures/final/` assembled with 10 files: 3 updated v6 PNGs + `demo_tier2_mistral.gif` (added manually by user) + 6 retained Phase 03.4 figures
+
+All 3 figures re-rendered and user approved. Phase 6 closed.
+
 ## Next Steps
 
-- Phase 4 talk deck and poster can cite gpt-oss numbers from `docs/results/undefended_baseline.md` (regenerated with disclosure) and `figures/d12_cross_model_heatmap_v6.png` (5×5 fused heatmap).
-- llama+mistral T1b backfill is deferred to a future phase per D-08 (T1b data was not collected in Phase 02.3 for those models).
+- Phase 4 talk deck and poster can cite gpt-oss numbers from `docs/results/undefended_baseline.md` and `figures/final/d12_cross_model_heatmap_v6.png` (4×4 fused heatmap).
+- All presentation assets are in `figures/final/` (10 files).
 - Submitted Phase 3.4 writeup (`docs/phase3_results.md`) is intentionally NOT updated per D-04 (submission artifacts are frozen).
-- Task 2 (human eyeball checkpoint) is next: user should open `figures/d12_cross_model_heatmap_v6.png`, `figures/d12_undefended_v6.png`, `figures/d03_arms_race_v6.png`, `docs/results/undefended_baseline.md`, and `docs/results/arms_race_table.md` to confirm visual and readability correctness.
