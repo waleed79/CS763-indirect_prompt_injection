@@ -356,13 +356,22 @@ class TestPromptInherited:
     """P7-INHERIT-PROMPT: Phase 7 imports JUDGE_SYSTEM_PROMPT from run_judge_fpr.py."""
 
     def test_prompt_is_same_object(self):
-        """_mod.JUDGE_SYSTEM_PROMPT must be the same object as _phase5.JUDGE_SYSTEM_PROMPT."""
+        """_mod.JUDGE_SYSTEM_PROMPT must come from _mod._phase5 (no local redefinition).
+
+        Implementation note: exec_module creates separate module instances, so we cannot
+        assert identity against the test-file's own _phase5 instance (separate exec).
+        Instead, we assert that _mod.JUDGE_SYSTEM_PROMPT IS _mod._phase5.JUDGE_SYSTEM_PROMPT,
+        which proves no local redefinition inside run_judge_fpr_gptoss.py.
+        """
         assert _PHASE5_AVAILABLE, "Phase 5 module must be loadable for identity check"
         assert hasattr(_mod, "JUDGE_SYSTEM_PROMPT"), (
             "run_judge_fpr_gptoss.py must expose JUDGE_SYSTEM_PROMPT"
         )
-        assert _mod.JUDGE_SYSTEM_PROMPT is _phase5.JUDGE_SYSTEM_PROMPT, (
-            "JUDGE_SYSTEM_PROMPT must be the same object as Phase 5's (no redefinition)"
+        assert hasattr(_mod, "_phase5"), (
+            "run_judge_fpr_gptoss.py must expose _phase5 (the importlib-loaded Phase 5 module)"
+        )
+        assert _mod.JUDGE_SYSTEM_PROMPT is _mod._phase5.JUDGE_SYSTEM_PROMPT, (
+            "JUDGE_SYSTEM_PROMPT must be the same object as _mod._phase5's (no local redefinition)"
         )
 
 
@@ -373,13 +382,22 @@ class TestParserInherited:
     """P7-INHERIT-PARSE: Phase 7 reuses parse_verdict() from Phase 5."""
 
     def test_parse_verdict_is_same_object(self):
-        """_mod.parse_verdict must be the same object as _phase5.parse_verdict."""
+        """_mod.parse_verdict must come from _mod._phase5 (no local copy-paste).
+
+        Implementation note: exec_module creates separate module instances, so we cannot
+        assert identity against the test-file's own _phase5 instance (separate exec).
+        Instead, we assert that _mod.parse_verdict IS _mod._phase5.parse_verdict,
+        which proves no local copy-paste inside run_judge_fpr_gptoss.py.
+        """
         assert _PHASE5_AVAILABLE, "Phase 5 module must be loadable for identity check"
         assert hasattr(_mod, "parse_verdict"), (
             "run_judge_fpr_gptoss.py must expose parse_verdict"
         )
-        assert _mod.parse_verdict is _phase5.parse_verdict, (
-            "parse_verdict must be the same object as Phase 5's (no copy-pasted parser)"
+        assert hasattr(_mod, "_phase5"), (
+            "run_judge_fpr_gptoss.py must expose _phase5 (the importlib-loaded Phase 5 module)"
+        )
+        assert _mod.parse_verdict is _mod._phase5.parse_verdict, (
+            "parse_verdict must be the same object as _mod._phase5's (no local copy-paste)"
         )
 
 
