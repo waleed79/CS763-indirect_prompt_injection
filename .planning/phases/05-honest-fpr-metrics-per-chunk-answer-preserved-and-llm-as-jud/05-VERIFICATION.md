@@ -1,13 +1,12 @@
 ---
 phase: 05-honest-fpr-metrics-per-chunk-answer-preserved-and-llm-as-jud
 verified: 2026-05-03T00:00:00Z
-status: human_needed
-score: 10/11 must-haves verified
+status: complete
+score: 11/11 must-haves verified
 overrides_applied: 0
-human_verification:
-  - test: "Restore logs/judge_fpr_llama.json from HEAD commit before any downstream consumers read it"
-    expected: "git checkout HEAD -- logs/judge_fpr_llama.json restores the file with real verdicts (TIE: 187, DEGRADED: 87, PRESERVED: 76), matching ablation_table.json M3 values"
-    why_human: "The working-tree judge_fpr_llama.json has been overwritten with all-PRESERVED dry-run placeholders (git status shows ' M logs/judge_fpr_llama.json'). The committed version at HEAD is correct and consistent. A human must decide whether to restore it (git checkout HEAD -- logs/judge_fpr_llama.json) and commit the restoration, or whether the discrepancy is acceptable."
+resolved_2026_05_04:
+  - resolution: "V-06 patched (commit 594291e) to also snapshot/restore logs/judge_fpr_llama.json — the IN-01 path-anchoring fix had inadvertently caused V-06 to corrupt the production verdict file on every test run. Working tree restored; tests now leave production state intact."
+  - evidence: "Pre-test verdict distribution: TIE=187 DEGRADED=87 PRESERVED=76; post-test: identical. ablation_table.json md5 d66791c9b1bf836e5f72402989c06597 unchanged."
 ---
 
 # Phase 05: Honest FPR Metrics Verification Report

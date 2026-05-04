@@ -26,6 +26,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 3.4: Full Evaluation and Final Report** - Complete experiment matrix, arms race analysis, limitations, and Phase 3 writeup (due Apr 30)
 - [ ] **Phase 4: Final Presentation** - 10-12 minute presentation with arms race narrative, plots, and demo (May 5-7)
 - [x] **Phase 5: Honest FPR Metrics** - Per-chunk FPR, answer-preserved FPR, and LLM-as-judge utility cost to replace the coarse 76% query-level FPR (post-presentation refinement) (completed 2026-05-03)
+- [ ] **Phase 7: Honest FPR Metrics — gpt-oss extension** - Extend Phase 5's three honest FPR metrics (M1 per-chunk, M2 answer-preserved, M3 judge-scored) to the gpt-oss-20b-cloud and gpt-oss-120b-cloud RAG targets on the {fused, def02} cells produced by Phase 6. Compute M1/M2 from existing Phase 6 v6 logs (no cloud calls); M3 requires ~200 cloud-judge calls (gpt-oss:20b-cloud as judge, mirroring Phase 5 setup). Output: logs/ablation_table_gptoss_v7.json + extended Phase 5 writeup. Wall-clock budget: ~26 min cloud + ~5 min downstream regen.
 
 ## Phase Details
 
