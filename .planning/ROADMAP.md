@@ -332,6 +332,28 @@ Plans:
 - [x] 06-05-PLAN.md — Wave 4 make_figures.py — 3 new renderers (5×5 fused heatmap, 5×4 undefended heatmap, arms-race v6 bars) + render 3 v6 PNGs
 - [ ] 06-06-PLAN.md — Wave 5 verification: full pytest, originals-untouched audit, manual figure eyeball, write 06-VERIFICATION.md
 
+### Phase 7: Honest FPR Metrics — gpt-oss extension
+
+**Goal:** Extend Phase 5's three honest FPR metrics (M1 per-chunk, M2 answer-preserved, M3 judge-scored) from llama3.2:3b to the two cloud RAG targets (gpt-oss:20b-cloud and gpt-oss:120b-cloud) on the {fused, def02} defense cells produced by Phase 6, so the project's user-visible defense cost is reported across all three RAG targets rather than just the local llama baseline.
+
+**Depends on:** Phase 5 (M1/M2/M3 metric definitions + scripts/run_judge_fpr.py infrastructure); Phase 6 (clean-query v6 logs for the gpt-oss × {fused, def02} cells)
+
+**Requirements:**
+- M1 (per-chunk FPR) computed for {gpt-oss:20b-cloud, gpt-oss:120b-cloud} × {fused, def02} = 4 cells from existing Phase 6 v6 clean-query logs (no cloud calls)
+- M2 (answer-preserved FPR) computed for the same 4 cells from existing Phase 6 v6 logs (no cloud calls)
+- M3 (LLM-as-judge FPR) — pairwise judge run over (defense-on answer, defense-off answer) on clean queries, ~200 cloud-judge calls using gpt-oss:20b-cloud as judge, mirroring Phase 5 setup
+- Emit logs/ablation_table_gptoss_v7.json with M1/M2/M3 × 4 cells
+- Extend docs/phase5_honest_fpr.md so the M1/M2/M3 table covers 3 RAG targets (llama + gpt-oss:20b + gpt-oss:120b), preserving the original llama row verbatim
+
+**Plans:** TBD (set during plan-phase)
+
+**Notes:**
+- M1/M2 are pure log-replay (no cloud calls) — near-instant
+- M3 wall-clock: ~26 min cloud (~200 judge calls × ~8 sec/call) + ~5 min downstream regen
+- Judge model locked: gpt-oss:20b-cloud (mirrors Phase 5 setup for cross-target comparability)
+- "Answer degraded" definition inherited from Phase 5 (do not redefine)
+- gemma4:31b-cloud is NOT in scope — Phase 6 only generated {fused, def02} cells for the two gpt-oss models; gemma4's cross-model matrix in Phase 3.3 uses a different schema and is excluded to avoid mixing data sources
+
 ---
 *Roadmap created: 2026-03-31*
 *Restructured: 2026-04-13 — Direction A (arms race) added*
@@ -347,3 +369,4 @@ Plans:
 *Course deadlines: Phase 1 Mar 27 (done), Phase 2 Apr 12 (done), Phase 3 Apr 30, Presentation May 5-7*
 
 *Phase 3.3 planned: 2026-04-24 — 7 plans in 2 waves; Wave 1 (6 parallel plans) covers Wave 0 test stubs + ATK-01b + ATK-02 + EVAL-06 + EVAL-V2-02 + EVAL-08; Wave 2 (1 plan) covers EVAL-V2-01 cross-model matrix and depends on Phase 3.2 causal artifacts with DEF-02 fallback per CONTEXT D-12.*
+*Phase 7 detail section added: 2026-05-04 — Phase 7 was registered in the checklist but lacked a `### Phase 7:` detail section, blocking gsd-sdk init.phase-op. Detail section drafted from the line-29 description (extends Phase 5 M1/M2/M3 metrics to gpt-oss:20b-cloud and gpt-oss:120b-cloud on the {fused, def02} cells from Phase 6).*
