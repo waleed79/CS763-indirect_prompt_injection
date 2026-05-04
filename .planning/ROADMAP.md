@@ -308,7 +308,7 @@ Plans:
 - [x] 05-02-judge-fpr-script-PLAN.md — Wave 1: scripts/run_judge_fpr.py (M1/M2/M3 + checkpoint cache + atomic ablation write)
 - [x] 05-03-execute-judge-run-PLAN.md — Wave 2: live judge run, populate logs/judge_fpr_llama.json + extend logs/ablation_table.json
 - [x] 05-04-writeup-PLAN.md — Wave 3: docs/phase5_honest_fpr.md (6-section writeup)
-- [ ] 05-05-callout-and-warning-PLAN.md — Wave 3: docs/phase3_results.md addendum + scripts/_build_ablation_table.py WARNING comment
+- [x] 05-05-callout-and-warning-PLAN.md — Wave 3: docs/phase3_results.md addendum + scripts/_build_ablation_table.py WARNING comment
 
 **Notes:**
 - Reuse existing clean-query eval set from Phase 3.4; no new data collection unless judge run requires re-inference
