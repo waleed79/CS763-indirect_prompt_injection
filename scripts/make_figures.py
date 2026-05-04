@@ -608,6 +608,22 @@ def render_d03_arms_race_v6(logs_dir: Path, output_dir: Path) -> None:
     nonzero_count = int(np.sum(~np.isnan(data) & (data > 0)))
     assert nonzero_count >= 5, f"D-03 v6 only {nonzero_count} non-zero cells"
 
+    # Muted, high-contrast palette: 4 model families (ColorBrewer-inspired),
+    # 3 shades per family (dark=no_defense, mid=fused, light=def02).
+    # Hatching adds a second visual cue for defense tier.
+    _bar_colors = {
+        "llama3.2_3b":        {"no_defense": "#2166ac", "fused": "#6aafd4", "def02": "#b0d4ea"},
+        "mistral_7b":         {"no_defense": "#b2182b", "fused": "#d6604d", "def02": "#f4a582"},
+        "gpt-oss_20b-cloud":  {"no_defense": "#1b7837", "fused": "#5aae61", "def02": "#a6dba0"},
+        "gpt-oss_120b-cloud": {"no_defense": "#762a83", "fused": "#9970ab", "def02": "#c2a5cf"},
+    }
+    _bar_hatches = {"no_defense": "", "fused": "//", "def02": ".."}
+    _defense_labels = {"no_defense": "undefended", "fused": "fused", "def02": "def02"}
+    _model_labels = {
+        "llama3.2_3b": "llama3.2:3b", "mistral_7b": "mistral:7b",
+        "gpt-oss_20b-cloud": "gpt-oss:20b", "gpt-oss_120b-cloud": "gpt-oss:120b",
+    }
+
     # Plot grouped bars
     fig, ax = plt.subplots(figsize=(14, 6))
     bar_width = 0.8 / max(n_groups, 1)
@@ -619,7 +635,11 @@ def render_d03_arms_race_v6(logs_dir: Path, output_dir: Path) -> None:
             x + gi * bar_width - 0.4 + bar_width / 2,
             col_safe,
             width=bar_width,
-            label=f"{model.replace('_',':',1)} / {defense}",
+            color=_bar_colors[model][defense],
+            hatch=_bar_hatches[defense],
+            edgecolor="white",
+            linewidth=0.4,
+            label=f"{_model_labels[model]} / {_defense_labels[defense]}",
         )
     ax.set_xticks(x)
     ax.set_xticklabels(["T1", "T1b", "T2", "T3"])
