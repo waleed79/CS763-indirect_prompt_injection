@@ -32,6 +32,19 @@ pytestmark = pytest.mark.skipif(
     reason="scripts/make_results.py not importable",
 )
 
+# _V6_AVAILABLE is True only when Wave 3 has added Phase 6 v6 support to make_results.py.
+# Wave 3 must expose a PHASE6_DISCLOSURE constant (or _resolve_v6_path) for this flag to flip.
+_V6_AVAILABLE: bool = (
+    _AVAILABLE and (
+        hasattr(_mod, "PHASE6_DISCLOSURE") or hasattr(_mod, "_resolve_v6_path")
+    )
+) if _AVAILABLE else False
+
+# Sentinel used in per-method @pytest.mark.skipif decorators below.
+_SKIP_V6 = pytest.mark.skipif(
+    not _V6_AVAILABLE,
+    reason="scripts/make_results.py Phase 6 v6 extensions not yet implemented (Wave 3)",
+)
 
 # Phase-6 v6 disclosure header literal — should also appear as module
 # constant inside scripts/make_results.py once Wave 3 lands. Test asserts on substring.
@@ -64,6 +77,8 @@ def _stage_minimal_inputs(tmp_path: Path) -> tuple[Path, Path]:
 # --- P6-RES-PR: path resolver --------------------------------------------
 class TestPathResolver:
     """P6-RES-PR: prefer _v6.json over un-versioned when present."""
+
+    @_SKIP_V6
     def test_v6_preferred_when_present(self, tmp_path):
         logs_dir, out_dir = _stage_minimal_inputs(tmp_path)
         # Stage BOTH versioned and un-versioned for gptoss20b
@@ -97,6 +112,7 @@ class TestPathResolver:
         # _v6 number 0.40 (asr_tier3) MUST appear; un-versioned would have shown nothing
         assert "0.40" in md, "v6 numbers not surfaced — resolver did not prefer _v6.json"
 
+    @_SKIP_V6
     def test_v6_summary_preferred_when_present(self, tmp_path):
         logs_dir, out_dir = _stage_minimal_inputs(tmp_path)
         # Stage BOTH _summary.json and _summary_v6.json
@@ -118,6 +134,8 @@ class TestPathResolver:
 # --- P6-MD: disclosure header --------------------------------------------
 class TestMarkdownDisclosure:
     """P6-MD: regenerated .md files include the dated disclosure header."""
+
+    @_SKIP_V6
     def test_undefended_baseline_disclosure_present(self, tmp_path):
         logs_dir, out_dir = _stage_minimal_inputs(tmp_path)
         rc = main(["--logs-dir", str(logs_dir), "--output-dir", str(out_dir)])
@@ -127,6 +145,7 @@ class TestMarkdownDisclosure:
             f"missing disclosure header. md head: {md[:200]!r}"
         )
 
+    @_SKIP_V6
     def test_arms_race_table_disclosure_present(self, tmp_path):
         logs_dir, out_dir = _stage_minimal_inputs(tmp_path)
         rc = main(["--logs-dir", str(logs_dir), "--output-dir", str(out_dir)])
@@ -140,6 +159,8 @@ class TestMarkdownDisclosure:
 # --- P6-CSV: csv companions ----------------------------------------------
 class TestCsvCompanions:
     """P6-CSV: undefended_baseline_v6.csv and arms_race_table_v6.csv emitted."""
+
+    @_SKIP_V6
     def test_undefended_baseline_v6_csv_exists(self, tmp_path):
         logs_dir, out_dir = _stage_minimal_inputs(tmp_path)
         rc = main(["--logs-dir", str(logs_dir), "--output-dir", str(out_dir)])
@@ -151,6 +172,7 @@ class TestCsvCompanions:
         for col in ["asr_tier1b", "asr_tier3", "asr_tier4"]:
             assert col in header, f"missing column {col} in v6 csv header: {header!r}"
 
+    @_SKIP_V6
     def test_arms_race_table_v6_csv_exists(self, tmp_path):
         logs_dir, out_dir = _stage_minimal_inputs(tmp_path)
         rc = main(["--logs-dir", str(logs_dir), "--output-dir", str(out_dir)])
