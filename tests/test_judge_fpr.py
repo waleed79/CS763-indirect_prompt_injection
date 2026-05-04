@@ -53,13 +53,17 @@ pytestmark = pytest.mark.skipif(
 
 NEW_KEYS = ("per_chunk_fpr", "answer_preserved_fpr", "judge_fpr", "judge_model", "judge_n_calls")
 
+# IN-01: anchor paths to the repo root so tests are not cwd-sensitive.
+# tests/ is one level below the repo root, so parent.parent is the repo root.
+_LOGS_DIR = Path(__file__).parent.parent / "logs"
+
 
 def _load_ablation():
-    return json.loads(Path("logs/ablation_table.json").read_text())
+    return json.loads((_LOGS_DIR / "ablation_table.json").read_text())
 
 
 def _load_verdicts():
-    return json.loads(Path("logs/judge_fpr_llama.json").read_text())
+    return json.loads((_LOGS_DIR / "judge_fpr_llama.json").read_text())
 
 
 class TestSchemaExtension:
@@ -107,7 +111,7 @@ class TestMetricBounds:
         ablation = _load_ablation()
         denom = TOP_K * N_CLEAN
         for defense_key, log_fname in DEFENSE_LOG_MAP.items():
-            log = json.loads(Path(f"logs/{log_fname}").read_text())
+            log = json.loads((_LOGS_DIR / log_fname).read_text())
             clean = [r for r in log["results"] if not r.get("paired", False)]
             numerator = sum(r.get("chunks_removed", 0) for r in clean)
             assert numerator <= denom, (
@@ -118,7 +122,7 @@ class TestMetricBounds:
         """V-02: M2 numerator (chunks_removed>0 AND DEGRADED) <= M1 numerator (chunks_removed>0)."""
         verdicts_doc = _load_verdicts()
         for defense_key, log_fname in DEFENSE_LOG_MAP.items():
-            log = json.loads(Path(f"logs/{log_fname}").read_text())
+            log = json.loads((_LOGS_DIR / log_fname).read_text())
             clean = [r for r in log["results"] if not r.get("paired", False)]
             m1_count = sum(1 for r in clean if r.get("chunks_removed", 0) > 0)
             vds = verdicts_doc["verdicts"].get(defense_key, {})
@@ -160,16 +164,17 @@ class TestJudgeConsistency:
     def test_idempotent_with_cache(self, frozen_judge_cache, tmp_path, monkeypatch):
         """V-06: re-running main() with cached verdicts produces byte-identical ablation_table.json."""
         # Snapshot pre-state, run main with frozen cache, snapshot post-state, run again, compare.
-        ablation_path = Path("logs/ablation_table.json")
-        pre = ablation_path.read_text()
+        # IN-02: explicit utf-8 on read+write so round-trip cannot corrupt the production file.
+        ablation_path = _LOGS_DIR / "ablation_table.json"
+        pre = ablation_path.read_text(encoding="utf-8")
         try:
             rc1 = main(["--cache", str(frozen_judge_cache), "--delay", "0"])
             assert rc1 == 0
-            post1 = ablation_path.read_text()
+            post1 = ablation_path.read_text(encoding="utf-8")
             rc2 = main(["--cache", str(frozen_judge_cache), "--delay", "0"])
             assert rc2 == 0
-            post2 = ablation_path.read_text()
+            post2 = ablation_path.read_text(encoding="utf-8")
             assert post1 == post2, "Re-run with cache produced different ablation_table.json"
         finally:
             # Restore pre-test state
-            ablation_path.write_text(pre)
+            ablation_path.write_text(pre, encoding="utf-8")

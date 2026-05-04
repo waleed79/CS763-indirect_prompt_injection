@@ -25,11 +25,15 @@ _DEFENSE_KEYS = [
 ]
 _N_CLEAN = 50  # indices 50-99 in defense logs (paired==False)
 
+# IN-01: anchor paths to the repo root so fixtures are not cwd-sensitive.
+# tests/ is one level below the repo root, so parent.parent is the repo root.
+_REPO_ROOT = Path(__file__).parent.parent
+
 
 @pytest.fixture
 def ablation_snapshot(tmp_path):
     """Copy of logs/ablation_table.json in tmp_path; tests can mutate freely."""
-    src = Path("logs/ablation_table.json")
+    src = _REPO_ROOT / "logs" / "ablation_table.json"
     if not src.exists():
         pytest.skip("logs/ablation_table.json not present in working tree")
     dst = tmp_path / "ablation_table.json"
@@ -57,5 +61,6 @@ def frozen_judge_cache(tmp_path):
             }
             for i in range(_N_CLEAN)
         }
-    cache_path.write_text(json.dumps(cache, indent=2))
+    # IN-02: explicit utf-8 so Windows cp1252 default cannot corrupt non-ASCII content.
+    cache_path.write_text(json.dumps(cache, indent=2), encoding="utf-8")
     return cache_path
