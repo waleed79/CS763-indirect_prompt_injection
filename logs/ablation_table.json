@@ -29,7 +29,7 @@
     "chunks_removed_total": 0,
     "per_chunk_fpr": 0.0,
     "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "judge_fpr": 0.24,
     "judge_model": "gpt-oss:20b-cloud",
     "judge_n_calls": 50
   },
@@ -45,10 +45,10 @@
     "n_queries": 100,
     "chunks_removed_total": 258,
     "per_chunk_fpr": 0.32,
-    "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "answer_preserved_fpr": 0.26,
+    "judge_fpr": 0.28,
     "judge_model": "gpt-oss:20b-cloud",
-    "judge_n_calls": 50
+    "judge_n_calls": 51
   },
   "perplexity_only": {
     "model": "llama3.2:3b",
@@ -62,8 +62,8 @@
     "n_queries": 100,
     "chunks_removed_total": 133,
     "per_chunk_fpr": 0.22,
-    "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "answer_preserved_fpr": 0.14,
+    "judge_fpr": 0.16,
     "judge_model": "gpt-oss:20b-cloud",
     "judge_n_calls": 50
   },
@@ -79,8 +79,8 @@
     "n_queries": 100,
     "chunks_removed_total": 232,
     "per_chunk_fpr": 0.364,
-    "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "answer_preserved_fpr": 0.34,
+    "judge_fpr": 0.34,
     "judge_model": "gpt-oss:20b-cloud",
     "judge_n_calls": 50
   },
@@ -96,8 +96,8 @@
     "n_queries": 100,
     "chunks_removed_total": 179,
     "per_chunk_fpr": 0.02,
-    "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "answer_preserved_fpr": 0.02,
+    "judge_fpr": 0.04,
     "judge_model": "gpt-oss:20b-cloud",
     "judge_n_calls": 50
   },
@@ -113,8 +113,8 @@
     "n_queries": 100,
     "chunks_removed_total": 247,
     "per_chunk_fpr": 0.308,
-    "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "answer_preserved_fpr": 0.32,
+    "judge_fpr": 0.34,
     "judge_model": "gpt-oss:20b-cloud",
     "judge_n_calls": 50
   },
@@ -131,8 +131,8 @@
     "chunks_removed_total": 270,
     "threshold_used": 0.1,
     "per_chunk_fpr": 0.34,
-    "answer_preserved_fpr": 0.0,
-    "judge_fpr": 0.0,
+    "answer_preserved_fpr": 0.32,
+    "judge_fpr": 0.34,
     "judge_model": "gpt-oss:20b-cloud",
     "judge_n_calls": 50
   },
