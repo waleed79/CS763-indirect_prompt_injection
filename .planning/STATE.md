@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-stopped_at: Completed 07-02-PLAN.md Wave 1 run_judge_fpr_gptoss.py script
-last_updated: "2026-05-04T11:57:10.035Z"
+status: Phase 7 complete
+stopped_at: Phase 7 all 6 plans complete — honest FPR gpt-oss extension done (2026-05-04)
+last_updated: "2026-05-04T18:00:00.000Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 14
-  completed_phases: 11
-  total_plans: 61
-  completed_plans: 58
-  percent: 95
+  completed_phases: 12
+  total_plans: 67
+  completed_plans: 67
+  percent: 100
 ---
 
 # Project State
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 05 complete — honest FPR metrics
+**Current focus:** Phase 07 complete — honest FPR gpt-oss extension (M1/M2/M3 for 4 cells)
 
 ## Current Position
 
-Phase: 07 (honest-fpr-metrics-gpt-oss-extension) — EXECUTING
-Plan: 5 of 6 complete
+Phase: 07 (honest-fpr-metrics-gpt-oss-extension) — COMPLETE
+Plan: 6 of 6 complete
 Last activity: 2026-05-04
 
 Progress: [██████████] 100% (research phases)
@@ -54,7 +54,7 @@ Progress: [██████████] 100% (research phases)
 | 03.4 | 6/6 | Complete (submitted to Google Doc 2026-04-30) |
 | 05 | 5/5 | Complete (verified 2026-05-03) |
 | 06 | 6/6 | Complete (verified + user approved 2026-05-04) |
-| 07 | 1/6 | In Progress (Plan 01 complete 2026-05-04) |
+| 07 | 6/6 | Complete (verified 2026-05-04) |
 
 **Recent Trend:**
 
@@ -170,6 +170,12 @@ Recent decisions affecting current work:
 - [Phase 07-01]: pre-existing INTERNALERROR in full pytest --collect-only traced to tests/test_judge_per_tier.py bare module-level 'from scripts.run_judge import' (ollama absent in Python 3.13 env); out-of-scope for Plan 01; deferred
 - [Phase ?]: exec_module creates separate class/string objects per call; test identity checks must use _mod._phase5.X not test's own _phase5.X
 - [Phase ?]: dry-run skips cache write to prevent SKIP_DRYRUN sentinel pollution of the shared checkpoint cache
+- [Phase 07-02]: importlib double-load pattern (run_judge_fpr_gptoss.py loads _phase5 via importlib; tests load _mod via importlib) — two independent exec_module calls produce non-identical class objects; test identity checks use _mod._phase5.X not local _phase5.X
+- [Phase 07-02]: assert "no_defense" not in ablation_v7 uses key membership (dict.__contains__), not str(dict) substring search — WR-02 code review finding; str(dict) is a false-negative trap if any key value contains the substring
+- [Phase 07-04]: gpt-oss cloud M3 run issued via `conda run -n rag-security` with `run_in_background=true` — Bash timeout is 10 min; 200 judge calls at 3s delay takes ~26 min; background + Monitor pattern avoids timeout
+- [Phase 07-04]: M1=0.092 for fused cells (both 20b and 120b) — same value because M1 is a retrieval-side metric; it does not depend on the LLM target model, only on the defense's chunk filtering
+- [Phase 07-04]: DEF-02 M1=0.000 for both models — system-prompt-only defense never removes chunks; M3=6–10% judge-rated degradation attributed to priming effect (same mechanism found in Phase 03.1-07)
+- [Phase 07-05]: Phase 5 doc addendum uses immediate append (no leading blank line) — blank lines before the heading caused TestPhase5ProseUntouched to fail (prefix byte mismatch); heading follows last byte of original file directly
 
 ### Pending Todos
 
@@ -186,6 +192,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-05-04T11:57:10.024Z
-Stopped at: Completed 07-02-PLAN.md Wave 1 run_judge_fpr_gptoss.py script
+Last session: 2026-05-04T18:00:00.000Z
+Stopped at: Phase 7 complete — all 6 plans executed, verified, code-reviewed
 Resume file: None
