@@ -132,8 +132,16 @@ def randomize_ab(
 def atomic_write_json(path: Path, obj: object) -> None:
     """Write obj as JSON to path atomically (tmp + replace) per RESEARCH §5.2."""
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(obj, indent=2))
+    tmp.write_text(json.dumps(obj, indent=2), encoding="utf-8")
     tmp.replace(path)
+
+
+class JudgeAuthError(RuntimeError):
+    """Raised by judge_one when the judge model rejects the call due to auth.
+
+    main() catches this and returns 1 instead of sys.exit-ing from a library
+    function (WR-02). This keeps judge_one testable.
+    """
 
 
 def judge_one(
@@ -152,7 +160,10 @@ def judge_one(
         raw_response: the raw content string from the model (empty string on error).
         error_msg_or_None: error message if call failed, else None.
 
-    Auth errors cause sys.exit(1) immediately (mirrors run_judge.py:197-199).
+    Raises:
+        JudgeAuthError: if the model rejects the call due to auth/login (WR-02).
+        Caller (main) catches this and returns rc=1 with cleanup.
+
     Always sleeps args.delay on both success AND failure branches (PATTERNS.md line 147).
     """
     try:
@@ -171,15 +182,26 @@ def judge_one(
     except Exception as exc:
         msg = str(exc)
         if "login" in msg.lower() or "auth" in msg.lower():
-            print(f"FATAL: Judge model requires auth. Run: ollama login\n{exc}")
-            sys.exit(1)
+            # WR-02: raise instead of sys.exit so callers (and tests) can handle it.
+            raise JudgeAuthError(
+                f"Judge model requires auth. Run: ollama login\n{exc}"
+            ) from exc
         print(f"  [ERROR] Judge call failed: {exc}")
         if delay > 0:
             time.sleep(delay)
         return None, "", str(exc)
 
-    msg_obj = resp.message if hasattr(resp, "message") else resp["message"]
-    content = msg_obj.content if hasattr(msg_obj, "content") else msg_obj["content"]
+    # WR-03: response shape can vary across ollama-python versions; if neither
+    # the attribute nor the subscript form works (e.g., resp is not a mapping),
+    # treat as a parse failure rather than letting TypeError crash the run.
+    try:
+        msg_obj = resp.message if hasattr(resp, "message") else resp["message"]
+        content = msg_obj.content if hasattr(msg_obj, "content") else msg_obj["content"]
+    except (AttributeError, KeyError, TypeError) as parse_exc:
+        print(f"  [ERROR] Unexpected response shape from judge model: {parse_exc}")
+        if delay > 0:
+            time.sleep(delay)
+        return None, "", str(parse_exc)
 
     if delay > 0:
         time.sleep(delay)
@@ -397,28 +419,57 @@ def main(argv: "list[str] | None" = None) -> int:
         print(f"Loaded existing cache from {cache_path}")
 
     # Step 5: Iterate over all active defense rows (DEFENSE_LOG_MAP has 7 entries per D-01)
+    # WR-01: accumulate per-defense metrics in memory and do a single write to
+    # ablation_table.json at the end of step 6, instead of read-modify-writing
+    # the production file 7+1=8 times. Path.replace() is non-atomic on Windows,
+    # so a single write minimizes the corruption window from ~8 to 1.
     print(f"Processing {len(DEFENSE_LOG_MAP)} defense modes: {list(DEFENSE_LOG_MAP.keys())}")
-    for defense_key, log_fname in DEFENSE_LOG_MAP.items():
-        log_path = Path("logs") / log_fname
-        if not log_path.exists():
-            print(f"WARNING: defense log not found: {log_path} — skipping {defense_key}")
-            continue
+    accumulated_metrics: dict = {}
+    try:
+        for defense_key, log_fname in DEFENSE_LOG_MAP.items():
+            log_path = Path("logs") / log_fname
+            if not log_path.exists():
+                print(f"WARNING: defense log not found: {log_path} — skipping {defense_key}")
+                continue
 
-        cache_for_defense = all_verdicts.get(defense_key, {})
+            cache_for_defense = all_verdicts.get(defense_key, {})
 
-        verdicts_dict, m1, m2, m3, n_calls = run_for_defense(
-            client, args, defense_key, log_path, off_records,
-            cache_for_defense, rng,
+            verdicts_dict, m1, m2, m3, n_calls = run_for_defense(
+                client, args, defense_key, log_path, off_records,
+                cache_for_defense, rng,
+            )
+
+            all_verdicts[defense_key] = verdicts_dict
+            accumulated_metrics[defense_key] = (m1, m2, m3, n_calls)
+
+            # Atomic-write cache after every defense (RESEARCH §5.1 checkpoint pattern).
+            # Cache is a derived/recoverable artifact; per-iteration writes are OK here.
+            atomic_write_json(cache_path, all_verdicts)
+    except JudgeAuthError as exc:
+        # WR-02: judge_one signals auth failure via exception; report and exit
+        # cleanly with rc=1 instead of sys.exit'ing from inside the helper.
+        print(f"FATAL: {exc}")
+        return 1
+
+    # Step 6: Single read-modify-write of ablation_table.json with all
+    # per-defense metrics + no_defense trivial fill (D-02).
+    ablation_path = Path("logs/ablation_table.json")
+    try:
+        ablation = json.loads(ablation_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as exc:
+        print(
+            f"ERROR: failed to read {ablation_path}: {exc}\n"
+            f"  Run scripts/_build_ablation_table.py first to create the base table."
         )
+        return 1
 
-        all_verdicts[defense_key] = verdicts_dict
-
-        # Atomic-write cache after every defense (RESEARCH §5.1 checkpoint pattern)
-        atomic_write_json(cache_path, all_verdicts)
-
-        # Read-modify-write ablation_table.json (one defense at a time, RESEARCH §2.4)
-        ablation_path = Path("logs/ablation_table.json")
-        ablation = json.loads(ablation_path.read_text())
+    for defense_key, (m1, m2, m3, n_calls) in accumulated_metrics.items():
+        # WR-04: defensively create the row if missing rather than KeyError.
+        if defense_key not in ablation:
+            print(
+                f"WARNING: {defense_key} key missing from ablation_table.json — creating it."
+            )
+            ablation[defense_key] = {}
         ablation[defense_key].update({
             "per_chunk_fpr":       m1,
             "answer_preserved_fpr": m2,
@@ -426,14 +477,11 @@ def main(argv: "list[str] | None" = None) -> int:
             "judge_model":         args.model,
             "judge_n_calls":       n_calls,
         })
-        # Atomic write per RESEARCH §5.2 (tmp + replace to survive Ctrl-C)
-        tmp_ab = Path("logs/ablation_table.json.tmp")
-        tmp_ab.write_text(json.dumps(ablation, indent=2))
-        tmp_ab.replace(ablation_path)
 
-    # Step 6: Trivially fill no_defense row (D-02)
-    ablation_path = Path("logs/ablation_table.json")
-    ablation = json.loads(ablation_path.read_text())
+    # WR-04: defensively create no_defense row if missing.
+    if "no_defense" not in ablation:
+        print("WARNING: no_defense key missing from ablation_table.json — creating it.")
+        ablation["no_defense"] = {}
     ablation["no_defense"].update({
         "per_chunk_fpr":       0.0,
         "answer_preserved_fpr": 0.0,
@@ -441,10 +489,9 @@ def main(argv: "list[str] | None" = None) -> int:
         "judge_model":         args.model,  # Schema-shape consistency only; judge_n_calls=0 is the canonical "no calls" signal (D-02).
         "judge_n_calls":       0,
     })
-    # Atomic write
-    tmp_ab = Path("logs/ablation_table.json.tmp")
-    tmp_ab.write_text(json.dumps(ablation, indent=2))
-    tmp_ab.replace(ablation_path)
+    # Atomic write per RESEARCH §5.2 (tmp + replace; best-effort on Windows
+    # where Path.replace is not strictly atomic — single write minimizes window).
+    atomic_write_json(ablation_path, ablation)
     print("\nFilled no_defense row with trivial zeros (D-02).")
 
     # Step 7: Write final per-cell verdicts file (D-11 schema)
