@@ -65,9 +65,9 @@ def make_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--url",
-        default="https://github.com/waleed79/CS763-indirect_prompt_injection",
+        default="https://github.com/muhammad-musa-ml/IPI-763",
         help=(
-            "Repo URL to encode (verified via git remote get-url origin 2026-05-02;"
+            "Repo URL to encode (updated 2026-05-04 to public canonical repo;"
             " .git stripped)"
         ),
     )
