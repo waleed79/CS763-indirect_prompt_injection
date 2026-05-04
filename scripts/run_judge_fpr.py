@@ -98,7 +98,7 @@ def load_clean_records(log_path: "str | Path") -> list:
     Returns:
         List of 50 clean records in log order.
     """
-    data = json.loads(Path(log_path).read_text())
+    data = json.loads(Path(log_path).read_text(encoding="utf-8"))
     clean = [r for r in data["results"] if not r.get("paired", False)]
     assert len(clean) == N_CLEAN, (
         f"{log_path}: expected {N_CLEAN} clean records, got {len(clean)}"
