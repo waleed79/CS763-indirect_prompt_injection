@@ -368,7 +368,7 @@ def main(argv: "list[str] | None" = None) -> int:
     assert set(ablation_v7.keys()) == expected, (
         f"D-02/D-03 violation: expected {expected}, got {set(ablation_v7.keys())}"
     )
-    assert "no_defense" not in str(ablation_v7), "D-03 violation: trivial no_defense row leaked"
+    assert "no_defense" not in ablation_v7, "D-03 violation: trivial no_defense row leaked"
 
     # D-04 verdicts file (nested model → defense → qid)
     final_verdicts = {
