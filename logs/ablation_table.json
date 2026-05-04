@@ -9,7 +9,12 @@
     "fpr": 0.0,
     "retrieval_rate": 0.88,
     "n_queries": 100,
-    "chunks_removed_total": 0
+    "chunks_removed_total": 0,
+    "per_chunk_fpr": 0.0,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 0
   },
   "def02": {
     "model": "llama3.2:3b",
@@ -21,7 +26,12 @@
     "fpr": 0.0,
     "retrieval_rate": 0.88,
     "n_queries": 100,
-    "chunks_removed_total": 0
+    "chunks_removed_total": 0,
+    "per_chunk_fpr": 0.0,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "bert_only": {
     "model": "llama3.2:3b",
@@ -33,7 +43,12 @@
     "fpr": 0.76,
     "retrieval_rate": 0.44,
     "n_queries": 100,
-    "chunks_removed_total": 258
+    "chunks_removed_total": 258,
+    "per_chunk_fpr": 0.32,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "perplexity_only": {
     "model": "llama3.2:3b",
@@ -45,7 +60,12 @@
     "fpr": 0.72,
     "retrieval_rate": 0.77,
     "n_queries": 100,
-    "chunks_removed_total": 133
+    "chunks_removed_total": 133,
+    "per_chunk_fpr": 0.22,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "imperative_only": {
     "model": "llama3.2:3b",
@@ -57,7 +77,12 @@
     "fpr": 0.88,
     "retrieval_rate": 0.74,
     "n_queries": 100,
-    "chunks_removed_total": 232
+    "chunks_removed_total": 232,
+    "per_chunk_fpr": 0.364,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "fingerprint_only": {
     "model": "llama3.2:3b",
@@ -69,7 +94,12 @@
     "fpr": 0.06,
     "retrieval_rate": 0.67,
     "n_queries": 100,
-    "chunks_removed_total": 179
+    "chunks_removed_total": 179,
+    "per_chunk_fpr": 0.02,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "fused_fixed_0.5": {
     "model": "llama3.2:3b",
@@ -81,7 +111,12 @@
     "fpr": 0.76,
     "retrieval_rate": 0.5,
     "n_queries": 100,
-    "chunks_removed_total": 247
+    "chunks_removed_total": 247,
+    "per_chunk_fpr": 0.308,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "fused_tuned_threshold": {
     "model": "llama3.2:3b",
@@ -94,7 +129,12 @@
     "retrieval_rate": 0.34,
     "n_queries": 100,
     "chunks_removed_total": 270,
-    "threshold_used": 0.1
+    "threshold_used": 0.1,
+    "per_chunk_fpr": 0.34,
+    "answer_preserved_fpr": 0.0,
+    "judge_fpr": 0.0,
+    "judge_model": "gpt-oss:20b-cloud",
+    "judge_n_calls": 50
   },
   "mistral_no_defense": {
     "model": "mistral:7b",
