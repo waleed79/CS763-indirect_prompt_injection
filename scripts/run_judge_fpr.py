@@ -248,20 +248,22 @@ def run_for_defense(
             f"  def: {def_r['query'][:60]!r}"
         )
 
-    n_pairs = len(off_records)
+    # IN-03: load_clean_records already asserts exactly N_CLEAN entries, so
+    # len(off_records) is always N_CLEAN by construction. Use the constant
+    # directly instead of stashing it in a local with a different name.
     verdicts_dict: dict = {}
     n_calls = 0
     degraded_count = 0
     degraded_with_removal_count = 0
 
-    print(f"\n[{defense_key}] Evaluating {n_pairs} clean queries ...")
+    print(f"\n[{defense_key}] Evaluating {N_CLEAN} clean queries ...")
 
     for i, (off_rec, def_rec) in enumerate(zip(off_records, def_records)):
         qid = str(50 + i)
         q = off_rec["query"]
         chunks_removed = def_rec["chunks_removed"]
 
-        print(f"  [{i+1:02d}/{n_pairs:02d}] {q[:60]}")
+        print(f"  [{i+1:02d}/{N_CLEAN:02d}] {q[:60]}")
 
         # --- Cache hit: reuse stored verdict --------------------------------
         if qid in cache_for_defense:
