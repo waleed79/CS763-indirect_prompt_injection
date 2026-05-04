@@ -201,7 +201,7 @@ def render_d03_arms_race(logs_dir: Path, output_dir: Path) -> None:
     ax.set_xticklabels(tiers)
     ax.set_ylabel("Paired / overall ASR")
     ax.set_xlabel("Attack tier")
-    ax.set_title("D-03: Arms Race -- Attack Tier x Defense Level (llama3.2:3b)")
+    ax.set_title("Arms Race — Attack Tier × Defense Level (llama3.2:3b)")
     ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0))
     ax.set_ylim(0, max(0.5, float(np.nanmax(data)) * 1.2))
     ax.grid(True, axis="y", alpha=0.3)
@@ -237,7 +237,7 @@ def render_d04_utility_security(logs_dir: Path, output_dir: Path) -> None:
         ax_a.annotate(label, (x, y), xytext=(6, 6), textcoords="offset points", fontsize=8)
     ax_a.set_xlabel("Retrieval rate (poisoned chunks reaching LLM)")
     ax_a.set_ylabel("Paired ASR (T2)")
-    ax_a.set_title("(a) llama3.2:3b -- 7 defense modes (D-04a)")
+    ax_a.set_title("(a) llama3.2:3b — 7 defense modes")
     ax_a.grid(True, alpha=0.3)
     ax_a.legend(loc="best", fontsize=7)
 
@@ -265,7 +265,7 @@ def render_d04_utility_security(logs_dir: Path, output_dir: Path) -> None:
             )
     ax_b.set_xlabel("Retrieval rate (mean across tiers)")
     ax_b.set_ylabel("Mean overall ASR (across 5 tiers)")
-    ax_b.set_title("(b) 3 LLMs x 3 defenses (D-04b)")
+    ax_b.set_title("(b) 3 LLMs × 3 defenses")
     # De-dupe legend entries
     handles, labels = ax_b.get_legend_handles_labels()
     seen = {}
@@ -355,7 +355,7 @@ def render_d05_loo_causal(logs_dir: Path, output_dir: Path) -> None:
     ax_b.set_xticklabels(["Clean", "Injected"])
     ax_b.set_ylabel("LOO divergence (1 if removing chunk changes answer)")
     ax_b.set_xlabel("Chunk class")
-    ax_b.set_title("(b) Influence vs cleanliness -- INVERSION VISIBLE (D-05b)")
+    ax_b.set_title("(b) Influence vs cleanliness — inversion visible")
     ax_b.legend(loc="best", fontsize=7, title="Tier")
     ax_b.grid(True, alpha=0.3)
     save_atomic(fig, str(output_dir / "fig3_loo_causal.png"))
@@ -390,7 +390,7 @@ def render_d06_ratio_sweep(logs_dir: Path, output_dir: Path) -> None:
     ax.set_xscale("log")
     ax.set_xlabel("Poisoning ratio (fraction of corpus, log scale)")
     ax.set_ylabel("Tier-1 ASR")
-    ax.set_title("D-06: ATK-02 -- Attack success vs corpus contamination (llama3.2:3b, undefended)")
+    ax.set_title("Attack success vs corpus contamination (llama3.2:3b, undefended)")
     ax.grid(True, alpha=0.3, which="both")
     # Annotate each marker with the value
     for r, a in zip(ratios, asrs):
@@ -455,7 +455,7 @@ def render_d12_cross_model_heatmap(logs_dir: Path, output_dir: Path) -> None:
         cbar_kws={"label": "Overall ASR (n=100, unpaired)"},
         linewidths=0.5, ax=ax,
     )
-    ax.set_title("D-12: EVAL-V2-01 -- Cross-model ASR under fused defense")
+    ax.set_title("Cross-model ASR under fused defense")
     ax.set_xlabel("LLM target")
     ax.set_ylabel("Attack tier")
     save_atomic(fig, str(output_dir / "fig5_cross_model_heatmap.png"))
@@ -504,7 +504,7 @@ def render_d12_cross_model_heatmap_v6(logs_dir: Path, output_dir: Path) -> None:
         cbar_kws={"label": "Overall ASR (n=100, unpaired)"},
         linewidths=0.5, ax=ax,
     )
-    ax.set_title("D-12 v6: Cross-model ASR under fused defense (4 LLMs, 4 tiers)")
+    ax.set_title("Cross-model ASR under Fused Defense")
     ax.set_xlabel("LLM target")
     ax.set_ylabel("Attack tier")
     save_atomic(fig, str(output_dir / "d12_cross_model_heatmap_v6.png"))
@@ -565,7 +565,7 @@ def render_d12_undefended_v6(logs_dir: Path, output_dir: Path) -> None:
         cbar_kws={"label": "Overall ASR (undefended, n=100)"},
         linewidths=0.5, ax=ax,
     )
-    ax.set_title("D-12 v6: Cross-model ASR — undefended baseline (4 tiers × 4 LLMs)")
+    ax.set_title("Cross-model ASR — Undefended Baseline")
     ax.set_xlabel("LLM target")
     ax.set_ylabel("Attack tier")
     save_atomic(fig, str(output_dir / "d12_undefended_v6.png"))
@@ -645,7 +645,7 @@ def render_d03_arms_race_v6(logs_dir: Path, output_dir: Path) -> None:
     ax.set_xticklabels(["T1", "T1b", "T2", "T3"])
     ax.set_xlabel("Attack tier")
     ax.set_ylabel("Overall ASR (n=100, unpaired)")
-    ax.set_title("D-03 v6: Arms race bars — 4 tiers × 4 LLMs × 3 defenses (Phase 6)")
+    ax.set_title("Arms Race — 4 Tiers × 4 LLMs × 3 Defenses")
     ax.legend(loc="upper right", fontsize=7, ncol=2, framealpha=0.85)
     ax.set_ylim(0, max(0.3, float(np.nanmax(data)) * 1.15))
     save_atomic(fig, str(output_dir / "d03_arms_race_v6.png"))
