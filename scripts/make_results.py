@@ -54,6 +54,10 @@ import pandas as pd
 # also used by Plan 03 figure renderer (scripts/make_figures.py) per
 # threat T-3.4-W1-05.
 
+# Phase 7 D-05 — single source of truth for the v7 ablation filename.
+# The resolver below uses this to locate the file under any logs_dir.
+_V7_ABLATION_FILENAME = "ablation_table_gptoss_v7.json"
+
 DEFENSE_DISPLAY: dict[str, str] = {
     # Top-level ablation_table.json keys (preferred lookup)
     "no_defense":                  "No Defense",
@@ -534,6 +538,57 @@ def _resolve_matrix_path(default_path: str, logs_dir: Path | None = None) -> Pat
 _resolve_v6_path = _resolve_matrix_path
 
 
+def _resolve_v7_ablation_path(logs_dir: "Path | None" = None) -> "Path | None":
+    """D-05: locate logs/ablation_table_gptoss_v7.json under logs_dir, or None.
+
+    Returns None when the v7 file is absent so callers can no-op gracefully
+    (the v7 emitter is purely additive; Phase 5 outputs must keep working when
+    Phase 7 has not run).
+    """
+    base = (logs_dir if logs_dir is not None else Path("logs"))
+    p = base / _V7_ABLATION_FILENAME
+    return p if p.exists() else None
+
+
+def load_honest_fpr_v7(path: Path) -> "pd.DataFrame":
+    """Phase 7: read logs/ablation_table_gptoss_v7.json into a 4-row DataFrame.
+
+    Columns: composite_key, model, defense_mode, per_chunk_fpr,
+             answer_preserved_fpr, judge_fpr, judge_model, judge_n_calls.
+    Uses schema-defensive .get(...) reads per T-3.4-W1-02.
+    """
+    raw = _safe_load_json(path)
+    if raw is None:
+        raise RuntimeError(f"Could not load v7 ablation table from {path}")
+    rows = []
+    for key, entry in raw.items():
+        if not isinstance(entry, dict):
+            continue
+        rows.append({
+            "composite_key":        key,
+            "model":                entry.get("model", "unknown"),
+            "defense_mode":         entry.get("defense_mode", "unknown"),
+            "per_chunk_fpr":        entry.get("per_chunk_fpr", 0.0),
+            "answer_preserved_fpr": entry.get("answer_preserved_fpr", 0.0),
+            "judge_fpr":            entry.get("judge_fpr", 0.0),
+            "judge_model":          entry.get("judge_model", "unknown"),
+            "judge_n_calls":        entry.get("judge_n_calls", 0),
+        })
+    return pd.DataFrame(rows)
+
+
+def emit_honest_fpr_gptoss_v7(df: pd.DataFrame, output_dir: Path, fmt: str) -> None:
+    """D-05: emit docs/results/honest_fpr_gptoss_v7.{md,csv} (4 rows).
+
+    Display-name column 'Defense' inserted via _display_defense() so output
+    matches the 'Fused' / 'DEF-02' labels used elsewhere. DEFENSE_DISPLAY
+    is NOT modified — its existing entries cover Phase 7 row labels.
+    """
+    df = df.copy()
+    df.insert(1, "Defense", df["defense_mode"].map(_display_defense))
+    emit_table(df, "honest_fpr_gptoss_v7", output_dir, fmt)
+
+
 def make_parser() -> argparse.ArgumentParser:
     """Return the argument parser for the results-assembly CLI."""
     parser = argparse.ArgumentParser(
@@ -613,6 +668,16 @@ def main(argv: list[str] | None = None) -> int:
     # Phase 6 D-06: emit _v6.csv companions (new files — originals untouched)
     emit_table(undefended, "undefended_baseline_v6", output_dir, "csv")
     emit_table(arms_race,  "arms_race_table_v6",   output_dir, "csv")
+
+    # Phase 7 D-05: emit honest_fpr_gptoss_v7 if v7 ablation file present (no-op otherwise)
+    v7_path = _resolve_v7_ablation_path(logs_dir)
+    if v7_path is not None:
+        try:
+            df_v7 = load_honest_fpr_v7(v7_path)
+        except RuntimeError as e:
+            print(f"[ERROR] {e}", file=sys.stderr)
+            return 2
+        emit_honest_fpr_gptoss_v7(df_v7, output_dir, args.format)
 
     return 0
 
