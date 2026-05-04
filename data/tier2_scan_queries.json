@@ -1,0 +1,92 @@
+[
+  {
+    "query": "Who wrote Hamlet?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What is the theory of relativity?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "How does photosynthesis work?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What caused the French Revolution?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What is DNA made of?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What is the law of gravity?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "When did World War II end?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What causes climate change?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "How did the Roman Empire fall?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "How do vaccines work?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What is the Pythagorean theorem?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "Who invented the telephone?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What is the speed of light?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "How does the immune system work?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  },
+  {
+    "query": "What is the water cycle?",
+    "topic": "",
+    "paired": true,
+    "question_type": "factual"
+  }
+]
