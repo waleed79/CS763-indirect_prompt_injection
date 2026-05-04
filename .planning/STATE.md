@@ -164,6 +164,7 @@ None.
 ### Roadmap Evolution
 
 - Phase 5 added (2026-05-03): Honest FPR metrics — per-chunk, answer-preserved, and LLM-as-judge utility cost. Reviewer-driven follow-up to replace coarse 76% query-level FPR with three more honest user-visible-cost metrics on the existing clean-query eval set. Run `/gsd-plan-phase 5` to break down.
+- Phase 6 added (2026-05-04): Cross-LLM undefended baseline gap fill — run gpt-oss:20b-cloud and gpt-oss:120b-cloud undefended on the existing combined poisoned corpus, single eval run per model with post-hoc per-tier tagging from passage_id to obtain T1, T1b, T2, T3, T4 ASR simultaneously. Closes the cross-LLM undefended baseline gap (Phase 2.3 only ran T1/T2 for these two cloud models). ~26 min total. Run `/gsd-plan-phase 6` to break down.
 
 ## Session Continuity
 

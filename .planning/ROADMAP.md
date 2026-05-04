@@ -316,6 +316,16 @@ Plans:
 - Judge model selection (e.g. gpt-oss:20b-cloud, gemma4:31b-cloud, or smaller local model) to be locked in plan phase
 - "Answer degraded" definition to be locked in plan phase (exact-match drop vs judge-scored)
 
+### Phase 6: Cross-LLM undefended baseline gap fill: run gpt-oss:20b-cloud and gpt-oss:120b-cloud undefended on the existing combined poisoned corpus, single eval run per model, post-hoc per-tier tagging from passage_id to obtain T1, T1b, T2, T3, T4 ASR simultaneously. Fills the cross-LLM undefended baseline gap (Phase 2.3 only ran T1/T2 for these two cloud models). ~26 minutes total. Goal: emit two new logs/eval_harness_undefended_*.json artifacts that integrate with scripts/make_results.py aggregate-source format. Undefended (no_defense) only — no defense changes.
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 6 to break down)
+
 ---
 *Roadmap created: 2026-03-31*
 *Restructured: 2026-04-13 — Direction A (arms race) added*
