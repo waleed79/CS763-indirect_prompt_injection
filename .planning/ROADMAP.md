@@ -25,7 +25,7 @@ Sub-phases execute in numeric order within each milestone group.
 - [ ] **Phase 3.3: Quick Evaluation Additions** - Retriever transferability, human stealthiness evaluation, XSS/SSRF taxonomy mapping
 - [ ] **Phase 3.4: Full Evaluation and Final Report** - Complete experiment matrix, arms race analysis, limitations, and Phase 3 writeup (due Apr 30)
 - [ ] **Phase 4: Final Presentation** - 10-12 minute presentation with arms race narrative, plots, and demo (May 5-7)
-- [ ] **Phase 5: Honest FPR Metrics** - Per-chunk FPR, answer-preserved FPR, and LLM-as-judge utility cost to replace the coarse 76% query-level FPR (post-presentation refinement)
+- [x] **Phase 5: Honest FPR Metrics** - Per-chunk FPR, answer-preserved FPR, and LLM-as-judge utility cost to replace the coarse 76% query-level FPR (post-presentation refinement) (completed 2026-05-03)
 
 ## Phase Details
 
@@ -287,6 +287,7 @@ Quick additions (3.3) runs in parallel with 3.1/3.2
 | 3.3 Quick Evaluation Additions | 7/7 | Complete | 2026-04-27 |
 | 3.4 Full Evaluation and Final Report | 6/6 | Complete | 2026-04-30 |
 | 4 Final Presentation | 4/7 | In Progress|  |
+| 5 Honest FPR Metrics | 5/5 | Complete | 2026-05-03 |
 
 ### Phase 5: Honest FPR metrics — per-chunk, answer-preserved, and LLM-as-judge utility cost
 

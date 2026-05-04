@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase complete — ready for verification
-stopped_at: Phase 5 context gathered
+status: Phase 5 complete
+stopped_at: Phase 5 execution complete (all 5 plans, ROADMAP updated)
 last_updated: "2026-05-04T05:06:02.937Z"
 last_activity: 2026-05-04
 progress:
@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-31)
 
 **Core value:** Demonstrate an attack-defense arms race for indirect prompt injection in RAG systems — 5 attack tiers (T1, T1b, T2, T3, T4) plus an adaptive tier (ATK-08/09), 2 defense generations, showing per-chunk defenses are fundamentally insufficient.
-**Current focus:** Phase 04 — final-presentation
+**Current focus:** Phase 05 complete — honest FPR metrics
 
 ## Current Position
 
@@ -52,6 +52,7 @@ Progress: [██████████] 100% (research phases)
 | 03.2 | 4/4 | Complete (verified 2026-04-24) |
 | 03.3 | 7/7 | Complete (03.3-07 EVAL-V2-01 cross-model 3×3×5 matrix complete 2026-04-27) |
 | 03.4 | 6/6 | Complete (submitted to Google Doc 2026-04-30) |
+| 05 | 5/5 | Complete (verified 2026-05-03) |
 
 **Recent Trend:**
 
