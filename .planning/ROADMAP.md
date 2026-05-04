@@ -325,7 +325,7 @@ Plans:
 
 Plans:
 - [x] 06-01-PLAN.md — Wave 0 test stubs (tests/test_phase6_eval.py + tests/test_make_results_v6.py — 12 + 3 stub classes for all P6-* requirements)
-- [ ] 06-02-PLAN.md — Wave 1 driver scripts/run_phase6_eval.py (sanity-assert + ollama preflight + 6 cell plan + provenance mutation + _summary_v6.json composer; logic only, no cloud calls)
+- [x] 06-02-PLAN.md — Wave 1 driver scripts/run_phase6_eval.py (sanity-assert + ollama preflight + 6 cell plan + provenance mutation + _summary_v6.json composer; logic only, no cloud calls)
 - [ ] 06-03-PLAN.md — Wave 2 [BLOCKING] cloud execution: invoke driver against gpt-oss:{20b,120b}-cloud × {off,fused,def02} = 6 runs, ~78 min total
 - [ ] 06-04-PLAN.md — Wave 3 make_results.py edits (path resolvers, disclosure header constant, emit_table extension, _v6.csv emissions) + regenerate docs/results/ MDs and CSVs
 - [ ] 06-05-PLAN.md — Wave 4 make_figures.py — 3 new renderers (5×5 fused heatmap, 5×4 undefended heatmap, arms-race v6 bars) + render 3 v6 PNGs
