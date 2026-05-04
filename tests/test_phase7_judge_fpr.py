@@ -445,13 +445,31 @@ class TestDryRunNoCloud:
 class TestAuthEscalation:
     """P7-AUTH: JudgeAuthError returns rc=1 cleanly without partial-state corruption."""
 
-    def test_auth_error_returns_rc1(self, monkeypatch):
-        """Monkeypatch judge_one to raise JudgeAuthError; main must return rc=1."""
+    def test_auth_error_returns_rc1(self, monkeypatch, tmp_path):
+        """Monkeypatch judge_one to raise JudgeAuthError; main must return rc=1.
+
+        Also patches _OLLAMA_AVAILABLE=True and Client() so the auth-check gating
+        (rc=2 when ollama is absent) is bypassed and JudgeAuthError is reachable.
+        Uses a fresh tmp_path cache to ensure no pre-existing SKIP_DRYRUN entries
+        allow all queries to be served from cache (bypassing judge_one entirely).
+        """
         assert _PHASE5_AVAILABLE, "Phase 5 module must be loadable"
-        JudgeAuthError = _phase5.JudgeAuthError
+        # Use _mod.JudgeAuthError (not _phase5.JudgeAuthError) so that the `except`
+        # clause in main() — which catches _mod.JudgeAuthError — can catch it.
+        # Two separate exec_module() calls produce separate class objects; the test's
+        # _phase5.JudgeAuthError and _mod.JudgeAuthError are different classes.
+        JudgeAuthError = _mod.JudgeAuthError
 
         def _always_auth_error(*args, **kwargs):
             raise JudgeAuthError("Mocked auth failure — run: ollama login")
+
+        class _DummyClient:
+            """Dummy client: judge_one raises JudgeAuthError, Client() succeeds."""
+            pass
+
+        # Enable the code path that calls Client() by faking ollama availability
+        monkeypatch.setattr(_mod, "_OLLAMA_AVAILABLE", True)
+        monkeypatch.setattr(_mod, "Client", _DummyClient)
 
         # Patch Phase 5's judge_one so run_judge_fpr_gptoss.py sees the mock
         monkeypatch.setattr(_phase5, "judge_one", _always_auth_error)
@@ -459,7 +477,10 @@ class TestAuthEscalation:
         if hasattr(_mod, "judge_one"):
             monkeypatch.setattr(_mod, "judge_one", _always_auth_error)
 
-        rc = main([])  # no --dry-run: will attempt cloud calls → should hit auth error
+        # Use a fresh empty cache (no pre-existing SKIP_DRYRUN entries that would
+        # serve all queries from cache and prevent judge_one from being called)
+        fresh_cache = str(tmp_path / "judge_fpr_gptoss_test.json.cache")
+        rc = main(["--cache", fresh_cache])  # no --dry-run: hits auth error
         assert rc == 1, (
             f"Expected rc=1 on JudgeAuthError, got rc={rc}"
         )
