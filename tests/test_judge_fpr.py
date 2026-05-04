@@ -27,9 +27,21 @@ try:
     N_CLEAN = _mod.N_CLEAN
     parse_verdict = _mod.parse_verdict
     _AVAILABLE = True
-except (AttributeError, FileNotFoundError, Exception):
+except (AttributeError, FileNotFoundError):
+    # Expected when Plan 02 has not yet landed (script absent) or has not yet
+    # exposed all required symbols. Fall through to the skip path silently.
     _AVAILABLE = False
     DEFENSE_LOG_MAP = {}  # placeholder so module loads cleanly during collect-only
+    TOP_K = 5
+    N_CLEAN = 50
+except Exception:
+    # WR-06: any other exception (SyntaxError, ImportError, etc.) is a real
+    # bug in run_judge_fpr.py — print the traceback so it is not swallowed by
+    # the misleading "not yet implemented" skip reason.
+    import traceback
+    traceback.print_exc()
+    _AVAILABLE = False
+    DEFENSE_LOG_MAP = {}
     TOP_K = 5
     N_CLEAN = 50
 
@@ -138,9 +150,11 @@ class TestJudgeConsistency:
             vds = verdicts_doc["verdicts"][defense_key]
             degraded_count = sum(1 for v in vds.values() if v.get("verdict") == "DEGRADED")
             m3 = ablation[defense_key]["judge_fpr"]
-            expected = degraded_count / 50
+            # WR-05: use the N_CLEAN constant from run_judge_fpr.py instead of a
+            # hardcoded 50 so the denominator stays in sync if N_CLEAN changes.
+            expected = degraded_count / N_CLEAN
             assert abs(m3 - expected) < 1e-9, (
-                f"{defense_key} judge_fpr={m3} disagrees with per-cell DEGRADED count {degraded_count}/50={expected}"
+                f"{defense_key} judge_fpr={m3} disagrees with per-cell DEGRADED count {degraded_count}/{N_CLEAN}={expected}"
             )
 
     def test_idempotent_with_cache(self, frozen_judge_cache, tmp_path, monkeypatch):
